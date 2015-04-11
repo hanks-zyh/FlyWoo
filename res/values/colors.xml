@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- base color -->
+    <color name="white">#ffffff</color>
+    <color name="gray">#66000000</color>
+    <color name="black">#ff000000</color>
+    <color name="hint">#ff999999</color>
+    <color name="grey">#ff666666</color>
+    <color name="red">#FFC93437</color>
+    <color name="blue">#FF375BF1</color>
+    <color name="yellow">#FFF7D23E</color>
+    <color name="green">#FF34A350</color>
+    <color name="purple">#FF881177</color>
+    <color name="orange">#FFffbb00</color>
+    <color name="transparent">#00000000</color>
+    <color name="title_red">#EF5054</color>
+    <color name="pressed_gray">#33222222</color>
+    <color name="black_tran">#88000000</color>
+
+    <!-- app color -->
+    <color name="main_blue">#289CCF</color>
+    <color name="title_blue">#1192CB</color>
+    <color name="bottom_text_blue">#0A76FE</color>
+    <color name="text_gray">#9DA3AF</color>
+    <color name="text_black">#1C2132</color>
+    <color name="person_text_pressed">#F6F6F6</color>
+    <color name="person_text_normal">#FFFFFF</color>
+    <color name="mian_bg">#F0F2F4</color>
+
+    <!-- text_press -->
+    <color name="text_bg_normal">#00000000</color>
+    <color name="text_bg_press">#33FFFFFF</color>
+    <color name="line">#F1F4F7</color>
+
+</resources>

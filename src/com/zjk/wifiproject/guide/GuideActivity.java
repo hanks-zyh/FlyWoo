@@ -22,7 +22,9 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.MainActivity;
 import com.zjk.wifiproject.base.BaseActivity;
 import com.zjk.wifiproject.base.BaseFragment;
+import com.zjk.wifiproject.config.SharedKey;
 import com.zjk.wifiproject.util.A;
+import com.zjk.wifiproject.util.SP;
 
 public class GuideActivity extends BaseActivity {
 
@@ -119,7 +121,9 @@ public class GuideActivity extends BaseActivity {
                 tv.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        A.goOtherActivity(context, MainActivity.class);
+                        // 下次不再展示引导界面
+                        SP.put(context, SharedKey.isfirst, false);
+                        A.goOtherActivityFinish(context, MainActivity.class);
                     }
                 });
             }
