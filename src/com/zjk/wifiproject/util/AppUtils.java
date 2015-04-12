@@ -13,12 +13,12 @@ import android.content.pm.PackageStats;
 import com.zjk.wifiproject.app.AppModle;
 
 /**
- * App¹¤¾ßÀà
+ * Appå·¥å…·ç±»
  */
 public class AppUtils {
 
     /**
-     * ·µ»ØÓÃ»§ÒÑ°²×°Ó¦ÓÃÁĞ±í
+     * è¿”å›ç”¨æˆ·å·²å®‰è£…åº”ç”¨åˆ—è¡¨
      */
     public static List<AppModle> getAppList(Context context) {
         PackageManager pm = context.getPackageManager();
@@ -28,7 +28,7 @@ public class AppUtils {
 
             ApplicationInfo app = packageInfo.applicationInfo;
             if ((app.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                // ·ÇÏµÍ³Ó¦ÓÃ
+                // éç³»ç»Ÿåº”ç”¨
                 File apkfile = new File(app.sourceDir);
                 PackageStats stats = new PackageStats(packageInfo.packageName);
 

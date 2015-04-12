@@ -33,8 +33,7 @@ public abstract class BasePresenterActivity<V extends Vu> extends Activity {
         super.onDestroy();
     }
 
-    protected void onBindVu() {
-    };
+    protected abstract void onBindVu();
 
     protected void onDestroyVu() {
     };

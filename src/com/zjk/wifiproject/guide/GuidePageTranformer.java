@@ -29,7 +29,7 @@ public class GuidePageTranformer implements PageTransformer {
         // next = (index + 1) % cs.length;
         if (position < -1) {
 
-        } else if (position <= 0) { // Ò³ÃæÏòÓÒ»¬¶¯£¬0 ¡ª> - Ïò×óÊÇ -1->0
+        } else if (position <= 0) { // Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½0 ï¿½ï¿½> - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -1->0
             // index = next;
             // next = (index + 1) % colors.length;
             L.i("..........position=" + position + ".......index=" + index);

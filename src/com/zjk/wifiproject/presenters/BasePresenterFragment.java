@@ -1,6 +1,7 @@
 package com.zjk.wifiproject.presenters;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,12 @@ import android.view.ViewGroup;
 public abstract class BasePresenterFragment<V extends Vu> extends Fragment {
 
     protected V vu;
+    protected Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getActivity();
     }
 
     @Override
@@ -38,8 +41,7 @@ public abstract class BasePresenterFragment<V extends Vu> extends Fragment {
         super.onDestroyView();
     }
 
-    protected void onBindVu() {
-    };
+    protected abstract void onBindVu();
 
     protected void onDestroyVu() {
     };

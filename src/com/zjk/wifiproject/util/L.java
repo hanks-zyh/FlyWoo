@@ -3,10 +3,10 @@ package com.zjk.wifiproject.util;
 import android.util.Log;
 
 /**
- * ÈÕÖ¾¹¤¾ßÀà
+ * æ—¥å¿—å·¥å…·ç±»
  */
 public class L {
-    public static boolean isDebug = true; // ÊÇ·ñĞèÒª´òÓ¡bug£¬¿ÉÒÔÔÚapplicationµÄonCreateº¯ÊıÀïÃæ³õÊ¼»¯
+    public static boolean isDebug = true; // æ˜¯å¦éœ€è¦æ‰“å°bugï¼Œå¯ä»¥åœ¨applicationçš„onCreateå‡½æ•°é‡Œé¢åˆå§‹åŒ–
     private static final String TAG = "WifiLog";
 
     public static String fromHere() {
@@ -21,7 +21,7 @@ public class L {
         return ret;
     }
 
-    // ÏÂÃæËÄ¸öÊÇÄ¬ÈÏtagµÄº¯Êı
+    // ä¸‹é¢å››ä¸ªæ˜¯é»˜è®¤tagçš„å‡½æ•°
     public static void i(String msg) {
         if (isDebug)
             Log.i(TAG, "..............." + msg);
@@ -42,7 +42,7 @@ public class L {
             Log.v(TAG, "..............." + msg);
     }
 
-    // ÏÂÃæÊÇ´«Èë×Ô¶¨ÒåtagµÄº¯Êı
+    // ä¸‹é¢æ˜¯ä¼ å…¥è‡ªå®šä¹‰tagçš„å‡½æ•°
     public static void i(String tag, String msg) {
         if (isDebug)
             Log.i(tag, "..............." + msg);

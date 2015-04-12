@@ -1,26 +1,26 @@
 package com.zjk.wifiproject.activity.wifiap;
 /**
- *  WifiAp³£Á¿
+ *  WifiApå¸¸é‡
  * @author Administrator
  *
  */
 public class WifiApConst {
-	 // Wifi×´Ì¬ ´ÖÂÔ
+	 // WifiçŠ¶æ€ ç²—ç•¥
   public static final int CLOSE = 0x001;
   public static final int SEARCH = 0x002;
   public static final int CREATE = 0x003;
   public static final int NOTHING = 0x004;
 
-  // Wifi×´Ì¬ ÏêÏ¸
-  public static final int ApSearchTimeOut = 0;// ËÑË÷³¬Ê±
-  public static final int ApScanResult = 1;// ËÑË÷µ½wifi·µ»Ø½á¹û
-  public static final int ApConnectResult = 2;// Á¬½ÓÉÏwifiÈÈµã
-  public static final int ApCreateAPResult = 3;// ´´½¨ÈÈµã½á¹û
-  public static final int ApUserResult = 4;// ÓÃ»§ÉÏÏßÈËÊı¸üĞÂÃüÁî(´ı¶¨)
-  public static final int ApConnected = 5;// Á¬½Ó»ò¶Ï¿ªwifi£¬3.5ÃëºóË¢ĞÂadapter
-  public static final int ApConnectting = 6;// Á¬½ÓÈÈµãÖĞ
+  // WifiçŠ¶æ€ è¯¦ç»†
+  public static final int ApSearchTimeOut = 0;// æœç´¢è¶…æ—¶
+  public static final int ApScanResult = 1;// æœç´¢åˆ°wifiè¿”å›ç»“æœ
+  public static final int ApConnectResult = 2;// è¿æ¥ä¸Šwifiçƒ­ç‚¹
+  public static final int ApCreateAPResult = 3;// åˆ›å»ºçƒ­ç‚¹ç»“æœ
+  public static final int ApUserResult = 4;// ç”¨æˆ·ä¸Šçº¿äººæ•°æ›´æ–°å‘½ä»¤(å¾…å®š)
+  public static final int ApConnected = 5;// è¿æ¥æˆ–æ–­å¼€wifiï¼Œ3.5ç§’ååˆ·æ–°adapter
+  public static final int ApConnectting = 6;// è¿æ¥çƒ­ç‚¹ä¸­
 
-  // WifiAP ²ÎÊı
+  // WifiAP å‚æ•°
   public static final String PACKAGE_NAME = "com.zjk.wifiproject.activity";
   public static final String FIRST_OPEN_KEY = "version";
   public static final String WIFI_AP_HEADER = "ZChat_";

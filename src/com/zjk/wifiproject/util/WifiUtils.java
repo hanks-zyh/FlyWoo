@@ -15,7 +15,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
 /**
- * ²Ù×÷WifiµÄÊµÌåÀà
+ * æ“ä½œWifiçš„å®ä½“ç±»
  * 
  * @author Administrator
  *
@@ -62,9 +62,9 @@ public class WifiUtils {
 	}
 
 	/**
-	 * »ñÈ¡ÈÈµã×´Ì¬
+	 * è·å–çƒ­ç‚¹çŠ¶æ€
 	 * 
-	 * @return booleanÖµ£¬¶ÔÓ¦ÈÈµãµÄ¿ªÆô(true)ºÍ¹Ø±Õ(false)
+	 * @return booleanå€¼ï¼Œå¯¹åº”çƒ­ç‚¹çš„å¼€å¯(true)å’Œå…³é—­(false)
 	 */
 	public boolean getWifiApState() {
 		try {
@@ -77,9 +77,9 @@ public class WifiUtils {
 	}
 
 	/**
-	 * ÅĞ¶ÏÊÇ·ñÁ¬½ÓÉÏwifi
+	 * åˆ¤æ–­æ˜¯å¦è¿æ¥ä¸Šwifi
 	 * 
-	 * @return booleanÖµ(isConnect),¶ÔÓ¦ÒÑÁ¬½Ó(true)ºÍÎ´Á¬½Ó(false)
+	 * @return booleanå€¼(isConnect),å¯¹åº”å·²è¿æ¥(true)å’Œæœªè¿æ¥(false)
 	 */
 	public boolean isWifiConnect() {
 		return mNetworkInfo.isConnected();
@@ -125,13 +125,13 @@ public class WifiUtils {
 	}
 
 	/**
-	 * ¿ªÆôwifiÈÈµã
+	 * å¼€å¯wifiçƒ­ç‚¹
 	 * @param paramWifiConfiguration
 	 * @param paramBoolean
 	 */
 	public void createWiFiAP(WifiConfiguration paramWifiConfiguration, boolean paramBoolean) {
 		try {
-			//Í¨¹ı·´Éä¿ªÆôwifi
+			//é€šè¿‡åå°„å¼€å¯wifi
 			Class<? extends WifiManager> localClass = mWifiManager.getClass();
 			Class[] arrayOfClass = new Class[2];
 			arrayOfClass[0] = WifiConfiguration.class;

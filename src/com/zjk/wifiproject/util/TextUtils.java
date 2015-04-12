@@ -20,20 +20,20 @@ import com.zjk.wifiproject.view.HandyTextView;
 /**
  * @fileName TextUtils.java
  * @package szu.wifichat.android.util
- * @description ÎÄ±¾¹¤¾ßÀà
+ * @description æ–‡æœ¬å·¥å…·ç±»
  */
 public class TextUtils {
     /**
-     * Ìí¼ÓÏÂ»®Ïß
+     * æ·»åŠ ä¸‹åˆ’çº¿
      * 
      * @param context
-     *            ÉÏÏÂÎÄ
+     *            ä¸Šä¸‹æ–‡
      * @param textView
-     *            Ìí¼ÓÏÂ»®ÏßµÄTextView
+     *            æ·»åŠ ä¸‹åˆ’çº¿çš„TextView
      * @param start
-     *            Ìí¼ÓÏÂ»®Ïß¿ªÊ¼µÄÎ»ÖÃ
+     *            æ·»åŠ ä¸‹åˆ’çº¿å¼€å§‹çš„ä½ç½®
      * @param end
-     *            Ìí¼ÓÏÂ»®Ïß½áÊøµÄÎ»ÖÃ
+     *            æ·»åŠ ä¸‹åˆ’çº¿ç»“æŸçš„ä½ç½®
      */
     public static void addUnderlineText(final Context context, final HandyTextView textView,
             final int start, final int end) {
@@ -47,12 +47,12 @@ public class TextUtils {
     }
 
     /**
-     * »ñÈ¡À¨ºÅÖĞµÄ¹ú¼ÒÇøºÅ
+     * è·å–æ‹¬å·ä¸­çš„å›½å®¶åŒºå·
      * 
      * @param text
-     *            ´øÓĞÀ¨ºÅµÄ¹ú¼ÒÇøºÅ
+     *            å¸¦æœ‰æ‹¬å·çš„å›½å®¶åŒºå·
      * @param defaultText
-     *            Ä¬ÈÏµÄ¹ú¼ÒÇøºÅ(ÔÚ»ñÈ¡´íÎóÊ±·µ»Ø¸ÃÖµ)
+     *            é»˜è®¤çš„å›½å®¶åŒºå·(åœ¨è·å–é”™è¯¯æ—¶è¿”å›è¯¥å€¼)
      * @return
      */
     public static String getCountryCodeBracketsInfo(String text, String defaultText) {
@@ -72,17 +72,17 @@ public class TextUtils {
     }
 
     /**
-     * ¸ù¾İÔÂÈÕ»ñÈ¡ĞÇ×ù
+     * æ ¹æ®æœˆæ—¥è·å–æ˜Ÿåº§
      * 
      * @param month
-     *            ÔÂ
+     *            æœˆ
      * @param day
-     *            ÈÕ
+     *            æ—¥
      * @return
      */
     public static String getConstellation(int month, int day) {
-        String[] constellationArr = { "Ë®Æ¿×ù", "Ë«Óã×ù", "°×Ñò×ù", "½ğÅ£×ù", "Ë«×Ó×ù", "¾ŞĞ·×ù", "Ê¨×Ó×ù", "´¦Å®×ù",
-                "Ìì³Ó×ù", "ÌìĞ«×ù", "ÉäÊÖ×ù", "Ä§ôÉ×ù" };
+        String[] constellationArr = { "æ°´ç“¶åº§", "åŒé±¼åº§", "ç™½ç¾Šåº§", "é‡‘ç‰›åº§", "åŒå­åº§", "å·¨èŸ¹åº§", "ç‹®å­åº§", "å¤„å¥³åº§",
+                "å¤©ç§¤åº§", "å¤©èåº§", "å°„æ‰‹åº§", "é­”ç¾¯åº§" };
         int[] constellationEdgeDay = { 20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22 };
         if (day < constellationEdgeDay[month]) {
             month = month - 1;
@@ -90,19 +90,19 @@ public class TextUtils {
         if (month >= 0) {
             return constellationArr[month];
         }
-        // default to return Ä¦ôÉ×ù
+        // default to return æ‘©ç¾¯åº§
         return constellationArr[11];
     }
 
     /**
-     * ¸ù¾İÄêÔÂÈÕ»ñÈ¡ÄêÁä
+     * æ ¹æ®å¹´æœˆæ—¥è·å–å¹´é¾„
      * 
      * @param year
-     *            Äê
+     *            å¹´
      * @param month
-     *            ÔÂ
+     *            æœˆ
      * @param day
-     *            ÈÕ
+     *            æ—¥
      * @return
      */
     public static int getAge(int year, int month, int day) {
@@ -134,11 +134,11 @@ public class TextUtils {
     }
 
     /**
-     * ÅĞ¶ÏÎÄ±¾¿òµÄÄÚÈİÊÇ·ñÎª¿Õ
+     * åˆ¤æ–­æ–‡æœ¬æ¡†çš„å†…å®¹æ˜¯å¦ä¸ºç©º
      * 
      * @param editText
-     *            ĞèÒªÅĞ¶ÏÊÇ·ñÎª¿ÕµÄEditText¶ÔÏó
-     * @return boolean ·µ»ØÊÇ·ñÎª¿Õ,¿Õ(true),·Ç¿Õ(false)
+     *            éœ€è¦åˆ¤æ–­æ˜¯å¦ä¸ºç©ºçš„EditTextå¯¹è±¡
+     * @return boolean è¿”å›æ˜¯å¦ä¸ºç©º,ç©º(true),éç©º(false)
      */
     public static boolean isNull(EditText editText) {
         String text = editText.getText().toString().trim();
@@ -149,9 +149,9 @@ public class TextUtils {
     }
 
     /**
-     * ·µ»ØÖ¸¶¨³¤¶ÈµÄÒ»´®Êı×Ö
+     * è¿”å›æŒ‡å®šé•¿åº¦çš„ä¸€ä¸²æ•°å­—
      * 
-     * @param NumLen Êı×Ö´®Î»Êı
+     * @param NumLen æ•°å­—ä¸²ä½æ•°
      * @return
      */
     public static String getRandomNumStr(int NumLen) {
@@ -159,23 +159,23 @@ public class TextUtils {
         StringBuffer str = new StringBuffer();
         int i, num;
         for (i = 0; i < NumLen; i++) {
-            num = random.nextInt(10); // 0-10µÄËæ»úÊı
+            num = random.nextInt(10); // 0-10çš„éšæœºæ•°
             str.append(num);
         }
         return str.toString();
     }
 
     /**
-     * »ñÈ¡AssetsÖĞµÄjsonÎÄ±¾
+     * è·å–Assetsä¸­çš„jsonæ–‡æœ¬
      * 
      * @param context
-     *            ÉÏÏÂÎÄ
+     *            ä¸Šä¸‹æ–‡
      * @param name
-     *            ÎÄ±¾Ãû³Æ
+     *            æ–‡æœ¬åç§°
      * @return
      */
     public static String getJson(Context context, String name) {
-        // TODO ´ıÇå³ı
+        // TODO å¾…æ¸…é™¤
         if (name != null) {
             String path = "json/" + name;
             InputStream is = null;
@@ -202,14 +202,14 @@ public class TextUtils {
     }
 
     /**
-     * ´ÓÊäÈëÁ÷ÖĞ»ñÈ¡ÎÄ±¾
+     * ä»è¾“å…¥æµä¸­è·å–æ–‡æœ¬
      * 
      * @param inputStream
-     *            ÎÄ±¾ÊäÈëÁ÷
+     *            æ–‡æœ¬è¾“å…¥æµ
      * @return
      */
     public static String readTextFile(InputStream inputStream) {
-        // TODO ´ıÇå³ı
+        // TODO å¾…æ¸…é™¤
         String readedStr = "";
         BufferedReader br;
         try {

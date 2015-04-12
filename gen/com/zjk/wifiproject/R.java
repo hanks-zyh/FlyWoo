@@ -31,33 +31,35 @@ public final class R {
         public static final int black=0x7f060002;
         public static final int black_tran=0x7f06000e;
         public static final int blue=0x7f060006;
-        public static final int bottom_text_blue=0x7f060011;
+        public static final int bottom_text_blue=0x7f060012;
         public static final int gray=0x7f060001;
         public static final int green=0x7f060008;
         public static final int grey=0x7f060004;
         public static final int hint=0x7f060003;
-        public static final int line=0x7f060019;
+        public static final int line=0x7f06001a;
+        public static final int main_blue=0x7f060010;
         /**  app color 
          */
-        public static final int main_blue=0x7f06000f;
-        public static final int mian_bg=0x7f060016;
+        public static final int main_red=0x7f06000f;
+        public static final int mian_bg=0x7f060017;
         public static final int orange=0x7f06000a;
-        public static final int person_text_normal=0x7f060015;
-        public static final int person_text_pressed=0x7f060014;
+        public static final int person_text_normal=0x7f060016;
+        public static final int person_text_pressed=0x7f060015;
         public static final int pressed_gray=0x7f06000d;
         public static final int purple=0x7f060009;
         public static final int red=0x7f060005;
+        public static final int tab_text_seletor=0x7f06001d;
         /**  text_press 
          */
-        public static final int text_bg_normal=0x7f060017;
-        public static final int text_bg_press=0x7f060018;
-        public static final int text_black=0x7f060013;
-        public static final int text_gray=0x7f060012;
-        public static final int title_blue=0x7f060010;
+        public static final int text_bg_normal=0x7f060018;
+        public static final int text_bg_press=0x7f060019;
+        public static final int text_black=0x7f060014;
+        public static final int text_gray=0x7f060013;
+        public static final int title_blue=0x7f060011;
         public static final int title_red=0x7f06000c;
         public static final int transparent=0x7f06000b;
-        public static final int umeng_fb_color_btn_normal=0x7f06001b;
-        public static final int umeng_fb_color_btn_pressed=0x7f06001a;
+        public static final int umeng_fb_color_btn_normal=0x7f06001c;
+        public static final int umeng_fb_color_btn_pressed=0x7f06001b;
         /**  base color 
          */
         public static final int white=0x7f060000;
@@ -96,16 +98,18 @@ public final class R {
         public static final int voice_right3=0x7f020011;
     }
     public static final class id {
-        public static final int action_settings=0x7f0c000a;
+        public static final int action_settings=0x7f0c000c;
         public static final int btn_creat=0x7f0c0001;
-        public static final int gridview=0x7f0c0006;
+        public static final int gridview=0x7f0c0007;
         public static final int guide=0x7f0c0003;
         public static final int image_m=0x7f0c0004;
-        public static final int iv_app_icon=0x7f0c0007;
+        public static final int iv_app_icon=0x7f0c0008;
+        public static final int left_drawer=0x7f0c000b;
+        public static final int tabs=0x7f0c0006;
         public static final int text=0x7f0c0005;
         public static final int top=0x7f0c0002;
-        public static final int tv_app_name=0x7f0c0008;
-        public static final int tv_app_size=0x7f0c0009;
+        public static final int tv_app_name=0x7f0c0009;
+        public static final int tv_app_size=0x7f0c000a;
         public static final int viewpager=0x7f0c0000;
     }
     public static final class integer {
@@ -115,9 +119,14 @@ public final class R {
         public static final int activity_guide=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_splash=0x7f030002;
-        public static final int fragment_guide=0x7f030003;
-        public static final int vu_app=0x7f030004;
-        public static final int vu_app_item=0x7f030005;
+        public static final int custom_tab=0x7f030003;
+        public static final int fragment_guide=0x7f030004;
+        public static final int layout_main=0x7f030005;
+        public static final int layout_title=0x7f030006;
+        public static final int vu_app=0x7f030007;
+        public static final int vu_app_item=0x7f030008;
+        public static final int vu_drawer=0x7f030009;
+        public static final int vu_main=0x7f03000a;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;

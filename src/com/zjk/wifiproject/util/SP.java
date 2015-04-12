@@ -8,17 +8,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * SharedPreferenceÏà¹Ø²Ù×÷
+ * SharedPreferenceç›¸å…³æ“ä½œ
  */
 public class SP {
 
 	/**
-	 * ±£´æÔÚÊÖ»úÀïÃæµÄÎÄ¼şÃû
+	 * ä¿å­˜åœ¨æ‰‹æœºé‡Œé¢çš„æ–‡ä»¶å
 	 */
 	public static final String FILE_NAME = "user";
 
 	/**
-	 * ±£´æÊı¾İµÄ·½·¨£¬ÎÒÃÇĞèÒªÄÃµ½±£´æÊı¾İµÄ¾ßÌåÀàĞÍ£¬È»ºó¸ù¾İÀàĞÍµ÷ÓÃ²»Í¬µÄ±£´æ·½·¨
+	 * ä¿å­˜æ•°æ®çš„æ–¹æ³•ï¼Œæˆ‘ä»¬éœ€è¦æ‹¿åˆ°ä¿å­˜æ•°æ®çš„å…·ä½“ç±»å‹ï¼Œç„¶åæ ¹æ®ç±»å‹è°ƒç”¨ä¸åŒçš„ä¿å­˜æ–¹æ³•
 	 * 
 	 * @param context
 	 * @param key
@@ -44,7 +44,7 @@ public class SP {
 	}
 
 	/**
-	 * µÃµ½±£´æÊı¾İµÄ·½·¨£¬ÎÒÃÇ¸ù¾İÄ¬ÈÏÖµµÃµ½±£´æµÄÊı¾İµÄ¾ßÌåÀàĞÍ£¬È»ºóµ÷ÓÃÏà¶ÔÓÚµÄ·½·¨»ñÈ¡Öµ
+	 * å¾—åˆ°ä¿å­˜æ•°æ®çš„æ–¹æ³•ï¼Œæˆ‘ä»¬æ ¹æ®é»˜è®¤å€¼å¾—åˆ°ä¿å­˜çš„æ•°æ®çš„å…·ä½“ç±»å‹ï¼Œç„¶åè°ƒç”¨ç›¸å¯¹äºçš„æ–¹æ³•è·å–å€¼
 	 * 
 	 * @param context
 	 * @param key
@@ -70,7 +70,7 @@ public class SP {
 	}
 
 	/**
-	 * ÒÆ³ıÄ³¸ökeyÖµÒÑ¾­¶ÔÓ¦µÄÖµ
+	 * ç§»é™¤æŸä¸ªkeyå€¼å·²ç»å¯¹åº”çš„å€¼
 	 * 
 	 * @param context
 	 * @param key
@@ -83,7 +83,7 @@ public class SP {
 	}
 
 	/**
-	 * Çå³ıËùÓĞÊı¾İ
+	 * æ¸…é™¤æ‰€æœ‰æ•°æ®
 	 * 
 	 * @param context
 	 */
@@ -95,7 +95,7 @@ public class SP {
 	}
 
 	/**
-	 * ²éÑ¯Ä³¸ökeyÊÇ·ñÒÑ¾­´æÔÚ
+	 * æŸ¥è¯¢æŸä¸ªkeyæ˜¯å¦å·²ç»å­˜åœ¨
 	 * 
 	 * @param context
 	 * @param key
@@ -107,7 +107,7 @@ public class SP {
 	}
 
 	/**
-	 * ·µ»ØËùÓĞµÄ¼üÖµ¶Ô
+	 * è¿”å›æ‰€æœ‰çš„é”®å€¼å¯¹
 	 * 
 	 * @param context
 	 * @return
@@ -118,7 +118,7 @@ public class SP {
 	}
 
 	/**
-	 * ´´½¨Ò»¸ö½â¾öSharedPreferencesCompat.apply·½·¨µÄÒ»¸ö¼æÈİÀà
+	 * åˆ›å»ºä¸€ä¸ªè§£å†³SharedPreferencesCompat.applyæ–¹æ³•çš„ä¸€ä¸ªå…¼å®¹ç±»
 	 * 
 	 * @author zhy
 	 * 
@@ -127,7 +127,7 @@ public class SP {
 		private static final Method sApplyMethod = findApplyMethod();
 
 		/**
-		 * ·´Éä²éÕÒapplyµÄ·½·¨
+		 * åå°„æŸ¥æ‰¾applyçš„æ–¹æ³•
 		 * 
 		 * @return
 		 */
@@ -143,7 +143,7 @@ public class SP {
 		}
 
 		/**
-		 * Èç¹ûÕÒµ½ÔòÊ¹ÓÃapplyÖ´ĞĞ£¬·ñÔòÊ¹ÓÃcommit
+		 * å¦‚æœæ‰¾åˆ°åˆ™ä½¿ç”¨applyæ‰§è¡Œï¼Œå¦åˆ™ä½¿ç”¨commit
 		 * 
 		 * @param editor
 		 */
@@ -166,7 +166,7 @@ public class SP {
 	private static String SHARED_KEY_VIBRATE = "shared_key_vibrate";
 
 	/**
-	 * ÊÇ·ñÔÊĞíÍÆËÍÍ¨Öª
+	 * æ˜¯å¦å…è®¸æ¨é€é€šçŸ¥
 	 */
 	public static boolean isAllowPushNotify(Context context) {
 		return (Boolean) get(context, SHARED_KEY_NOTIFY, true);
@@ -177,7 +177,7 @@ public class SP {
 	}
 
 	/**
-	 * ÊÇ·ñÔÊĞíÉùÒô
+	 * æ˜¯å¦å…è®¸å£°éŸ³
 	 */
 	public static boolean isAllowVoice(Context context) {
 		return (Boolean) get(context, SHARED_KEY_VOICE, true);
@@ -188,7 +188,7 @@ public class SP {
 	}
 
 	/**
-	 * ÊÇ·ñÔÊĞíÕğ¶¯
+	 * æ˜¯å¦å…è®¸éœ‡åŠ¨
 	 */
 	public static boolean isAllowVibrate(Context context) {
 		return (Boolean) get(context, SHARED_KEY_VIBRATE, true);

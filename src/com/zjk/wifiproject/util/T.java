@@ -4,12 +4,12 @@ import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Toast³£ÓÃÀà
+ * Toastå¸¸ç”¨ç±»
  */
 public class T {
 
 	/**
-	 * Ä¬ÈÏ×¢ÊÍ
+	 * é»˜è®¤æ³¨é‡Š
 	 * @param context
 	 * @param content
 	 */
@@ -18,7 +18,7 @@ public class T {
 	}
 
 	/**
-	 * ³¤ÏÔÊ¾
+	 * é•¿æ˜¾ç¤º
 	 * @param context
 	 * @param content
 	 */
@@ -27,11 +27,11 @@ public class T {
 	}
 
 	/**
-	 * ÍøÂç´íÎóToast
+	 * ç½‘ç»œé”™è¯¯Toast
 	 * @param context
 	 */
 	public static void showNetErr(Context context) {
-		Toast.makeText(context, "ÍøÂç´íÎóÇëÖØÊÔ", 0).show();
+		Toast.makeText(context, "ç½‘ç»œé”™è¯¯è¯·é‡è¯•", 0).show();
 	}
 
 }

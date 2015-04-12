@@ -19,10 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zjk.wifiproject.R;
-import com.zjk.wifiproject.activity.MainActivity;
 import com.zjk.wifiproject.base.BaseActivity;
 import com.zjk.wifiproject.base.BaseFragment;
 import com.zjk.wifiproject.config.SharedKey;
+import com.zjk.wifiproject.main.MainActivity;
 import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.SP;
 
@@ -121,7 +121,7 @@ public class GuideActivity extends BaseActivity {
                 tv.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // ÏÂ´Î²»ÔÙÕ¹Ê¾Òýµ¼½çÃæ
+                        // ï¿½Â´Î²ï¿½ï¿½ï¿½Õ¹Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
                         SP.put(context, SharedKey.isfirst, false);
                         A.goOtherActivityFinish(context, MainActivity.class);
                     }
