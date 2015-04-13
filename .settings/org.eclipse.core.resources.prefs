@@ -1,11 +1,9 @@
 eclipse.preferences.version=1
-encoding//gen/com/zjk/wifiproject/BuildConfig.java=UTF-8
-encoding//gen/com/zjk/wifiproject/R.java=UTF-8
 encoding//src/com/zjk/wifiproject/activity/wifiap/WifiApConst.java=UTF-8
 encoding//src/com/zjk/wifiproject/app/AppGridAdapter.java=UTF-8
-encoding//src/com/zjk/wifiproject/app/AppGridVu.java=UTF-8
 encoding//src/com/zjk/wifiproject/app/AppItemVu.java=UTF-8
 encoding//src/com/zjk/wifiproject/app/AppModle.java=UTF-8
+encoding//src/com/zjk/wifiproject/app/AppVu.java=UTF-8
 encoding//src/com/zjk/wifiproject/base/BaseActivity.java=UTF-8
 encoding//src/com/zjk/wifiproject/base/BaseFragment.java=UTF-8
 encoding//src/com/zjk/wifiproject/config/SharedKey.java=UTF-8

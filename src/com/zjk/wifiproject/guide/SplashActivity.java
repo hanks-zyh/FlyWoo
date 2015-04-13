@@ -33,6 +33,7 @@ public class SplashActivity extends BaseActivity {
                 boolean isFirst = (boolean) SP.get(context, SharedKey.isfirst, true);
                 A.goOtherActivityFinish(context, isFirst ? GuideActivity.class : MainActivity.class);
             }
-        }, 100);
+        }, 1000);
     }
+
 }

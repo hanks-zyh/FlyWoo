@@ -4,45 +4,15 @@ import android.graphics.drawable.Drawable;
 
 public class AppModle {
 
-    /**
-     * Ӧ�õ�apk�ļ�·��
-     */
     private String apkPath;
-    /**
-     * Ӧ�ð���
-     */
     private String packageName;
-    /**
-     * Ӧ�����
-     */
     private String name;
-    /**
-     * Ӧ�ð汾��
-     */
     private String versionName;
-    /**
-     * Ӧ�ð汾��
-     */
     private int versionCode;
-    /**
-     * Ӧ��uid
-     */
     private int uid;
-    /**
-     * Ӧ��apk��װ���С
-     */
     private long apkSize;
-    /**
-     * Ӧ�û����С
-     */
     private long cacheSize;
-    /**
-     * Ӧ�ô�С
-     */
     private long dataSize;
-    /**
-     * Ӧ��ͼ��
-     */
     private Drawable icon;
 
     private boolean checked;
