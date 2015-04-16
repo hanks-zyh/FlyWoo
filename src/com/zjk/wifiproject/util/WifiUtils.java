@@ -1,9 +1,16 @@
 package com.zjk.wifiproject.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Iterator;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.List;
+
+import org.apache.http.conn.util.InetAddressUtils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -13,313 +20,416 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
+import android.os.Message;
+
+import com.zjk.wifiproject.BaseApplication;
+import com.zjk.wifiproject.activity.wifiap.WifiApConst;
+import com.zjk.wifiproject.wifi.TimerCheck;
 
 /**
- * 操作Wifi的实体类
+ * Wifi 工具类
  * 
- * @author Administrator
- *
+ * 封装了Wifi的基础操作方法，方便获取Wifi连接信息以及操作Wifi
  */
+
 public class WifiUtils {
 
-	private static WifiUtils				mWifiUtils	= null;
-	private List<WifiConfiguration>	mWifiConfiguration;
-	private WifiInfo								mWifiInfo;
-	private DhcpInfo								mDhcpInfo;
-	private List<ScanResult>				mWifiList;
-	private WifiManager.WifiLock		mWifiLock;
-	public WifiManager							mWifiManager;
-	private NetworkInfo							mNetworkInfo;
+    private static final String TAG = "SZU_WifiUtils";
+    private static Context mContext = BaseApplication.getInstance();
+    private static WifiManager mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 
-	public static WifiUtils getInstance(Context context) {
-		if (mWifiUtils == null)
-			mWifiUtils = new WifiUtils(context);
-		return mWifiUtils;
-	}
+    public static enum WifiCipherType {
+        WIFICIPHER_WEP, WIFICIPHER_WPA, WIFICIPHER_NOPASS, WIFICIPHER_INVALID
+    }
 
-	private WifiUtils(Context context) {
-		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		mDhcpInfo = mWifiManager.getDhcpInfo();
-		mWifiInfo = mWifiManager.getConnectionInfo();
-		mNetworkInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE))
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-	}
+    public static void startWifiAp(String ssid, String passwd, final Handler handler) {
+        if (mWifiManager.isWifiEnabled()) {
+            mWifiManager.setWifiEnabled(false);
+        }
+        startAp(ssid, passwd);
+        TimerCheck timerCheck = new TimerCheck() {
+            @Override
+            public void doTimerCheckWork() {
 
-	public void setNewWifiManagerInfo() {
-		mWifiInfo = mWifiManager.getConnectionInfo();
-		mDhcpInfo = mWifiManager.getDhcpInfo();
-	}
+                if (isWifiApEnabled()) {
+                    // LogUtils.v(TAG, "WifiAp enabled success!");
+                    Message msg = handler.obtainMessage(WifiApConst.ApCreateApSuccess);
+                    handler.sendMessage(msg);
+                    this.exit();
+                } else {
+                    // LogUtils.v(TAG, "WifiAp enabled failed!");
+                }
+            }
 
-	private WifiConfiguration isExsits(String paramString) {
-		Iterator<WifiConfiguration> localIterator = mWifiManager.getConfiguredNetworks().iterator();
-		WifiConfiguration localWifiConfiguration;
-		do {
-			if (!localIterator.hasNext())
-				return null;
-			localWifiConfiguration = (WifiConfiguration) localIterator.next();
-		} while (!localWifiConfiguration.SSID.equals("\"" + paramString + "\""));
-		return localWifiConfiguration;
-	}
+            @Override
+            public void doTimeOutWork() {
+                // TODO Auto-generated method stub
+                this.exit();
+            }
+        };
+        timerCheck.start(10, 1000);
 
-	/**
-	 * 获取热点状态
-	 * 
-	 * @return boolean值，对应热点的开启(true)和关闭(false)
-	 */
-	public boolean getWifiApState() {
-		try {
-			int i = ((Integer) mWifiManager.getClass().getMethod("getWifiApState", new Class[0])
-					.invoke(mWifiManager, new Object[0])).intValue();
-			return (3 == i) || (13 == i);
-		} catch (Exception localException) {
-		}
-		return false;
-	}
+    }
 
-	/**
-	 * 判断是否连接上wifi
-	 * 
-	 * @return boolean值(isConnect),对应已连接(true)和未连接(false)
-	 */
-	public boolean isWifiConnect() {
-		return mNetworkInfo.isConnected();
-	}
+    private static void startAp(String ssid, String passwd) {
+        Method method1 = null;
+        try {
+            method1 = mWifiManager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class,
+                    boolean.class);
+            WifiConfiguration netConfig = new WifiConfiguration();
 
-	public void AcquireWifiLock() {
-		mWifiLock.acquire();
-	}
+            netConfig.SSID = ssid;
+            netConfig.preSharedKey = passwd;
 
-	public void CreatWifiLock() {
-		mWifiLock = mWifiManager.createWifiLock("Test");
-	}
+            netConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+            netConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+            netConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+            netConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+            netConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+            netConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+            netConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            netConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
 
-	public void OpenWifi() {
-		if (!mWifiManager.isWifiEnabled())
-			mWifiManager.setWifiEnabled(true);
-	}
+            method1.invoke(mWifiManager, netConfig, true);
 
-	public void ReleaseWifiLock() {
-		if (mWifiLock.isHeld())
-			mWifiLock.release();
-	}
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	public void addNetwork(WifiConfiguration paramWifiConfiguration) {
-		int i = mWifiManager.addNetwork(paramWifiConfiguration);
-		mWifiManager.enableNetwork(i, true);
-	}
+    public static void closeWifiAp() {
+        if (isWifiApEnabled()) {
+            try {
+                Method method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
+                method.setAccessible(true);
 
-	public void closeWifi() {
-		mWifiManager.setWifiEnabled(false);
-	}
+                WifiConfiguration config = (WifiConfiguration) method.invoke(mWifiManager);
 
-	public void connectConfiguration(int paramInt) {
-		if (paramInt > mWifiConfiguration.size())
-			return;
-		mWifiManager.enableNetwork(((WifiConfiguration) mWifiConfiguration.get(paramInt)).networkId, true);
-	}
+                Method method2 = mWifiManager.getClass().getMethod("setWifiApEnabled",
+                        WifiConfiguration.class, boolean.class);
+                method2.invoke(mWifiManager, config, false);
+            } catch (NoSuchMethodException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public void removeNetwork(int netId) {
-		if (mWifiManager != null) {
-			mWifiManager.removeNetwork(netId);
-		}
-	}
+    public static boolean isWifiApEnabled() {
+        try {
+            Method method = mWifiManager.getClass().getMethod("isWifiApEnabled");
+            method.setAccessible(true);
+            return (Boolean) method.invoke(mWifiManager);
+        } catch (NoSuchMethodException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	/**
-	 * 开启wifi热点
-	 * @param paramWifiConfiguration
-	 * @param paramBoolean
-	 */
-	public void createWiFiAP(WifiConfiguration paramWifiConfiguration, boolean paramBoolean) {
-		try {
-			//通过反射开启wifi
-			Class<? extends WifiManager> localClass = mWifiManager.getClass();
-			Class[] arrayOfClass = new Class[2];
-			arrayOfClass[0] = WifiConfiguration.class;
-			arrayOfClass[1] = Boolean.TYPE;
-			Method localMethod = localClass.getMethod("setWifiApEnabled", arrayOfClass);
-			WifiManager localWifiManager = mWifiManager;
-			Object[] arrayOfObject = new Object[2];
-			arrayOfObject[0] = paramWifiConfiguration;
-			arrayOfObject[1] = Boolean.valueOf(paramBoolean);
-			localMethod.invoke(localWifiManager, arrayOfObject);
-			return;
-		} catch (Exception localException) {
-		}
-	}
+        return false;
+    }
 
-	public WifiConfiguration createWifiInfo(String ssid, String paramString2, int paramInt, String paramString3) {
-		WifiConfiguration localWifiConfiguration1 = new WifiConfiguration();
-		localWifiConfiguration1.allowedAuthAlgorithms.clear();
-		localWifiConfiguration1.allowedGroupCiphers.clear();
-		localWifiConfiguration1.allowedKeyManagement.clear();
-		localWifiConfiguration1.allowedPairwiseCiphers.clear();
-		localWifiConfiguration1.allowedProtocols.clear();
-		if ("wt".equals(paramString3)) {
-			localWifiConfiguration1.SSID = ("\"" + ssid + "\"");
-			WifiConfiguration localWifiConfiguration2 = isExsits(ssid);
-			if (localWifiConfiguration2 != null)
-				removeNetwork(localWifiConfiguration2.networkId);
-			if (paramInt == 1) {
-				localWifiConfiguration1.wepKeys[0] = "";
-				localWifiConfiguration1.allowedKeyManagement.set(0);
-				localWifiConfiguration1.wepTxKeyIndex = 0;
-			} else if (paramInt == 2) {
-				localWifiConfiguration1.hiddenSSID = true;
-				localWifiConfiguration1.wepKeys[0] = ("\"" + paramString2 + "\"");
-			} else {
-				localWifiConfiguration1.preSharedKey = ("\"" + paramString2 + "\"");
-				localWifiConfiguration1.hiddenSSID = true;
-				localWifiConfiguration1.allowedAuthAlgorithms.set(0);
-				localWifiConfiguration1.allowedGroupCiphers.set(2);
-				localWifiConfiguration1.allowedKeyManagement.set(1);
-				localWifiConfiguration1.allowedPairwiseCiphers.set(1);
-				localWifiConfiguration1.allowedGroupCiphers.set(3);
-				localWifiConfiguration1.allowedPairwiseCiphers.set(2);
-			}
-		} else {
-			localWifiConfiguration1.SSID = ssid;
-			localWifiConfiguration1.allowedAuthAlgorithms.set(1);
-			localWifiConfiguration1.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-			localWifiConfiguration1.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-			localWifiConfiguration1.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-			localWifiConfiguration1.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-			localWifiConfiguration1.allowedKeyManagement.set(0);
-			localWifiConfiguration1.wepTxKeyIndex = 0;
-			if (paramInt == 1) {
-				localWifiConfiguration1.wepKeys[0] = "";
-				localWifiConfiguration1.allowedKeyManagement.set(0);
-				localWifiConfiguration1.wepTxKeyIndex = 0;
-			} else if (paramInt == 2) {
-				localWifiConfiguration1.hiddenSSID = true;
-				localWifiConfiguration1.wepKeys[0] = paramString2;
-			} else if (paramInt == 3) {
-				localWifiConfiguration1.preSharedKey = paramString2;
-				localWifiConfiguration1.allowedAuthAlgorithms.set(0);
-				localWifiConfiguration1.allowedProtocols.set(1);
-				localWifiConfiguration1.allowedProtocols.set(0);
-				localWifiConfiguration1.allowedKeyManagement.set(1);
-				localWifiConfiguration1.allowedPairwiseCiphers.set(2);
-				localWifiConfiguration1.allowedPairwiseCiphers.set(1);
-			}
-		}
-		return localWifiConfiguration1;
-	}
+    public static int getWifiApStateInt() {
+        try {
+            int i = ((Integer) mWifiManager.getClass().getMethod("getWifiApState", new Class[0])
+                    .invoke(mWifiManager, new Object[0])).intValue();
+            return i;
+        } catch (Exception localException) {
+        }
+        return 4;
+    }
 
-	public void disconnectWifi(int paramInt) {
-		mWifiManager.disableNetwork(paramInt);
-	}
+    /**
+     * 判断是否连接上wifi
+     * 
+     * @return boolean值(isConnect),对应已连接(true)和未连接(false)
+     */
+    public static boolean isWifiConnect() {
+        NetworkInfo mNetworkInfo = ((ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE))
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mNetworkInfo.isConnected();
+    }
 
-	public String getApSSID() {
-		try {
-			Method localMethod = mWifiManager.getClass().getDeclaredMethod("getWifiApConfiguration", new Class[0]);
-			if (localMethod == null)
-				return null;
-			Object localObject1 = localMethod.invoke(mWifiManager, new Object[0]);
-			if (localObject1 == null)
-				return null;
-			WifiConfiguration localWifiConfiguration = (WifiConfiguration) localObject1;
-			if (localWifiConfiguration.SSID != null)
-				return localWifiConfiguration.SSID;
-			Field localField1 = WifiConfiguration.class.getDeclaredField("mWifiApProfile");
-			if (localField1 == null)
-				return null;
-			localField1.setAccessible(true);
-			Object localObject2 = localField1.get(localWifiConfiguration);
-			localField1.setAccessible(false);
-			if (localObject2 == null)
-				return null;
-			Field localField2 = localObject2.getClass().getDeclaredField("SSID");
-			localField2.setAccessible(true);
-			Object localObject3 = localField2.get(localObject2);
-			if (localObject3 == null)
-				return null;
-			localField2.setAccessible(false);
-			String str = (String) localObject3;
-			return str;
-		} catch (Exception localException) {
-		}
-		return null;
-	}
+    public static boolean isWifiEnabled() {
+        return mWifiManager.isWifiEnabled();
+    }
 
-	public String getBSSID() {
-		if (mWifiInfo == null)
-			return "NULL";
-		return mWifiInfo.getBSSID();
-	}
+    public static void OpenWifi() {
+        if (!mWifiManager.isWifiEnabled())
+            mWifiManager.setWifiEnabled(true);
+    }
 
-	public String getSSID() {
-		if (mWifiInfo == null)
-			return "NULL";
-		return mWifiInfo.getSSID();
-	}
+    public static void closeWifi() {
+        mWifiManager.setWifiEnabled(false);
+    }
 
-	public List<WifiConfiguration> getConfiguration() {
-		return mWifiConfiguration;
-	}
+    public static void addNetwork(WifiConfiguration paramWifiConfiguration) {
+        int i = mWifiManager.addNetwork(paramWifiConfiguration);
+        mWifiManager.enableNetwork(i, true);
+    }
 
-	public String getLocalIPAddress() {
-		if (mWifiInfo == null)
-			return "NULL";
-		return intToIp(mWifiInfo.getIpAddress());
-	}
+    public static void removeNetwork(int netId) {
+        if (mWifiManager != null) {
+            mWifiManager.removeNetwork(netId);
+            mWifiManager.saveConfiguration();
+        }
+    }
 
-	public String getServerIPAddress() {
-		if (mDhcpInfo == null)
-			return "NULL";
-		return intToIp(mDhcpInfo.serverAddress);
-	}
+    /**
+     * Function: 连接Wifi热点 <br>
+     * 
+     * @date 2015年2月14日 上午11:17
+     * @change hillfly
+     * @version 1.0
+     * @param SSID
+     * @param Password
+     * @param Type
+     * <br>
+     *            没密码： {@linkplain WifiCipherType#WIFICIPHER_NOPASS}<br>
+     *            WEP加密: {@linkplain WifiCipherType#WIFICIPHER_WEP}<br>
+     *            WPA加密： {@linkplain WifiCipherType#WIFICIPHER_WPA}<br>
+     * @return true:连接成功；false:连接失败
+     */
+    public static boolean connectWifi(String SSID, String Password, WifiCipherType Type) {
+        if (!isWifiEnabled()) {
+            return false;
+        }
+        // 开启wifi需要一段时间,要等到wifi状态变成WIFI_STATE_ENABLED
+        while (mWifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLING) {
+            try {
+                // 避免程序不停循环
+                Thread.currentThread();
+                Thread.sleep(500);
+            } catch (InterruptedException ie) {
+            }
+        }
 
-	public String getMacAddress() {
-		if (mWifiInfo == null)
-			return "NULL";
-		return mWifiInfo.getMacAddress();
-	}
+        WifiConfiguration wifiConfig = createWifiInfo(SSID, Password, Type);
+        if (wifiConfig == null) {
+            return false;
+        }
 
-	public int getNetworkId() {
-		if (mWifiInfo == null)
-			return 0;
-		return mWifiInfo.getNetworkId();
-	}
+        WifiConfiguration tempConfig = isExsits(SSID);
 
-	public int getWifiApStateInt() {
-		try {
-			int i = ((Integer) mWifiManager.getClass().getMethod("getWifiApState", new Class[0])
-					.invoke(mWifiManager, new Object[0])).intValue();
-			return i;
-		} catch (Exception localException) {
-		}
-		return 4;
-	}
+        if (tempConfig != null) {
+            mWifiManager.removeNetwork(tempConfig.networkId);
+        }
 
-	public WifiInfo getWifiInfo() {
-		return mWifiManager.getConnectionInfo();
-	}
+        int netID = mWifiManager.addNetwork(wifiConfig);
 
-	public List<ScanResult> getWifiList() {
-		return mWifiList;
-	}
+        // 断开连接
+        mWifiManager.disconnect();
 
-	public StringBuilder lookUpScan() {
-		StringBuilder localStringBuilder = new StringBuilder();
-		for (int i = 0;; i++) {
-			if (i >= 2)
-				return localStringBuilder;
-			localStringBuilder.append("Index_" + Integer.valueOf(i + 1).toString() + ":");
-			localStringBuilder.append(((ScanResult) mWifiList.get(i)).toString());
-			localStringBuilder.append("/n");
-		}
-	}
+        // 设置为true,使其他的连接断开
+        boolean bRet = mWifiManager.enableNetwork(netID, true);
+        mWifiManager.reconnect();
+        return bRet;
+    }
 
-	public void setWifiList() {
-		mWifiList = mWifiManager.getScanResults();
-	}
+    public static void disconnectWifi(int paramInt) {
+        mWifiManager.disableNetwork(paramInt);
+    }
 
-	public void startScan() {
-		mWifiManager.startScan();
-	}
+    public static void startScan() {
+        mWifiManager.startScan();
+    }
 
-	public String intToIp(int paramIntip) {
-		return (paramIntip & 0xFF) + "." + ((paramIntip >> 8) & 0xFF) + "." + ((paramIntip >> 16) & 0xFF) + "."
-				+ ((paramIntip >> 24) & 0xFF);
-	}
+    private static WifiConfiguration createWifiInfo(String SSID, String Password, WifiCipherType Type) {
+        WifiConfiguration config = new WifiConfiguration();
+        config.allowedAuthAlgorithms.clear();
+        config.allowedGroupCiphers.clear();
+        config.allowedKeyManagement.clear();
+        config.allowedPairwiseCiphers.clear();
+        config.allowedProtocols.clear();
+        config.SSID = "\"" + SSID + "\"";
+        if (Type == WifiCipherType.WIFICIPHER_NOPASS) {
+            config.wepKeys[0] = "";
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+            config.wepTxKeyIndex = 0;
+        }
+        if (Type == WifiCipherType.WIFICIPHER_WEP) {
+            config.preSharedKey = "\"" + Password + "\"";
+            config.hiddenSSID = true;
+            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+            config.wepTxKeyIndex = 0;
+        }
+        if (Type == WifiCipherType.WIFICIPHER_WPA) {
+
+            config.preSharedKey = "\"" + Password + "\"";
+            config.hiddenSSID = true;
+            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+            // config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+
+        } else {
+            return null;
+        }
+        return config;
+    }
+
+    public static String getApSSID() {
+        try {
+            Method localMethod = mWifiManager.getClass().getDeclaredMethod("getWifiApConfiguration",
+                    new Class[0]);
+            if (localMethod == null)
+                return null;
+            Object localObject1 = localMethod.invoke(mWifiManager, new Object[0]);
+            if (localObject1 == null)
+                return null;
+            WifiConfiguration localWifiConfiguration = (WifiConfiguration) localObject1;
+            if (localWifiConfiguration.SSID != null)
+                return localWifiConfiguration.SSID;
+            Field localField1 = WifiConfiguration.class.getDeclaredField("mWifiApProfile");
+            if (localField1 == null)
+                return null;
+            localField1.setAccessible(true);
+            Object localObject2 = localField1.get(localWifiConfiguration);
+            localField1.setAccessible(false);
+            if (localObject2 == null)
+                return null;
+            Field localField2 = localObject2.getClass().getDeclaredField("SSID");
+            localField2.setAccessible(true);
+            Object localObject3 = localField2.get(localObject2);
+            if (localObject3 == null)
+                return null;
+            localField2.setAccessible(false);
+            String str = (String) localObject3;
+            return str;
+        } catch (Exception localException) {
+        }
+        return null;
+    }
+
+    public static String getBSSID() {
+        WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+        return mWifiInfo.getBSSID();
+    }
+
+    public static String getSSID() {
+        WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+        return mWifiInfo.getSSID();
+    }
+
+    public static String getLocalIPAddress() {
+        WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
+        return intToIp(wifiInfo.getIpAddress());
+    }
+
+    public static String getGPRSLocalIPAddress() {
+        try {
+            Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+            while (en.hasMoreElements()) {
+                NetworkInterface nif = en.nextElement();
+                Enumeration<InetAddress> enumIpAddr = nif.getInetAddresses();
+                while (enumIpAddr.hasMoreElements()) {
+                    InetAddress mInetAddress = enumIpAddr.nextElement();
+                    if (!mInetAddress.isLoopbackAddress()
+                            && InetAddressUtils.isIPv4Address(mInetAddress.getHostAddress())) {
+                        return mInetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getServerIPAddress() {
+        DhcpInfo mDhcpInfo = mWifiManager.getDhcpInfo();
+        return intToIp(mDhcpInfo.gateway);
+    }
+
+    public static String getBroadcastAddress() {
+        System.setProperty("java.net.preferIPv4Stack", "true");
+        try {
+            for (Enumeration<NetworkInterface> niEnum = NetworkInterface.getNetworkInterfaces(); niEnum
+                    .hasMoreElements();) {
+                NetworkInterface ni = niEnum.nextElement();
+                if (!ni.isLoopback()) {
+                    for (InterfaceAddress interfaceAddress : ni.getInterfaceAddresses()) {
+                        if (interfaceAddress.getBroadcast() != null) {
+                            L.d(TAG, interfaceAddress.getBroadcast().toString().substring(1));
+                            return interfaceAddress.getBroadcast().toString().substring(1);
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String getMacAddress() {
+        WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+        if (mWifiInfo == null)
+            return "NULL";
+        return mWifiInfo.getMacAddress();
+    }
+
+    public static int getNetworkId() {
+        WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+        if (mWifiInfo == null)
+            return 0;
+        return mWifiInfo.getNetworkId();
+    }
+
+    public static WifiInfo getWifiInfo() {
+        return mWifiManager.getConnectionInfo();
+    }
+
+    public static List<ScanResult> getScanResults() {
+        return mWifiManager.getScanResults();
+    }
+
+    // 查看以前是否也配置过这个网络
+    private static WifiConfiguration isExsits(String SSID) {
+        List<WifiConfiguration> existingConfigs = mWifiManager.getConfiguredNetworks();
+        for (WifiConfiguration existingConfig : existingConfigs) {
+            if (existingConfig.SSID.equals("\"" + SSID + "\"")) {
+                return existingConfig;
+            }
+        }
+        return null;
+    }
+
+    private static String intToIp(int i) {
+        return (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + ((i >> 16) & 0xFF) + "." + ((i >> 24) & 0xFF);
+    }
 }

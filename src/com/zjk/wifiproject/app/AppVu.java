@@ -16,7 +16,9 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.zjk.wifiproject.R;
+import com.zjk.wifiproject.connection.CreateConnectionActivity;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.util.A;
 
 public class AppVu implements Vu {
 
@@ -29,6 +31,7 @@ public class AppVu implements Vu {
     private TextView tv_local;
     private TextView tv_select_size;
     private boolean showAnim = false;
+    private Context context;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -37,12 +40,6 @@ public class AppVu implements Vu {
         tv_local = (TextView) view.findViewById(R.id.tv_local);
         tv_select_size = (TextView) view.findViewById(R.id.tv_select_size);
         layout_bottom = view.findViewById(R.id.layout_bottom);
-        view.findViewById(R.id.ib_close).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideBottomLayout();
-            }
-        });
     }
 
     @Override
@@ -74,10 +71,27 @@ public class AppVu implements Vu {
     }
 
     public void setData(Context context, List<AppModle> list) {
+        this.context = context;
         this.list = list;
         tv_local.setText("本地应用（" + list.size() + "）");
         this.adapter = new AppGridAdapter(this, context, list);
         gridView.setAdapter(adapter);
+        setListener();
+    }
+
+    private void setListener() {
+        view.findViewById(R.id.ib_close).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideBottomLayout();
+            }
+        });
+        tv_select_size.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                A.goOtherActivityFinish(context, CreateConnectionActivity.class);
+            }
+        });
     }
 
     private void showBottomLayout() {

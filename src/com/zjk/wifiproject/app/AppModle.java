@@ -14,7 +14,6 @@ public class AppModle {
     private long cacheSize;
     private long dataSize;
     private Drawable icon;
-
     private boolean checked;
     private boolean visible;
 
