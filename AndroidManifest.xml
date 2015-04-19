@@ -8,10 +8,12 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="22" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.zjk.wifiproject.BaseApplication"
@@ -31,6 +33,7 @@
         <activity android:name="com.zjk.wifiproject.main.MainActivity" />
         <activity android:name="com.zjk.wifiproject.guide.GuideActivity" />
         <activity android:name="com.zjk.wifiproject.connection.CreateConnectionActivity" />
+        <activity android:name="com.zjk.wifiproject.connection.ConnectAcivity" />
     </application>
 
 </manifest>

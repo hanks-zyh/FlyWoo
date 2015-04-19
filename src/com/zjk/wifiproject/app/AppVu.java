@@ -89,7 +89,7 @@ public class AppVu implements Vu {
         tv_select_size.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                A.goOtherActivityFinish(context, CreateConnectionActivity.class);
+                A.goOtherActivity(context, CreateConnectionActivity.class);
             }
         });
     }

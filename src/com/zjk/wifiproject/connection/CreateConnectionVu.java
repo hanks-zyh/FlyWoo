@@ -5,21 +5,34 @@ import android.os.Build;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiApConst;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.util.A;
+import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.TextUtils;
 import com.zjk.wifiproject.util.WifiUtils;
 
-public class CreateConnectionVu implements Vu {
+public class CreateConnectionVu implements Vu, OnClickListener {
 
     private View view;
+    private Context context;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.activity_create_connection, null);
+        context = inflater.getContext();
+        bindView(view);
+    }
+
+    private void bindView(View view2) {
+        view2.findViewById(R.id.open_ap).setOnClickListener(this);
+        view2.findViewById(R.id.open_wifi).setOnClickListener(this);
+        view2.findViewById(R.id.close_ap).setOnClickListener(this);
+        view2.findViewById(R.id.close_wifi).setOnClickListener(this);
     }
 
     @Override
@@ -41,18 +54,23 @@ public class CreateConnectionVu implements Vu {
         // WifiApConst.WIFI_AP_PASSWORD, 3, "ap");
         // wifiUtils.createWiFiAP(wifiConfiguration, true);
 
-        if (WifiUtils.isWifiApEnabled()) {
+        if (WifiUtils.isWifiEnabled()) {
             // 执行关闭热点事件
-            WifiUtils.closeWifiAp();
-            WifiUtils.OpenWifi();
-
-        } else {
-            Handler mHandler = new Handler();
-            // 创建热点
-            WifiUtils.startWifiAp(WifiApConst.WIFI_AP_HEADER + getLocalHostName(),
-                    WifiApConst.WIFI_AP_PASSWORD, mHandler);
+            WifiUtils.closeWifi();
         }
+        Handler mHandler = new Handler();
+        // 创建热点
+        WifiUtils.startWifiAp(WifiApConst.WIFI_AP_HEADER + getLocalHostName(), WifiApConst.WIFI_AP_PASSWORD,
+                mHandler);
 
+        L.d("localIP=" + WifiUtils.getServerIPAddress());
+
+        new Thread(new CreateAPThread()).start();
+
+    }
+
+    public void closeAP() {
+        WifiUtils.closeWifiAp();
     }
 
     /**
@@ -75,5 +93,27 @@ public class CreateConnectionVu implements Vu {
         String str2 = Build.MODEL;
         str2 = str1 + "_" + str2;
         return str2;
+    }
+
+    @Override
+    public void onClick(View v) {
+        L.e("v=" + v.toString());;
+        switch (v.getId()) {
+            case R.id.close_ap:
+                closeAP();
+                break;
+            case R.id.open_ap:
+                createAP(context);
+                break;
+            case R.id.close_wifi:
+                WifiUtils.closeWifi();
+                break;
+            case R.id.open_wifi:
+                WifiUtils.OpenWifi();
+                A.goOtherActivityFinish(context, ConnectAcivity.class);
+                break;
+            default:
+                break;
+        }
     }
 }

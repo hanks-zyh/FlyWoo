@@ -12,10 +12,16 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.zjk.wifiproject.util.PixelUtil;
+
 public class CircularProgress extends View {
 
     private Paint bgPaint, progressBgPaint, progressPaint;
     private float curProgress = 0;
+
+    private int ringBgWidth;
+    private int ringWidth;
+    private int gap;
 
     @SuppressLint("NewApi")
     public CircularProgress(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -37,21 +43,26 @@ public class CircularProgress extends View {
     }
 
     private void init(Context context) {
+
+        ringBgWidth = PixelUtil.dp2px(8);
+        ringWidth = PixelUtil.dp2px(8);
+        gap = PixelUtil.dp2px(2);
+
         bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bgPaint.setColor(Color.parseColor("#F7F7F7"));
 
         progressBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressBgPaint.setColor(Color.parseColor("#88444459"));
-        progressBgPaint.setStrokeWidth(8);
+        progressBgPaint.setStrokeWidth(ringBgWidth);
         progressBgPaint.setStyle(Paint.Style.STROKE); // 绘制空心圆
 
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setColor(Color.parseColor("#FF0000"));
-        progressPaint.setStrokeWidth(8);
+        progressPaint.setStrokeWidth(ringWidth);
         progressPaint.setStyle(Paint.Style.STROKE); // 绘制空心圆
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(4000);
+                ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(10000);
                 va.addUpdateListener(new AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -61,7 +72,7 @@ public class CircularProgress extends View {
                 });
                 va.start();
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override
@@ -70,11 +81,12 @@ public class CircularProgress extends View {
         // canvas.save();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
-        canvas.drawCircle(width / 2, height / 2, width / 2 - 15, bgPaint);
+        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - gap, bgPaint);
 
         RectF oval = null;
         if (oval == null) {
-            oval = new RectF(5, 5, width - 5, height - 5);
+            oval = new RectF(ringWidth + gap, ringBgWidth + gap, width - ringBgWidth - gap, height
+                    - ringBgWidth - gap);
         }
         canvas.drawArc(oval, 0, 360, false, progressBgPaint);
 
