@@ -52,7 +52,7 @@ public class MainVu implements Vu {
         // Center the tabs in the layout
         // mTabs.setDistributeEvenly(true);
         // Customize tab color
-        mTabs.setSelectedIndicatorColors(Color.RED);
+        mTabs.setSelectedIndicatorColors(Color.WHITE);
         mTabs.setViewPager(mViewPager);
 
     }

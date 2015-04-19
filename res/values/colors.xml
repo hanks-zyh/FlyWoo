@@ -19,7 +19,7 @@
     <color name="black_tran">#88000000</color>
 
     <!-- app color -->
-    <color name="main_red">#ED5A37</color>
+    <color name="main_red">#F44336</color>
     <color name="main_blue">#289CCF</color>
     <color name="title_blue">#1192CB</color>
     <color name="bottom_text_blue">#0A76FE</color>

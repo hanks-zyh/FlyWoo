@@ -81,33 +81,35 @@ public final class R {
         public static final int titlebar_height=0x7f070002;
     }
     public static final class drawable {
-        public static final int btn_seletor=0x7f020000;
-        public static final int checkbox_pressed=0x7f020001;
-        public static final int guide_1=0x7f020002;
-        public static final int guide_1_text=0x7f020003;
-        public static final int guide_2=0x7f020004;
-        public static final int guide_2_text=0x7f020005;
-        public static final int guide_3=0x7f020006;
-        public static final int guide_3_text=0x7f020007;
-        public static final int guide_3_text_bg=0x7f020008;
-        public static final int ic_back_white=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int ic_menu_white=0x7f02000b;
-        public static final int ic_more_white=0x7f02000c;
-        public static final int ic_search_white=0x7f02000d;
-        public static final int ic_x=0x7f02000e;
-        public static final int loading_logo=0x7f02000f;
-        public static final int loading_people=0x7f020010;
-        public static final int tab_text_seletor=0x7f020011;
-        public static final int voice_left=0x7f020012;
-        public static final int voice_left1=0x7f020013;
-        public static final int voice_left2=0x7f020014;
-        public static final int voice_left3=0x7f020015;
-        public static final int voice_right=0x7f020016;
-        public static final int voice_right1=0x7f020017;
-        public static final int voice_right2=0x7f020018;
-        public static final int voice_right3=0x7f020019;
-        public static final int zapya_common_actionbar_logo=0x7f02001a;
+        public static final int bt_bg_shadow_2dp=0x7f020000;
+        public static final int btn_seletor=0x7f020001;
+        public static final int checkbox_pressed=0x7f020002;
+        public static final int guide_1=0x7f020003;
+        public static final int guide_1_text=0x7f020004;
+        public static final int guide_2=0x7f020005;
+        public static final int guide_2_text=0x7f020006;
+        public static final int guide_3=0x7f020007;
+        public static final int guide_3_text=0x7f020008;
+        public static final int guide_3_text_bg=0x7f020009;
+        public static final int ic_back_white=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int ic_menu_white=0x7f02000c;
+        public static final int ic_more_white=0x7f02000d;
+        public static final int ic_search_white=0x7f02000e;
+        public static final int ic_x=0x7f02000f;
+        public static final int loading_logo=0x7f020010;
+        public static final int loading_people=0x7f020011;
+        public static final int shadow=0x7f020012;
+        public static final int tab_text_seletor=0x7f020013;
+        public static final int voice_left=0x7f020014;
+        public static final int voice_left1=0x7f020015;
+        public static final int voice_left2=0x7f020016;
+        public static final int voice_left3=0x7f020017;
+        public static final int voice_right=0x7f020018;
+        public static final int voice_right1=0x7f020019;
+        public static final int voice_right2=0x7f02001a;
+        public static final int voice_right3=0x7f02001b;
+        public static final int zapya_common_actionbar_logo=0x7f02001c;
     }
     public static final class id {
         public static final int action_settings=0x7f0c0020;
@@ -158,12 +160,13 @@ public final class R {
         public static final int layout_main=0x7f030007;
         public static final int layout_title=0x7f030008;
         public static final int popup_app_option=0x7f030009;
-        public static final int vu_app=0x7f03000a;
-        public static final int vu_app_item=0x7f03000b;
-        public static final int vu_connect=0x7f03000c;
-        public static final int vu_drawer=0x7f03000d;
-        public static final int vu_main=0x7f03000e;
-        public static final int vu_picture=0x7f03000f;
+        public static final int shadow=0x7f03000a;
+        public static final int vu_app=0x7f03000b;
+        public static final int vu_app_item=0x7f03000c;
+        public static final int vu_connect=0x7f03000d;
+        public static final int vu_drawer=0x7f03000e;
+        public static final int vu_main=0x7f03000f;
+        public static final int vu_picture=0x7f030010;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;

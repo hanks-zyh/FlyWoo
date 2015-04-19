@@ -8,7 +8,7 @@
         android:id="@+id/tv_local"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="#FDFDFD"
+        android:background="#EDEDED"
         android:gravity="center_vertical|left"
         android:paddingLeft="16dp"
         android:text="本地应用" />
@@ -18,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tv_local"
-        android:background="#EDEDED"
         android:fadingEdge="none"
         android:fadingEdgeLength="0px"
         android:numColumns="4"
