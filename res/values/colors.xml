@@ -28,6 +28,9 @@
     <color name="person_text_pressed">#F6F6F6</color>
     <color name="person_text_normal">#FFFFFF</color>
     <color name="mian_bg">#F0F2F4</color>
+    <color name="text_colot_1">#212121</color>
+    <color name="text_colot_2">#7D7D7D</color>
+    <color name="text_colot_3">#878787</color>
 
     <!-- text_press -->
     <color name="text_bg_normal">#00000000</color>

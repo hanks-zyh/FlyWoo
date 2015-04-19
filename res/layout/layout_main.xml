@@ -9,7 +9,7 @@
     <com.zjk.wifiproject.view.tabs.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="38dp" >
+        android:layout_height="wrap_content" >
     </com.zjk.wifiproject.view.tabs.SlidingTabLayout>
 
     <android.support.v4.view.ViewPager

@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.format.Formatter;
 
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
-import com.zjk.wifiproject.util.L;
 
 public class AppGridAdapter extends BasePresenterAdapter<AppModle, AppItemVu> {
 
@@ -25,7 +24,6 @@ public class AppGridAdapter extends BasePresenterAdapter<AppModle, AppItemVu> {
 
     @Override
     protected void onBindItemVu(int position) {
-        L.e("position=" + position);
         AppModle item = list.get(position);
         vu.setAppIcon(((BitmapDrawable) item.getIcon()).getBitmap());
         vu.setAppName(item.getName());

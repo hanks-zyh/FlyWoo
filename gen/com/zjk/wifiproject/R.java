@@ -36,7 +36,7 @@ public final class R {
         public static final int green=0x7f060008;
         public static final int grey=0x7f060004;
         public static final int hint=0x7f060003;
-        public static final int line=0x7f06001a;
+        public static final int line=0x7f06001d;
         public static final int main_blue=0x7f060010;
         /**  app color 
          */
@@ -50,15 +50,18 @@ public final class R {
         public static final int red=0x7f060005;
         /**  text_press 
          */
-        public static final int text_bg_normal=0x7f060018;
-        public static final int text_bg_press=0x7f060019;
+        public static final int text_bg_normal=0x7f06001b;
+        public static final int text_bg_press=0x7f06001c;
         public static final int text_black=0x7f060014;
+        public static final int text_colot_1=0x7f060018;
+        public static final int text_colot_2=0x7f060019;
+        public static final int text_colot_3=0x7f06001a;
         public static final int text_gray=0x7f060013;
         public static final int title_blue=0x7f060011;
         public static final int title_red=0x7f06000c;
         public static final int transparent=0x7f06000b;
-        public static final int umeng_fb_color_btn_normal=0x7f06001c;
-        public static final int umeng_fb_color_btn_pressed=0x7f06001b;
+        public static final int umeng_fb_color_btn_normal=0x7f06001f;
+        public static final int umeng_fb_color_btn_pressed=0x7f06001e;
         /**  base color 
          */
         public static final int white=0x7f060000;
@@ -107,33 +110,38 @@ public final class R {
         public static final int zapya_common_actionbar_logo=0x7f02001a;
     }
     public static final class id {
-        public static final int action_settings=0x7f0c001b;
-        public static final int btn_connect=0x7f0c0019;
+        public static final int action_settings=0x7f0c0020;
+        public static final int btn_connect=0x7f0c001d;
         public static final int btn_creat=0x7f0c0006;
-        public static final int button1=0x7f0c000f;
-        public static final int checked=0x7f0c0018;
+        public static final int button1=0x7f0c0013;
+        public static final int checked=0x7f0c001c;
         public static final int close_ap=0x7f0c0001;
         public static final int close_wifi=0x7f0c0003;
-        public static final int gridview=0x7f0c0011;
+        public static final int folderName=0x7f0c000d;
+        public static final int gridview=0x7f0c0015;
         public static final int guide=0x7f0c0008;
-        public static final int ib_close=0x7f0c0014;
-        public static final int ib_menu=0x7f0c000c;
-        public static final int ib_more=0x7f0c000d;
-        public static final int ib_search=0x7f0c000e;
+        public static final int ib_close=0x7f0c0018;
+        public static final int ib_menu=0x7f0c0010;
+        public static final int ib_more=0x7f0c0011;
+        public static final int ib_search=0x7f0c0012;
+        public static final int image=0x7f0c000b;
         public static final int image_m=0x7f0c0009;
-        public static final int iv_app_icon=0x7f0c0015;
-        public static final int layout_bottom=0x7f0c0012;
-        public static final int left_drawer=0x7f0c001a;
+        public static final int iv_app_icon=0x7f0c0019;
+        public static final int layout_bottom=0x7f0c0016;
+        public static final int left_drawer=0x7f0c001e;
+        public static final int listView=0x7f0c001f;
         public static final int open_ap=0x7f0c0002;
         public static final int open_wifi=0x7f0c0004;
+        public static final int pictureCount=0x7f0c000c;
         public static final int relativeLayout1=0x7f0c0000;
-        public static final int tabs=0x7f0c000b;
+        public static final int select=0x7f0c000e;
+        public static final int tabs=0x7f0c000f;
         public static final int text=0x7f0c000a;
         public static final int top=0x7f0c0007;
-        public static final int tv_app_name=0x7f0c0016;
-        public static final int tv_app_size=0x7f0c0017;
-        public static final int tv_local=0x7f0c0010;
-        public static final int tv_select_size=0x7f0c0013;
+        public static final int tv_app_name=0x7f0c001a;
+        public static final int tv_app_size=0x7f0c001b;
+        public static final int tv_local=0x7f0c0014;
+        public static final int tv_select_size=0x7f0c0017;
         public static final int viewpager=0x7f0c0005;
     }
     public static final class integer {
@@ -146,14 +154,16 @@ public final class R {
         public static final int activity_splash=0x7f030003;
         public static final int custom_tab=0x7f030004;
         public static final int fragment_guide=0x7f030005;
-        public static final int layout_main=0x7f030006;
-        public static final int layout_title=0x7f030007;
-        public static final int popup_app_option=0x7f030008;
-        public static final int vu_app=0x7f030009;
-        public static final int vu_app_item=0x7f03000a;
-        public static final int vu_connect=0x7f03000b;
-        public static final int vu_drawer=0x7f03000c;
-        public static final int vu_main=0x7f03000d;
+        public static final int item_picture_folder=0x7f030006;
+        public static final int layout_main=0x7f030007;
+        public static final int layout_title=0x7f030008;
+        public static final int popup_app_option=0x7f030009;
+        public static final int vu_app=0x7f03000a;
+        public static final int vu_app_item=0x7f03000b;
+        public static final int vu_connect=0x7f03000c;
+        public static final int vu_drawer=0x7f03000d;
+        public static final int vu_main=0x7f03000e;
+        public static final int vu_picture=0x7f03000f;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;

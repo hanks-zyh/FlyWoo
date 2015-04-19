@@ -3,9 +3,19 @@ package com.zjk.wifiproject.util;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+
+import com.zjk.wifiproject.picture.PictureEntity;
+import com.zjk.wifiproject.picture.PictureFolderEntity;
 
 /**
  * @fileName FileUtils.java
@@ -196,4 +206,46 @@ public class FileUtils {
         return null;
     }
 
+    public static List<PictureFolderEntity> getPictureFolderList(Context context) {
+        List<PictureFolderEntity> list = new ArrayList<PictureFolderEntity>();
+
+        /**
+         * 临时的辅助类，用于防止同一个文件夹的多次扫描
+         */
+        HashMap<String, Integer> tmpDir = new HashMap<String, Integer>();
+
+        ContentResolver mContentResolver = context.getContentResolver();
+        Cursor mCursor = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Images.ImageColumns.DATA }, "", null,
+                MediaStore.MediaColumns.DATE_ADDED + " DESC");
+        if (mCursor.moveToFirst()) {
+            int _date = mCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            do {
+                // 获取图片的路径
+                String path = mCursor.getString(_date);
+                // 获取该图片的父路径名
+                File parentFile = new File(path).getParentFile();
+                if (parentFile == null) {
+                    continue;
+                }
+                PictureFolderEntity pictureFoldery = null;
+                String dirPath = parentFile.getAbsolutePath();
+                if (!tmpDir.containsKey(dirPath)) {
+                    // 初始化PictureFolderEntity
+                    pictureFoldery = new PictureFolderEntity();
+                    pictureFoldery.setDir(dirPath);
+                    pictureFoldery.setFirstImagePath(path);
+                    list.add(pictureFoldery);
+                    // Log.d("zyh", dirPath + "," + path);
+                    tmpDir.put(dirPath, list.indexOf(pictureFoldery));
+                } else {
+                    pictureFoldery = list.get(tmpDir.get(dirPath));
+                }
+                pictureFoldery.images.add(new PictureEntity(path));
+            } while (mCursor.moveToNext());
+        }
+        mCursor.close();
+        tmpDir = null;
+        return list;
+    }
 }

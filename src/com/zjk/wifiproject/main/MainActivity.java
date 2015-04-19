@@ -7,6 +7,7 @@ import android.app.Fragment;
 
 import com.zjk.wifiproject.app.AppFragment;
 import com.zjk.wifiproject.drawer.DrawerFragment;
+import com.zjk.wifiproject.picture.PictureFragment;
 import com.zjk.wifiproject.presenters.BasePresenterActivity;
 
 public class MainActivity extends BasePresenterActivity<MainVu> {
@@ -21,7 +22,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
         // 主界面
         list.add(new AppFragment());
         list.add(new AppFragment());
-        list.add(new AppFragment());
+        list.add(new PictureFragment());
         list.add(new AppFragment());
         list.add(new AppFragment());
         vu.setViewPager(list);
