@@ -150,7 +150,7 @@
     <string name="wifi_dialog_pwd_input">输入密码</string>
     <string name="wifi_dialog_pwd_cancle">取消</string>
     <string name="wifi_dialog_pwd_connect">连接</string>
-    <string name="app_name">快牙</string>
+    <string name="app_name">飞牙</string>
     <string name="dm_start_associated_app">关联程序</string>
     <string name="start_2x_running">请点击确定，关闭正在运行的%1$s，再打开快牙</string>
     <string name="start_2x_running_title">提示</string>

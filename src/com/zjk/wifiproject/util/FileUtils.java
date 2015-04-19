@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import com.zjk.wifiproject.music.MusicEntity;
 import com.zjk.wifiproject.picture.PictureEntity;
 import com.zjk.wifiproject.picture.PictureFolderEntity;
 
@@ -244,8 +245,43 @@ public class FileUtils {
                 pictureFoldery.images.add(new PictureEntity(path));
             } while (mCursor.moveToNext());
         }
-        mCursor.close();
+        if (mCursor != null) {
+            mCursor.close();
+        }
         tmpDir = null;
         return list;
+    }
+
+    public static List<MusicEntity> getMusicList(Context context) {
+        List<MusicEntity> list = new ArrayList<MusicEntity>();
+
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        /* 这个字符串数组表示要查询的列 */
+        new String[] { MediaStore.Video.Media.TITLE, // 音乐名
+                MediaStore.Audio.Media.DURATION, // 音乐的总时间
+                MediaStore.Audio.Media.ARTIST, // 艺术家
+                MediaStore.Audio.Media._ID, // id号
+                MediaStore.Audio.Media.DISPLAY_NAME, // 音乐文件名
+                MediaStore.Audio.Media.DATA // 音乐文件的路径
+                }, null, // 查询条件，相当于sql中的where语句
+                null, // 查询条件中使用到的数据
+                null);
+        while (cursor.moveToNext()) {
+            MusicEntity music = new MusicEntity();
+            music.setTitle(cursor.getString(0));
+            music.setDuration(cursor.getLong(1));
+            music.setArtist(cursor.getString(2));
+            music.setId(cursor.getInt(3));
+            music.setDisplayName(cursor.getString(4));
+            music.setData(cursor.getString(5));
+            // L.i(music.toString());
+            list.add(music);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return list;
+
     }
 }
