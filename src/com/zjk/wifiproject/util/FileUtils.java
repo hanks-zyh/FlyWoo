@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import com.zjk.wifiproject.music.MusicEntity;
 import com.zjk.wifiproject.picture.PictureEntity;
 import com.zjk.wifiproject.picture.PictureFolderEntity;
+import com.zjk.wifiproject.vedio.VedioEntity;
 
 /**
  * @fileName FileUtils.java
@@ -207,6 +208,14 @@ public class FileUtils {
         return null;
     }
 
+    /**
+     * 获取所有图片的list
+     * 
+     * @version 1.0
+     * @author zyh
+     * @param context
+     * @return
+     */
     public static List<PictureFolderEntity> getPictureFolderList(Context context) {
         List<PictureFolderEntity> list = new ArrayList<PictureFolderEntity>();
 
@@ -283,5 +292,30 @@ public class FileUtils {
         }
         return list;
 
+    }
+
+    public static List<VedioEntity> getVedioList(Context context) {
+        List<VedioEntity> list = new ArrayList<VedioEntity>();
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, //
+                new String[] { MediaStore.Video.Media._ID,//
+                        MediaStore.Video.Media.DATA, //
+                        MediaStore.Video.Media.DURATION, //
+                        MediaStore.Video.Media.DISPLAY_NAME,//
+                        MediaStore.Video.Media.SIZE //
+                }, null, // 查询条件，相当于sql中的where语句
+                null, // 查询条件中使用到的数据
+                null);
+        while (cursor.moveToNext()) {
+            VedioEntity vedio = new VedioEntity();
+            vedio.setId(cursor.getInt(0));
+            vedio.setData(cursor.getString(1));
+            vedio.setDuration(cursor.getLong(2));
+            vedio.setDisplayName(cursor.getString(3));
+            vedio.setSize(cursor.getLong(4));
+            L.i(vedio.toString());
+            list.add(vedio);
+        }
+        return list;
     }
 }

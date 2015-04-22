@@ -7,9 +7,11 @@ import android.app.Fragment;
 
 import com.zjk.wifiproject.app.AppFragment;
 import com.zjk.wifiproject.drawer.DrawerFragment;
+import com.zjk.wifiproject.file.FileFragment;
 import com.zjk.wifiproject.music.MusicFragment;
 import com.zjk.wifiproject.picture.PictureFragment;
 import com.zjk.wifiproject.presenters.BasePresenterActivity;
+import com.zjk.wifiproject.vedio.VedioFragment;
 
 public class MainActivity extends BasePresenterActivity<MainVu> {
 
@@ -24,10 +26,9 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
         list.add(new AppFragment());
         list.add(new MusicFragment());
         list.add(new PictureFragment());
-        list.add(new AppFragment());
-        list.add(new AppFragment());
+        list.add(new VedioFragment());
+        list.add(new FileFragment());
         vu.setViewPager(list);
-
     }
 
     @Override

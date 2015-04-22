@@ -41,6 +41,8 @@ public class MainVu implements Vu {
     }
 
     public void setViewPager(List<Fragment> list) {
+        // 设置Viewpager缓存页数
+        mViewPager.setOffscreenPageLimit(list.size());
         mViewPager.setAdapter(new MainPageAdapter(fm, list));
         initSlidingTabLayout();
     }

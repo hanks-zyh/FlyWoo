@@ -7,4 +7,8 @@ package com.zjk.wifiproject.entity;
  */
 public class Entity {
     // 本来想做些什么来,暂时空着吧
+    protected String fileName;
+    protected String filePath;
+    protected long fileSize;
+
 }
