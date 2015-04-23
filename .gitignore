@@ -49,3 +49,5 @@ local.properties
 */build/
 *~
 *.swp
+/gen/
+/bin/

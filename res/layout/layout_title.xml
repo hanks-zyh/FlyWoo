@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/titlebar_height"
+    android:background="@color/main_red"
+    android:orientation="vertical" >
+
+    <ImageButton
+        android:id="@+id/ib_menu"
+        android:layout_width="@dimen/titlebar_height"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_seletor"
+        android:src="@drawable/ic_menu_white" />
+
+    <ImageButton
+        android:id="@+id/ib_more"
+        android:layout_width="@dimen/titlebar_height"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_seletor"
+        android:src="@drawable/ic_more_white" />
+
+    <ImageButton
+        android:id="@+id/ib_search"
+        android:layout_width="@dimen/titlebar_height"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/ib_more"
+        android:background="@drawable/btn_seletor"
+        android:src="@drawable/ic_search_white" />
+
+    <ImageView
+        android:layout_width="34dp"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:layout_toRightOf="@+id/ib_menu"
+        android:scaleType="centerInside"
+        android:src="@drawable/zapya_common_actionbar_logo" />
+
+</RelativeLayout>
