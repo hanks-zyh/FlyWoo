@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.music.MusicEntity;
 import com.zjk.wifiproject.picture.PictureEntity;
 import com.zjk.wifiproject.picture.PictureFolderEntity;
@@ -226,7 +227,7 @@ public class FileUtils {
 
         ContentResolver mContentResolver = context.getContentResolver();
         Cursor mCursor = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Images.ImageColumns.DATA }, "", null,
+                new String[]{MediaStore.Images.ImageColumns.DATA}, "", null,
                 MediaStore.MediaColumns.DATE_ADDED + " DESC");
         if (mCursor.moveToFirst()) {
             int _date = mCursor.getColumnIndex(MediaStore.Images.Media.DATA);
@@ -315,6 +316,33 @@ public class FileUtils {
             vedio.setSize(cursor.getLong(4));
             L.i(vedio.toString());
             list.add(vedio);
+        }
+        return list;
+    }
+
+
+    /**
+     *
+     * @param path
+     * @return 当是文件时返回null
+     */
+    public static List<WFile> getCurrentFileList(String path) {
+        L.d(""+path);
+        List<WFile> list = new ArrayList<>();
+        File file = new File(path);
+        if(file.isDirectory()){
+            for(File f : file.listFiles()){
+                WFile wf = new WFile();
+                L.d("-----"+f.getAbsolutePath());
+                wf.setFilePath(f.getAbsolutePath());
+                wf.setFileName(f.getName());
+                wf.setIsDirectory(f.isDirectory());
+                wf.setFileSize(f.length());
+                list.add(wf);
+            }
+
+        }else{
+            return  null;
         }
         return list;
     }

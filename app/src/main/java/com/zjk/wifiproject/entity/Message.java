@@ -5,7 +5,7 @@ package com.zjk.wifiproject.entity;
  * 
  * @author _Hill3
  */
-public class Message extends Entity {
+public class Message extends WFile {
 
     private String senderIMEI;
     private String sendTime;

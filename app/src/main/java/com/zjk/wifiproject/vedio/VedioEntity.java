@@ -1,8 +1,8 @@
 package com.zjk.wifiproject.vedio;
 
-import com.zjk.wifiproject.entity.Entity;
+import com.zjk.wifiproject.entity.WFile;
 
-public class VedioEntity extends Entity {
+public class VedioEntity extends WFile {
 
     private int id;
     private String data;

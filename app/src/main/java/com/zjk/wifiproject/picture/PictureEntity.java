@@ -1,8 +1,8 @@
 package com.zjk.wifiproject.picture;
 
-import com.zjk.wifiproject.entity.Entity;
+import com.zjk.wifiproject.entity.WFile;
 
-public class PictureEntity extends Entity {
+public class PictureEntity extends WFile {
 
     private String path;
 

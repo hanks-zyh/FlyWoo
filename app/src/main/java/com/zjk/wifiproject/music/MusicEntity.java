@@ -1,8 +1,8 @@
 package com.zjk.wifiproject.music;
 
-import com.zjk.wifiproject.entity.Entity;
+import com.zjk.wifiproject.entity.WFile;
 
-public class MusicEntity extends Entity {
+public class MusicEntity extends WFile {
 
     private String title;// 音乐名
     private long duration; // 音乐的总时间
