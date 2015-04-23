@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/guide_1" />
+
+    <ImageView
+        android:id="@+id/image_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/guide"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30.0dip"
+        android:scaleType="fitCenter"
+        android:src="@drawable/guide_1_text" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_m"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15.0dip"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="4.0dip"
+        android:text="@string/guide_text_1"
+        android:textColor="#AA000000"
+        android:textSize="16sp"
+        android:typeface="sans" />
+
+</RelativeLayout><!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/layout/fragment_guide.xml -->

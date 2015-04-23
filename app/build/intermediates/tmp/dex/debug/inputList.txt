@@ -1,0 +1,4 @@
+Z:\WorkSpace\WifiProject\app\build\intermediates\classes\debug
+Z:\WorkSpace\WifiProject\app\build\intermediates\pre-dexed\debug\rebound-0.3.7-188172c80a9ea9b92a62c510dfbe44456685d600.jar
+Z:\WorkSpace\WifiProject\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-3c9b7cca5c499a680d0a7a04ed1dd53a0573b820.jar
+Z:\WorkSpace\WifiProject\app\build\intermediates\pre-dexed\debug\android-support-v13-f3de72768f7a82a394a8417a8a5cb3e12c1f214c.jar

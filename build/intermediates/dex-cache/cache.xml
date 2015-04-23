@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="Z:\WorkSpace\WifiProject\app\libs\android-support-v13.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f4f7fcb93c67b84cdc871b82c36d9a849d6c5da1">
+        <dex dex="Z:\WorkSpace\WifiProject\app\build\intermediates\pre-dexed\debug\android-support-v13-f3de72768f7a82a394a8417a8a5cb3e12c1f214c.jar" />
+    </item>
+    <item
+        jar="Z:\WorkSpace\WifiProject\app\libs\picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="Z:\WorkSpace\WifiProject\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-3c9b7cca5c499a680d0a7a04ed1dd53a0573b820.jar" />
+    </item>
+    <item
+        jar="Z:\WorkSpace\WifiProject\app\libs\rebound-0.3.7.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="da23f0d13a0a572e01a1b53b547cbdc7a5b52209">
+        <dex dex="Z:\WorkSpace\WifiProject\app\build\intermediates\pre-dexed\debug\rebound-0.3.7-188172c80a9ea9b92a62c510dfbe44456685d600.jar" />
+    </item>
+
+</items>

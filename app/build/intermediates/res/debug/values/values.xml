@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="black">#ff000000</color>
+    <color name="black_tran">#88000000</color>
+    <color name="blue">#FF375BF1</color>
+    <color name="bottom_text_blue">#0A76FE</color>
+    <color name="gray">#66000000</color>
+    <color name="green">#FF34A350</color>
+    <color name="grey">#ff666666</color>
+    <color name="hint">#ff999999</color>
+    <color name="line">#F1F4F7</color>
+    <color name="main_blue">#289CCF</color>
+    <color name="main_red">#F44336</color>
+    <color name="mian_bg">#F0F2F4</color>
+    <color name="orange">#FFffbb00</color>
+    <color name="person_text_normal">#FFFFFF</color>
+    <color name="person_text_pressed">#F6F6F6</color>
+    <color name="pressed_gray">#33222222</color>
+    <color name="purple">#FF881177</color>
+    <color name="red">#FFC93437</color>
+    <color name="text_bg_normal">#00000000</color>
+    <color name="text_bg_press">#33FFFFFF</color>
+    <color name="text_black">#1C2132</color>
+    <color name="text_colot_1">#212121</color>
+    <color name="text_colot_2">#7D7D7D</color>
+    <color name="text_colot_3">#878787</color>
+    <color name="text_gray">#9DA3AF</color>
+    <color name="title_blue">#1192CB</color>
+    <color name="title_red">#EF5054</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="yellow">#FFF7D23E</color>
+    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="line_height">0.8dp</dimen>
+    <dimen name="titlebar_height">48dp</dimen>
+    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/integers.xml -->
+    <eat-comment/>
+    <integer name="activity_anim_duration">400</integer>
+    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">飞牙</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light"/>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowNoTitle">true</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>
