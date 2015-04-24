@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="black">#ff000000</color>
     <color name="black_tran">#88000000</color>
@@ -32,22 +32,22 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="yellow">#FFF7D23E</color>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="line_height">0.8dp</dimen>
     <dimen name="titlebar_height">48dp</dimen>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/integers.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/integers.xml -->
     <eat-comment/>
     <integer name="activity_anim_duration">400</integer>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Settings</string>
     <string name="app_name">飞牙</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_main">MainActivity</string>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light"/>
     <style name="AppTheme" parent="AppBaseTheme">

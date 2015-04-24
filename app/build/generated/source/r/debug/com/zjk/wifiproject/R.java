@@ -137,7 +137,7 @@ public final class R {
         public static final int size=0x7f0c0010;
         public static final int tabs=0x7f0c0019;
         public static final int text=0x7f0c000a;
-        public static final int tiemSize=0x7f0c000d;
+        public static final int timeSize=0x7f0c000d;
         public static final int title=0x7f0c000f;
         public static final int top=0x7f0c0007;
         public static final int tv_app_name=0x7f0c0024;

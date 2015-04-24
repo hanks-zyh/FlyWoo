@@ -21,11 +21,18 @@ public class FileAdapter extends BasePresenterAdapter<WFile,FileAdapterVu>{
         WFile item = list.get(position);
         vu.setFileIcon(item);
         vu.setFileName(item.getFileName());
-        vu.setFileSize(item.getFileSize());
+        vu.setFileSize(item);
     }
 
+    public void setData(List<WFile> newList){
+        list.clear();
+        list.addAll(newList);
+        notifyDataSetChanged();
+    }
     @Override
     protected Class<FileAdapterVu> getVuClass() {
         return FileAdapterVu.class;
     }
+
+
 }

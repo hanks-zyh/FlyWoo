@@ -6,4 +6,4 @@
     <item android:drawable="@color/pressed_gray" android:state_pressed="true"></item>
     <item android:drawable="@color/transparent"></item>
 
-</selector><!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/drawable/btn_seletor.xml -->
+</selector><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/drawable/btn_seletor.xml -->

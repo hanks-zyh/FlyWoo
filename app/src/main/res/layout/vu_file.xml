@@ -7,7 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/gray" >
+        android:paddingLeft="16dp"
+        android:background="#eff2ff">
 
         <TextView
             android:id="@+id/path"
@@ -22,6 +23,8 @@
 
         <ImageButton
             android:id="@+id/up"
+            android:background="@drawable/btn_seletor"
+            android:src="@drawable/ic_arrow_up_black"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true" />

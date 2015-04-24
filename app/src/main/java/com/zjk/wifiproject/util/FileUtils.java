@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.music.MusicEntity;
 import com.zjk.wifiproject.picture.PictureEntity;
@@ -327,17 +328,26 @@ public class FileUtils {
      * @return 当是文件时返回null
      */
     public static List<WFile> getCurrentFileList(String path) {
-        L.d(""+path);
+        if(path==null){
+            return null;
+        }
+        Logger.d("查询路径" + path);
         List<WFile> list = new ArrayList<>();
         File file = new File(path);
         if(file.isDirectory()){
             for(File f : file.listFiles()){
                 WFile wf = new WFile();
-                L.d("-----"+f.getAbsolutePath());
+                Logger.d("-----" + f.getAbsolutePath());
                 wf.setFilePath(f.getAbsolutePath());
                 wf.setFileName(f.getName());
                 wf.setIsDirectory(f.isDirectory());
                 wf.setFileSize(f.length());
+                if(f.isDirectory() && f.listFiles()!=null){
+                    wf.setChildernSize(f.listFiles().length);
+                }else {
+                    wf.setChildernSize(0);
+                }
+
                 list.add(wf);
             }
 

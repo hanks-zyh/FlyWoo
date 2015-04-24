@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values-zh/arrays.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values-zh/arrays.xml -->
     <eat-comment/>
     <string-array name="wifi_address_type">
         <item>餐厅/快餐店/餐饮服务</item>
@@ -20,14 +20,14 @@
         <item>加油站/汽车服务</item>
         <item>其他</item>
     </string-array>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values-zh/colors.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values-zh/colors.xml -->
     <eat-comment/>
     <color name="umeng_fb_color_btn_normal">#ff333333</color>
     <color name="umeng_fb_color_btn_pressed">#ff1495f7</color>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values-zh/dimens.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values-zh/dimens.xml -->
     <eat-comment/>
     <dimen name="guide_text">40.0sp</dimen>
-    <!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/values-zh/strings.xml -->
+    <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values-zh/strings.xml -->
     <eat-comment/>
     <string name="about_check_version">检查新版本</string>
     <string name="about_contact_us">联系我们</string>

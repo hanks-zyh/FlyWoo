@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:padding="16dp"
+    android:descendantFocusability="blocksDescendants"
     android:minHeight="92dp"
+    android:background="@drawable/btn_seletor"
     android:layout_height="92dp">
     <ImageView
         android:layout_marginRight="16dp"
@@ -22,7 +24,7 @@
         android:layout_alignBottom="@+id/fileIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tiemSize"
+        android:id="@+id/timeSize"
         android:text="timeAndSize"
         android:textSize="14sp"
         android:textColor="@color/text_colot_2"
@@ -30,9 +32,9 @@
     <CheckBox
         android:id="@+id/isSelect"
         android:gravity="center"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
 
-</RelativeLayout><!-- From: file:/Z:/WorkSpace/WifiProject/app/src/main/res/layout/item_file.xml -->
+</RelativeLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/item_file.xml -->

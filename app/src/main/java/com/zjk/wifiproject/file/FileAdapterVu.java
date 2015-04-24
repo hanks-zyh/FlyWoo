@@ -33,7 +33,7 @@ public class FileAdapterVu implements Vu {
 
     private ImageView mFileIcon;
     private TextView mFileName;
-    private TextView mTiemSize;
+    private TextView mTimeSize;
     private CheckBox mIsSelect;
 
     // End Of Content View Elements
@@ -42,7 +42,7 @@ public class FileAdapterVu implements Vu {
 
         mFileIcon = (ImageView) view.findViewById(R.id.fileIcon);
         mFileName = (TextView) view.findViewById(R.id.fileName);
-        mTiemSize = (TextView) view.findViewById(R.id.tiemSize);
+        mTimeSize = (TextView) view.findViewById(R.id.timeSize);
         mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
     }
 
@@ -64,9 +64,13 @@ public class FileAdapterVu implements Vu {
         mFileName.setText(fileName);
     }
 
-    public void setFileSize(long size){
-        mTiemSize.setText(Formatter.formatFileSize(context
-                ,size));
+    public void setFileSize(WFile file){
+        if(file.isDirectory()){
+            mTimeSize.setText("("+file.getChildernSize()+")");
+        }else {
+            mTimeSize.setText(Formatter.formatFileSize(context
+                    , file.getFileSize()));
+        }
     }
     public void setFileSelect(boolean isSelected){
         mIsSelect.setChecked(isSelected);

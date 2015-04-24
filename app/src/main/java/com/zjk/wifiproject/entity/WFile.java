@@ -1,6 +1,9 @@
 package com.zjk.wifiproject.entity;
 
+import com.zjk.wifiproject.util.FileUtils;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,15 +17,8 @@ public class WFile {
     protected String filePath;
     protected long fileSize;
     protected boolean isDirectory;
-    protected List<WFile> childern;
+    protected int childernSize ;
 
-    public List<WFile> getChildern() {
-        return childern;
-    }
-
-    public void setChildern(List<WFile> childern) {
-        this.childern = childern;
-    }
 
     public String getFileName() {
         return fileName;
@@ -54,5 +50,13 @@ public class WFile {
 
     public void setIsDirectory(boolean isDirectory) {
         this.isDirectory = isDirectory;
+    }
+
+    public void setChildernSize(int i) {
+        this.childernSize = i;
+    }
+
+    public int getChildernSize() {
+        return childernSize;
     }
 }
