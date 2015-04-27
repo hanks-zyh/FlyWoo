@@ -17,6 +17,7 @@ import android.os.Vibrator;
 
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.entity.FileState;
+import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
 
@@ -53,7 +54,13 @@ public class BaseApplication extends Application {
     public static List<String> mEmoticons;
     public static List<String> mEmoticons_Zem;
 
+
     private static BaseApplication instance;
+
+
+
+
+    private   List<WFile> sendFiles;
 
     /**
      * <p>
@@ -76,14 +83,23 @@ public class BaseApplication extends Application {
         sendFileStates = new HashMap<String, FileState>();
         recieveFileStates = new HashMap<String, FileState>();
         mAvatarCache = new HashMap<String, SoftReference<Bitmap>>();
-
+        sendFiles = new ArrayList<WFile>();
         // ActivitiesManager.init(getApplicationContext()); // 初始化活动管理器
         // L.setLogStatus(isPrintLog); // 设置是否显示日志
 
         initEmoticons();
         initNotification();
         initFolder();
+    }
 
+
+
+    public List<WFile> getSendFiles() {
+        return sendFiles;
+    }
+
+    public void setSendFiles(List<WFile> sendFiles) {
+        this.sendFiles = sendFiles;
     }
 
     private void initEmoticons() {

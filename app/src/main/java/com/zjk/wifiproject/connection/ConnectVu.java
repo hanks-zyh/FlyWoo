@@ -1,5 +1,6 @@
 package com.zjk.wifiproject.connection;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +11,7 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiApConst;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.util.L;
+import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.util.WifiUtils.WifiCipherType;
 
@@ -17,10 +19,11 @@ public class ConnectVu implements Vu, OnClickListener {
 
     private View view;
     private Button mConnectButton;
+    private Context context;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
-
+        context = inflater.getContext();
         view = inflater.inflate(R.layout.vu_connect, container, false);
         bindView();
     }
@@ -55,6 +58,7 @@ public class ConnectVu implements Vu, OnClickListener {
             boolean connFlag = WifiUtils.connectWifi("ZChat_google_608", WifiApConst.WIFI_AP_PASSWORD,
                     WifiCipherType.WIFICIPHER_WPA);
             if (!connFlag) {
+                T.show(context,"已连接");
                 mConnectButton.setText("已连接");
                 new Thread(new ConnectAPThread()).start();
             }

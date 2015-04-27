@@ -34,10 +34,15 @@ public class FileUtils {
      * @return
      */
     public static boolean isSdcardExist() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        }
-        return false;
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+    /**
+     * 判断内部存储
+     *
+     * @return
+     */
+    public static boolean isSdcard0Exist() {
+        return Environment.getExternalStorageDirectory();
     }
 
     /**

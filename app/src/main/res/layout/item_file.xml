@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:padding="16dp"
     android:descendantFocusability="blocksDescendants"
     android:minHeight="92dp"
@@ -15,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="android"
+        tools:text="android"
         android:id="@+id/fileName"
         android:textSize="18sp"
         android:textColor="@color/text_colot_1"
@@ -25,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/timeSize"
-        android:text="timeAndSize"
+        tools:text="timeAndSize"
         android:textSize="14sp"
         android:textColor="@color/text_colot_2"
         android:layout_toRightOf="@+id/fileIcon"/>

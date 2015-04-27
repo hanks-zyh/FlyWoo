@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.base.BaseActivity;
 import com.zjk.wifiproject.base.BaseFragment;
@@ -110,7 +111,11 @@ public class GuideActivity extends BaseActivity {
                 v.findViewById(R.id.top).setBackgroundColor(colors[index]);
                 ((ImageView) v.findViewById(R.id.guide)).setImageResource(images[index][0]);
                 ((ImageView) v.findViewById(R.id.image_m)).setImageResource(images[index][1]);
-                ((TextView) v.findViewById(R.id.text)).setText(texts[index]);
+                Logger.d(index+"");
+                int str = texts[index];
+                Logger.d(str+","+getString(R.string.guide_text_1));
+
+                        ((TextView) v.findViewById(R.id.text)).setText(str);
             } else {
                 v.findViewById(R.id.top).setBackgroundColor(Color.parseColor("#DDE865"));
                 ((ImageView) v.findViewById(R.id.guide)).setImageResource(R.drawable.guide_3_text_bg);
@@ -121,7 +126,6 @@ public class GuideActivity extends BaseActivity {
                 tv.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // �´β���չʾ�����
                         SP.put(context, SharedKey.isfirst, false);
                         A.goOtherActivityFinish(context, MainActivity.class);
                     }

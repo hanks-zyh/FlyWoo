@@ -21,6 +21,17 @@ public class FileFragment extends BasePresenterFragment<FileVu> {
     @Override
     protected void onBindVu() {
         list = new ArrayList<>();
+
+
+        if (FileUtils.isSdcardExist()){
+            WFile file0 =new WFile();
+            file0.setChildernSize(0);
+            file0.setFileSize(0);
+            file0.setFileName("Õ‚≤ø¥Ê¥¢");
+            file0.setIsDirectory(true);
+            file0.setFilePath(FileUtils.getSDPath());
+            list.add(file0);
+        }
         vu.setData(list);
         String currentPath  = Environment.getRootDirectory().getAbsolutePath();
         vu.setCurrentPath(currentPath);
