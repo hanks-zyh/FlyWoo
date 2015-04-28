@@ -2,6 +2,7 @@ package com.zjk.wifiproject.vedio;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.util.L;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class VedioAdapterVu implements Vu {
 
@@ -51,7 +56,22 @@ public class VedioAdapterVu implements Vu {
      */
     public void setVedioThrmuil(String path) {
         try {
-            mVedio.setImageBitmap(getVideoThumbnail(path));
+            Bitmap bm = getVideoThumbnail(path);
+            L.d("缩略图："+bm.getWidth() +"，"+bm.getHeight());
+            ByteArrayOutputStream baos = null ;
+            try{
+                baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 3, baos);
+
+            }finally{
+                try {
+                    if(baos != null)
+                        baos.close() ;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            mVedio.setImageBitmap(bm);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +94,7 @@ public class VedioAdapterVu implements Vu {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             retriever.setDataSource(filePath);
-            bitmap = retriever.getFrameAtTime();
+            bitmap = retriever.getFrameAtTime(0,0);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {

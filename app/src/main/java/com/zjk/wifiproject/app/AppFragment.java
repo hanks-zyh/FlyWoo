@@ -14,7 +14,7 @@ public class AppFragment extends BasePresenterFragment<AppVu> {
 
     @Override
     protected void onBindVu() {
-        List<AppModle> list = AppUtils.getAppList(context);
+        List<AppEntity> list = AppUtils.getAppList(context);
         vu.setData(context, list);
         vu.setOnItemClickListener();
     }

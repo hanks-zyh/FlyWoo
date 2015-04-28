@@ -16,24 +16,12 @@ import java.util.List;
 
 public class FileFragment extends BasePresenterFragment<FileVu> {
 
-    private ArrayList<WFile> list;
+    private ArrayList<WFile> list = new ArrayList<>();
 
     @Override
     protected void onBindVu() {
-        list = new ArrayList<>();
-
-
-        if (FileUtils.isSdcardExist()){
-            WFile file0 =new WFile();
-            file0.setChildernSize(0);
-            file0.setFileSize(0);
-            file0.setFileName("外部存储");
-            file0.setIsDirectory(true);
-            file0.setFilePath(FileUtils.getSDPath());
-            list.add(file0);
-        }
         vu.setData(list);
-        String currentPath  = Environment.getRootDirectory().getAbsolutePath();
+        String currentPath  = Environment.getExternalStorageDirectory().getAbsolutePath();
         vu.setCurrentPath(currentPath);
         Logger.i(currentPath);
         vu.setOnItemClickListener(new FileItemClickListener());
@@ -51,7 +39,7 @@ public class FileFragment extends BasePresenterFragment<FileVu> {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             WFile item = list.get(position);
             if(item.isDirectory()) {
-                String path = item.getFilePath();
+                String path = item.getAbsolutePath();
                 Logger.i(path);
                 vu.setCurrentPath(path);
             }

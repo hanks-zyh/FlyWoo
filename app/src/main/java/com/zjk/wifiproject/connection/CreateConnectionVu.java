@@ -11,11 +11,10 @@ import android.widget.EditText;
 
 import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
-import com.zjk.wifiproject.activity.wifiap.WifiApConst;
+import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.socket.IPMSGConst;
 import com.zjk.wifiproject.socket.UDPMessageListener;
-import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.TextUtils;
@@ -59,8 +58,8 @@ public class CreateConnectionVu implements Vu, OnClickListener {
     public void createAP(Context context) {
         // WifiUtils wifiUtils = WifiUtils.getInstance(context);
         // WifiConfiguration wifiConfiguration =
-        // wifiUtils.createWifiInfo(WifiApConst.WIFI_AP_HEADER,
-        // WifiApConst.WIFI_AP_PASSWORD, 3, "ap");
+        // wifiUtils.createWifiInfo(WifiConst.WIFI_AP_HEADER,
+        // WifiConst.WIFI_AP_PASSWORD, 3, "ap");
         // wifiUtils.createWiFiAP(wifiConfiguration, true);
 
         if (WifiUtils.isWifiEnabled()) {
@@ -69,9 +68,9 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         }
         Handler mHandler = new Handler();
         // 创建热点
-//        WifiUtils.startWifiAp(WifiApConst.WIFI_AP_HEADER + getLocalHostName(), WifiApConst.WIFI_AP_PASSWORD,
+//        WifiUtils.startWifiAp(WifiConst.WIFI_AP_HEADER + getLocalHostName(), WifiConst.WIFI_AP_PASSWORD,
 //                mHandler);
-        WifiUtils.startWifiAp("ZChat_google_608", WifiApConst.WIFI_AP_PASSWORD,
+        WifiUtils.startWifiAp("ZChat_google_608", WifiConst.WIFI_AP_PASSWORD,
                 mHandler);
 
         L.d("localIP=" + WifiUtils.getServerIPAddress());
@@ -140,9 +139,9 @@ public class CreateConnectionVu implements Vu, OnClickListener {
     private void connectAp() {
         String ssid = WifiUtils.getApSSID();
         L.e(ssid);
-        if (ssid.startsWith(WifiApConst.WIFI_AP_HEADER)) {
+        if (ssid.startsWith(WifiConst.WIFI_AP_HEADER)) {
             // 连接网络
-            boolean connFlag = WifiUtils.connectWifi("ZChat_google_608", WifiApConst.WIFI_AP_PASSWORD,
+            boolean connFlag = WifiUtils.connectWifi("ZChat_google_608", WifiConst.WIFI_AP_PASSWORD,
                     WifiUtils.WifiCipherType.WIFICIPHER_WPA);
             if (connFlag) {
                 T.show(context, "已连接");

@@ -5,16 +5,13 @@ import com.zjk.wifiproject.entity.WFile;
 public class VedioEntity extends WFile {
 
     private int id;
-    private String data;
     private String displayName;
-    private long size;
     private long duration;
 
-    @Override
-    public String toString() {
-        return "VedioEntity [id=" + id + ", data=" + data + ", displayName=" + displayName + ", size=" + size
-                + ", duration=" + duration + "]";
+    public VedioEntity(String path) {
+        super(path);
     }
+
 
     public int getId() {
         return id;
@@ -24,13 +21,6 @@ public class VedioEntity extends WFile {
         this.id = id;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
 
     public String getDisplayName() {
         return displayName;
@@ -38,14 +28,6 @@ public class VedioEntity extends WFile {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
     }
 
     public long getDuration() {

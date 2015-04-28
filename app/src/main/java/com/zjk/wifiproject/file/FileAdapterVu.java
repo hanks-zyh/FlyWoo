@@ -66,10 +66,10 @@ public class FileAdapterVu implements Vu {
 
     public void setFileSize(WFile file){
         if(file.isDirectory()){
-            mTimeSize.setText("("+file.getChildernSize()+")");
+            mTimeSize.setText("("+(file.listFiles() !=null ? file.listFiles().length : 0 )+")");
         }else {
             mTimeSize.setText(Formatter.formatFileSize(context
-                    , file.getFileSize()));
+                    , file.length()));
         }
     }
     public void setFileSelect(boolean isSelected){

@@ -15,9 +15,9 @@ public class VedioAdapter extends BasePresenterAdapter<VedioEntity, VedioAdapter
     @Override
     protected void onBindItemVu(int position) {
         VedioEntity item = list.get(position);
-        vu.setVedioThrmuil(item.getData());
+        vu.setVedioThrmuil(item.getAbsolutePath());
         vu.setVedioName(item.getDisplayName());
-        vu.setVedioSize(item.getSize());
+        vu.setVedioSize(item.length());
         vu.setVedioDuration(item.getDuration());
     }
 

@@ -9,12 +9,9 @@ public class MusicEntity extends WFile {
     private String artist; // 艺术家
     private int id; // id号
     private String displayName;// 音乐文件名
-    private String data;// 音乐文件的路径
 
-    @Override
-    public String toString() {
-        return "MusicEntity [title=" + title + ", duration=" + duration + ", artist=" + artist + ", id=" + id
-                + ", displayName=" + displayName + ", data=" + data + "]";
+    public MusicEntity(String path) {
+        super(path);
     }
 
     public String getTitle() {
@@ -56,13 +53,4 @@ public class MusicEntity extends WFile {
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
 }

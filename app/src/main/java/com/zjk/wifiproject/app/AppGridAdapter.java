@@ -8,11 +8,11 @@ import android.text.format.Formatter;
 
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
 
-public class AppGridAdapter extends BasePresenterAdapter<AppModle, AppItemVu> {
+public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
 
     private AppVu appVu;
 
-    public AppGridAdapter(AppVu appVu, Context context, List<AppModle> list) {
+    public AppGridAdapter(AppVu appVu, Context context, List<AppEntity> list) {
         super(context, list);
         this.appVu = appVu;
     }
@@ -24,10 +24,10 @@ public class AppGridAdapter extends BasePresenterAdapter<AppModle, AppItemVu> {
 
     @Override
     protected void onBindItemVu(int position) {
-        AppModle item = list.get(position);
+        AppEntity item = list.get(position);
         vu.setAppIcon(((BitmapDrawable) item.getIcon()).getBitmap());
         vu.setAppName(item.getName());
-        vu.setAppSize(Formatter.formatFileSize(context, item.getApkSize()));
+        vu.setAppSize(Formatter.formatFileSize(context, item.length()));
         vu.setChecked(appVu.getSelectedList().contains(item));
     }
 }

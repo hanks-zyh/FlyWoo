@@ -6,7 +6,7 @@ package com.zjk.wifiproject.activity.wifiap;
  * @author Administrator
  *
  */
-public class WifiApConst {
+public class WifiConst {
     // Wifi状态 粗略
     public static final int CLOSE = 0x001;
     public static final int SEARCH = 0x002;

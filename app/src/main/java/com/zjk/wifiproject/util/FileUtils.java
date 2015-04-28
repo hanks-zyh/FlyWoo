@@ -1,12 +1,5 @@
 package com.zjk.wifiproject.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +13,13 @@ import com.zjk.wifiproject.music.MusicEntity;
 import com.zjk.wifiproject.picture.PictureEntity;
 import com.zjk.wifiproject.picture.PictureFolderEntity;
 import com.zjk.wifiproject.vedio.VedioEntity;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @fileName FileUtils.java
@@ -160,7 +160,7 @@ public class FileUtils {
     /**
      * 通过路径获得文件名字
      * 
-     * @param path
+     * @param fullpath
      * @return
      */
     public static String getPathByFullPath(String fullpath) {
@@ -284,13 +284,12 @@ public class FileUtils {
                 null, // 查询条件中使用到的数据
                 null);
         while (cursor.moveToNext()) {
-            MusicEntity music = new MusicEntity();
+            MusicEntity music = new MusicEntity(cursor.getString(5));
             music.setTitle(cursor.getString(0));
             music.setDuration(cursor.getLong(1));
             music.setArtist(cursor.getString(2));
             music.setId(cursor.getInt(3));
             music.setDisplayName(cursor.getString(4));
-            music.setData(cursor.getString(5));
             // L.i(music.toString());
             list.add(music);
         }
@@ -314,12 +313,11 @@ public class FileUtils {
                 null, // 查询条件中使用到的数据
                 null);
         while (cursor.moveToNext()) {
-            VedioEntity vedio = new VedioEntity();
+            VedioEntity vedio = new VedioEntity(cursor.getString(1));
             vedio.setId(cursor.getInt(0));
-            vedio.setData(cursor.getString(1));
             vedio.setDuration(cursor.getLong(2));
             vedio.setDisplayName(cursor.getString(3));
-            vedio.setSize(cursor.getLong(4));
+//            vedio.setSize(cursor.getLong(4));
             L.i(vedio.toString());
             list.add(vedio);
         }
@@ -333,32 +331,29 @@ public class FileUtils {
      * @return 当是文件时返回null
      */
     public static List<WFile> getCurrentFileList(String path) {
+        Logger.d("查询路径" + path);
         if(path==null){
             return null;
         }
-        Logger.d("查询路径" + path);
         List<WFile> list = new ArrayList<>();
         File file = new File(path);
         if(file.isDirectory()){
             for(File f : file.listFiles()){
-                WFile wf = new WFile();
-                Logger.d("-----" + f.getAbsolutePath());
-                wf.setFilePath(f.getAbsolutePath());
-                wf.setFileName(f.getName());
-                wf.setIsDirectory(f.isDirectory());
-                wf.setFileSize(f.length());
-                if(f.isDirectory() && f.listFiles()!=null){
-                    wf.setChildernSize(f.listFiles().length);
-                }else {
-                    wf.setChildernSize(0);
-                }
-
+                L.d("-----" + f.getAbsolutePath());
+                WFile wf = new WFile(f.getAbsolutePath());
                 list.add(wf);
             }
-
         }else{
             return  null;
         }
         return list;
+    }
+
+    public static String getProjectDir() {
+        File file = new File(getSDPath()+"/WifiProject");
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        return file.getAbsolutePath();
     }
 }

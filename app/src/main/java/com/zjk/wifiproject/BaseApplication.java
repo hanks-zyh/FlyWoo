@@ -1,13 +1,5 @@
 package com.zjk.wifiproject;
 
-import java.io.File;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Application;
 import android.app.Service;
 import android.graphics.Bitmap;
@@ -15,11 +7,18 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
 
-import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
+
+import java.io.File;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BaseApplication extends Application {
 
@@ -86,6 +85,9 @@ public class BaseApplication extends Application {
         sendFiles = new ArrayList<WFile>();
         // ActivitiesManager.init(getApplicationContext()); // 初始化活动管理器
         // L.setLogStatus(isPrintLog); // 设置是否显示日志
+
+        //初始化Fresco库
+//        Fresco.initialize(this);
 
         initEmoticons();
         initNotification();

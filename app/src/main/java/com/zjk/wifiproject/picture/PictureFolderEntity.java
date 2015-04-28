@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.zjk.wifiproject.entity.WFile;
 
-public class PictureFolderEntity extends WFile {
+public class PictureFolderEntity  {
     /**
      * 图片的文件夹路径
      */
@@ -22,6 +22,7 @@ public class PictureFolderEntity extends WFile {
     private String name;
 
     public List<PictureEntity> images = new ArrayList<PictureEntity>();
+
 
     public String getDir() {
         return dir;

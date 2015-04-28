@@ -24,7 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zjk.wifiproject.BaseApplication;
-import com.zjk.wifiproject.activity.wifiap.WifiApConst;
+import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.wifi.TimerCheck;
 
 /**
@@ -54,7 +54,7 @@ public class WifiUtils {
 
                 if (isWifiApEnabled()) {
                     // LogUtils.v(TAG, "WifiAp enabled success!");
-                    Message msg = handler.obtainMessage(WifiApConst.ApCreateApSuccess);
+                    Message msg = handler.obtainMessage(WifiConst.ApCreateApSuccess);
                     handler.sendMessage(msg);
                     this.exit();
                 } else {

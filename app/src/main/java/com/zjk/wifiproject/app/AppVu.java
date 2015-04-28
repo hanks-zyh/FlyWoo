@@ -26,8 +26,8 @@ public class AppVu implements Vu {
     private GridView gridView;
     private AppGridAdapter adapter;
     private View layout_bottom;
-    private List<AppModle> selectedList = new ArrayList<AppModle>();
-    private List<AppModle> list;
+    private List<AppEntity> selectedList = new ArrayList<AppEntity>();
+    private List<AppEntity> list;
     private TextView tv_local;
     private TextView tv_select_size;
     private boolean showAnim = false;
@@ -70,7 +70,7 @@ public class AppVu implements Vu {
         });
     }
 
-    public void setData(Context context, List<AppModle> list) {
+    public void setData(Context context, List<AppEntity> list) {
         this.context = context;
         this.list = list;
         tv_local.setText("本地应用（" + list.size() + "）");
@@ -128,7 +128,7 @@ public class AppVu implements Vu {
         adapter.notifyDataSetChanged();
     }
 
-    public List<AppModle> getSelectedList() {
+    public List<AppEntity> getSelectedList() {
         return selectedList;
     }
 

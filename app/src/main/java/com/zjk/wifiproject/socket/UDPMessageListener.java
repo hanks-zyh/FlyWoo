@@ -22,7 +22,6 @@ import java.util.concurrent.Executors;
  */
 public class UDPMessageListener implements Runnable {
 
-
     private static final int POOL_SIZE = 5; //单个cpu线程个数
     private static final int BUFFERLENGTH = 1024; //缓存大小
 

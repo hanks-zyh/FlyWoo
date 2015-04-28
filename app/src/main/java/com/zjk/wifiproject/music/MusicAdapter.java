@@ -1,12 +1,11 @@
 package com.zjk.wifiproject.music;
 
-import java.io.File;
-import java.util.List;
-
 import android.content.Context;
 import android.text.format.Formatter;
 
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
+
+import java.util.List;
 
 public class MusicAdapter extends BasePresenterAdapter<MusicEntity, MusicAdapterVu> {
 
@@ -18,8 +17,7 @@ public class MusicAdapter extends BasePresenterAdapter<MusicEntity, MusicAdapter
     protected void onBindItemVu(int position) {
         MusicEntity item = list.get(position);
         vu.setTitle(item.getTitle());
-        long size = new File(item.getData()).length();
-        vu.setSize(Formatter.formatFileSize(context, size));
+        vu.setSize(Formatter.formatFileSize(context, item.length()));
     }
 
     @Override

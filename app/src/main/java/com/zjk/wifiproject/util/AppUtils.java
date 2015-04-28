@@ -10,7 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 
-import com.zjk.wifiproject.app.AppModle;
+import com.zjk.wifiproject.app.AppEntity;
 
 /**
  * App工具类
@@ -20,10 +20,10 @@ public class AppUtils {
     /**
      * 返回用户已安装应用列表
      */
-    public static List<AppModle> getAppList(Context context) {
+    public static List<AppEntity> getAppList(Context context) {
         PackageManager pm = context.getPackageManager();
         List<PackageInfo> packageInfos = pm.getInstalledPackages(0);
-        List<AppModle> appInfos = new ArrayList<AppModle>();
+        List<AppEntity> appInfos = new ArrayList<AppEntity>();
         for (PackageInfo packageInfo : packageInfos) {
 
             ApplicationInfo app = packageInfo.applicationInfo;
@@ -31,16 +31,13 @@ public class AppUtils {
                 // 非系统应用
                 File apkfile = new File(app.sourceDir);
                 PackageStats stats = new PackageStats(packageInfo.packageName);
-
-                AppModle appInfo = new AppModle();
-                appInfo.setApkPath(app.sourceDir);
+                AppEntity appInfo = new AppEntity(app.sourceDir);
                 appInfo.setPackageName(packageInfo.packageName);
                 appInfo.setVersionCode(packageInfo.versionCode);
                 appInfo.setVersionName(packageInfo.versionName);
-                appInfo.setApkSize(apkfile.length());
                 appInfo.setUid(app.uid);
                 appInfo.setIcon(app.loadIcon(pm));
-                appInfo.setName(app.loadLabel(pm).toString());
+                appInfo.setAppName(app.loadLabel(pm).toString());
                 appInfo.setCacheSize(stats.cacheSize);
                 appInfo.setDataSize(stats.dataSize);
                 appInfos.add(appInfo);

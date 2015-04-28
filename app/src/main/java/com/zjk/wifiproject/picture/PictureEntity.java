@@ -6,10 +6,9 @@ public class PictureEntity extends WFile {
 
     private String path;
 
-    public PictureEntity() {
-    }
 
     public PictureEntity(String path) {
+        super(path);
         this.setPath(path);
     }
 

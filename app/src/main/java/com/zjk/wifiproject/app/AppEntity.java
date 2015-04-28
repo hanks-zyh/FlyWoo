@@ -2,35 +2,55 @@ package com.zjk.wifiproject.app;
 
 import android.graphics.drawable.Drawable;
 
-public class AppModle {
+import com.zjk.wifiproject.entity.WFile;
 
-    private String apkPath;
+/**
+ * APK文件
+ */
+public class AppEntity extends WFile{
+
+    /**
+     * APK包名
+     */
     private String packageName;
-    private String name;
+    /**
+     * APK版本
+     */
     private String versionName;
+    /**
+     * APK版本号
+     */
     private int versionCode;
+    /**
+     * APK uid
+     */
     private int uid;
-    private long apkSize;
+    /**
+     * 缓存数据大小
+     */
     private long cacheSize;
+    /**
+     * 应用数据大小
+     */
     private long dataSize;
+    /**
+     * 图标
+     */
     private Drawable icon;
     private boolean checked;
     private boolean visible;
+    private String appName;
 
-    @Override
-    public String toString() {
-        return "AppInfo [apkPath=" + apkPath + ", packageName=" + packageName + ", name=" + name
-                + ", versionName=" + versionName + ", versionCode=" + versionCode + ", uid=" + uid
-                + ", apkSize=" + apkSize + ", cacheSize=" + cacheSize + ", dataSize=" + dataSize + ", icon="
-                + icon + "]";
+    public String getAppName() {
+        return appName;
     }
 
-    public String getApkPath() {
-        return apkPath;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
-    public void setApkPath(String apkPath) {
-        this.apkPath = apkPath;
+    public AppEntity(String path) {
+        super(path);
     }
 
     public String getPackageName() {
@@ -39,14 +59,6 @@ public class AppModle {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getVersionName() {
@@ -73,14 +85,6 @@ public class AppModle {
         this.uid = uid;
     }
 
-    public long getApkSize() {
-        return apkSize;
-    }
-
-    public void setApkSize(long apkSize) {
-        this.apkSize = apkSize;
-    }
-
     public long getCacheSize() {
         return cacheSize;
     }
@@ -105,14 +109,6 @@ public class AppModle {
         this.icon = icon;
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
     public boolean isChecked() {
         return checked;
     }
@@ -121,4 +117,11 @@ public class AppModle {
         this.checked = checked;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 }

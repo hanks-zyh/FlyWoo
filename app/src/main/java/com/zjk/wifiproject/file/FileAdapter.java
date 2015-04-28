@@ -20,7 +20,7 @@ public class FileAdapter extends BasePresenterAdapter<WFile,FileAdapterVu>{
     protected void onBindItemVu(int position) {
         WFile item = list.get(position);
         vu.setFileIcon(item);
-        vu.setFileName(item.getFileName());
+        vu.setFileName(item.getName());
         vu.setFileSize(item);
     }
 

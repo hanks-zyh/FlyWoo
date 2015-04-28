@@ -24,4 +24,5 @@ dependencies {
     compile files('libs/rebound-0.3.7.jar')
     compile 'com.orhanobut:logger:1.8'
     compile 'io.reactivex:rxandroid:0.24.0'
+//    compile 'com.facebook.fresco:fresco:0.3.0+'
 }
