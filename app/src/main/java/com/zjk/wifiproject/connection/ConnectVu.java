@@ -7,9 +7,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiApConst;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.socket.IPMSGConst;
+import com.zjk.wifiproject.socket.UDPMessageListener;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.WifiUtils;
@@ -58,9 +61,13 @@ public class ConnectVu implements Vu, OnClickListener {
             boolean connFlag = WifiUtils.connectWifi("ZChat_google_608", WifiApConst.WIFI_AP_PASSWORD,
                     WifiCipherType.WIFICIPHER_WPA);
             if (!connFlag) {
-                T.show(context,"已连接");
+                T.show(context, "已连接");
                 mConnectButton.setText("已连接");
-                new Thread(new ConnectAPThread()).start();
+//                new Thread(new ConnectAPThread()).start();
+                String ip = WifiUtils.getServerIPAddress();
+                Logger.i("ip:"+ip);
+                UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO,ip);
+
             }
         }
     }

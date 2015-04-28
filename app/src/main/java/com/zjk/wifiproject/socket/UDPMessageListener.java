@@ -1,30 +1,34 @@
 package com.zjk.wifiproject.socket;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.orhanobut.logger.Logger;
+import com.zjk.wifiproject.entity.WFile;
+import com.zjk.wifiproject.util.T;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * ¼àÌıÏûÏ¢µÄÏß³Ì
+ * ç›‘å¬æ¶ˆæ¯çš„çº¿ç¨‹
  * Created by Administrator on 2015/4/26.
  */
 public class UDPMessageListener implements Runnable {
 
 
-    private static final int POOL_SIZE = 5; //µ¥¸öcpuÏß³Ì¸öÊı
-    private static final int BUFFERLENGTH = 1024; //»º´æ´óĞ¡
+    private static final int POOL_SIZE = 5; //å•ä¸ªcpuçº¿ç¨‹ä¸ªæ•°
+    private static final int BUFFERLENGTH = 1024; //ç¼“å­˜å¤§å°
 
     private static String BROADCASTIP;
     /**
-     * µ¥ÀıÄ£Ê½
+     * å•ä¾‹æ¨¡å¼
      */
     private static UDPMessageListener udpMessageListener;
     private final ExecutorService exector;
@@ -35,6 +39,7 @@ public class UDPMessageListener implements Runnable {
     private byte[] receiveBuffer = new byte[BUFFERLENGTH];
     private DatagramPacket receiveDataPacket;
     private Thread receiveUDPThread;
+    private DatagramPacket sendDatagramPacket;
 
     private UDPMessageListener(Context context) {
 
@@ -42,12 +47,12 @@ public class UDPMessageListener implements Runnable {
         BROADCASTIP = "255.255.255.255";
 
         int cpuNumber = Runtime.getRuntime().availableProcessors();
-        exector = Executors.newFixedThreadPool(cpuNumber * POOL_SIZE); //¸ù¾İCPUÊıÄ¿³õÊ¼»¯Ïß³Ì³Ø
+        exector = Executors.newFixedThreadPool(cpuNumber * POOL_SIZE); //æ ¹æ®CPUæ•°ç›®åˆå§‹åŒ–çº¿ç¨‹æ± 
 
     }
 
     /**
-     * ·µ»ØUDPMessageListenerµÄÊµÀı
+     * è¿”å›UDPMessageListenerçš„å®ä¾‹
      *
      * @param context
      * @return
@@ -71,7 +76,7 @@ public class UDPMessageListener implements Runnable {
                 e.printStackTrace();
 
 
-                //´¦ÀíÒì³£
+                //å¤„ç†å¼‚å¸¸
                 receiveDataPacket = null;
                 stopUDPSocketThread();
 
@@ -79,21 +84,31 @@ public class UDPMessageListener implements Runnable {
                     udpSocket = null;
                     udpSocket.close();
                 }
-                Logger.e("UDPÊı¾İ°ü½ÓÊÜÊ§°Ü£¬Í£Ö¹Ïß³Ì");
+                Logger.e("UDPæ•°æ®åŒ…æ¥å—å¤±è´¥ï¼Œåœæ­¢çº¿ç¨‹");
                 break;
             }
 
             if (receiveDataPacket.getLength() == 0) {
-                Logger.e("ÎŞ·¨½ÓÊÕUDPÊı¾İ»òÕß½ÓÊÕµ½µÄUDPÊı¾İÎª¿Õ");
+                Logger.e("æ— æ³•æ¥æ”¶UDPæ•°æ®æˆ–è€…æ¥æ”¶åˆ°çš„UDPæ•°æ®ä¸ºç©º");
                 continue;
             }
 
             String UDPListenResStr = "";
             try {
-                UDPListenResStr = new String(receiveBuffer, 0, receiveDataPacket.getLength(), "utf-8");
+                UDPListenResStr = new String(receiveBuffer, 0, receiveDataPacket.getLength(), IPMSGConst.IPMSG_CHARSET);
+                Logger.i("æ¥æ”¶åˆ°æ•°æ®ï¼š" + UDPListenResStr);
+                final String finalUDPListenResStr = UDPListenResStr;
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        T.show(context, "æ¥æ”¶åˆ°æ•°æ®ï¼š" + finalUDPListenResStr);
+                    }
+                });
+
+
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-                Logger.e("ÏµÍ³²»Ö§³ÖGBK±àÂë");
+                Logger.e("ç³»ç»Ÿä¸æ”¯æŒGBKç¼–ç ");
             }
 
 
@@ -101,47 +116,101 @@ public class UDPMessageListener implements Runnable {
     }
 
     /**
-     * ½¨Á¢SocketÁ¬½Ó
+     * å»ºç«‹Socketè¿æ¥
      */
     public void connectUDPSocket() {
 
         try {
-            //°ó¶¨¶Ë¿Ú
+            //ç»‘å®šç«¯å£
             if (udpSocket == null) {
-                udpSocket = new DatagramSocket(IPMSGCons.PORT);
-                Logger.i("connectUDPSocket()°ó¶¨¶Ë¿Ú³É¹¦");
+                udpSocket = new DatagramSocket(IPMSGConst.PORT);
+                Logger.i("connectUDPSocket()ç»‘å®šç«¯å£æˆåŠŸ");
             }
 
-            //´´½¨Êı¾İ½ÓÊÜ°ü
+            //åˆ›å»ºæ•°æ®æ¥å—åŒ…
             if (receiveDataPacket == null) {
                 receiveDataPacket = new DatagramPacket(receiveBuffer, BUFFERLENGTH);
             }
 
             startUDPSocketThread();
 
-
         } catch (SocketException e) {
             e.printStackTrace();
         }
     }
 
-    private void startUDPSocketThread() {
+    public void startUDPSocketThread() {
         if (receiveUDPThread == null) {
             receiveUDPThread = new Thread(this);
             receiveUDPThread.start();
         }
         isThreadRunning = true;
-        Logger.i("Æô¶¯Ïß³Ì");
+        Logger.i("å¯åŠ¨çº¿ç¨‹");
     }
 
-    private void stopUDPSocketThread() {
+    public void stopUDPSocketThread() {
         isThreadRunning = false;
         if (receiveUDPThread != null) {
             receiveUDPThread.interrupt();
         }
         receiveUDPThread = null;
-        udpMessageListener = null; //ÖÃ¿Õ£¬Ïû³ı¾²Ì¬±äÁ¿ÒıÓÃ
-        Logger.i("Í£Ö¹Ïß³Ì");
+        udpMessageListener = null; //ç½®ç©ºï¼Œæ¶ˆé™¤é™æ€å˜é‡å¼•ç”¨
+        Logger.i("åœæ­¢çº¿ç¨‹");
     }
 
+
+    /**
+     * å‘é€UDPæ•°æ®åŒ…
+     * @param commandNo æ¶ˆæ¯å‘½ä»¤
+     * @param targetIP ç›®æ ‡ID
+     *
+     */
+    public void sendUDPdata(int commandNo,String targetIP){
+        sendUDPdata(commandNo, targetIP, null);
+    }
+
+    /**
+     * @param addData é™„åŠ æ•°æ®
+     * @param commandNo
+     * @param targetIP
+     */
+    public void sendUDPdata(int commandNo, String targetIP, Object addData) {
+        IPMSGProtocol ipmsgProtocol = null;
+
+        String imei = ""; //
+
+        if(addData==null){
+            ipmsgProtocol = new IPMSGProtocol(imei,commandNo);
+        }else if(addData instanceof WFile ){
+            ipmsgProtocol = new IPMSGProtocol(imei,commandNo,(WFile)addData);
+        }else if(addData instanceof String ){
+            ipmsgProtocol = new IPMSGProtocol(imei,commandNo,(String)addData);
+        }
+        sendUDPdata(ipmsgProtocol,targetIP);
+    }
+
+    public void sendUDPdata(final IPMSGProtocol ipmsgProtocol, final String targetIP){
+
+        exector.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    InetAddress targetAddr = InetAddress.getByName(targetIP);
+                    sendBuffer = ipmsgProtocol.getProtocolJSON().getBytes(IPMSGConst.IPMSG_CHARSET);
+                    sendDatagramPacket = new DatagramPacket(sendBuffer, sendBuffer.length, targetAddr, IPMSGConst.PORT);
+                        //ç»‘å®šç«¯å£
+                        if (udpSocket == null) {
+                            udpSocket = new DatagramSocket(IPMSGConst.PORT);
+                            Logger.i("connectUDPSocket()ç»‘å®šç«¯å£æˆåŠŸ");
+                        }
+
+                    udpSocket.send(sendDatagramPacket);
+                    Logger.i("æ•°æ®UDPå‘é€æˆåŠŸ");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Logger.e("æ•°æ®UDPå‘é€å¤±è´¥");
+                }
+            }
+        });
+    }
 }

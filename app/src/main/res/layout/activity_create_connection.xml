@@ -61,5 +61,32 @@
         android:layout_toRightOf="@+id/close_ap"
         android:text="打开无线"
         android:textColor="@color/white" />
+    <Button
+        android:id="@+id/connect_wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="连接无线"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/open_wifi"
+        android:layout_toStartOf="@+id/open_wifi" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/open_wifi"
+        android:layout_alignStart="@+id/open_wifi"
+        android:text="手动ss" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send"
+        android:id="@+id/send"
+        android:layout_below="@+id/open_ap"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

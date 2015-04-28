@@ -27,7 +27,7 @@ public class FileFragment extends BasePresenterFragment<FileVu> {
             WFile file0 =new WFile();
             file0.setChildernSize(0);
             file0.setFileSize(0);
-            file0.setFileName("�ⲿ�洢");
+            file0.setFileName("外部存储");
             file0.setIsDirectory(true);
             file0.setFilePath(FileUtils.getSDPath());
             list.add(file0);

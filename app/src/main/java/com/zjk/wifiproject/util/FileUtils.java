@@ -41,7 +41,7 @@ public class FileUtils {
      *
      * @return
      */
-    public static boolean isSdcard0Exist() {
+    public static File isSdcard0Exist() {
         return Environment.getExternalStorageDirectory();
     }
 

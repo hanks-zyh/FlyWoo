@@ -6,7 +6,7 @@ public class CreateConnectionActivity extends BasePresenterActivity<CreateConnec
 
     @Override
     protected void onBindVu() {
-        vu.createAP(context);
+//        vu.createAP(context);
     }
 
     @Override
