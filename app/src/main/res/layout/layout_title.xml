@@ -34,6 +34,6 @@
         android:layout_margin="4dp"
         android:layout_toRightOf="@+id/ib_menu"
         android:scaleType="centerInside"
-        android:src="@drawable/zapya_common_actionbar_logo" />
+        android:src="@drawable/ic_main_logo" />
 
 </RelativeLayout>

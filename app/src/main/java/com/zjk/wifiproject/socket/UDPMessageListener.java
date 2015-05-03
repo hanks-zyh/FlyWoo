@@ -97,7 +97,7 @@ public class UDPMessageListener implements Runnable {
                 UDPListenResStr = new String(receiveBuffer, 0, receiveDataPacket.getLength(), IPMSGConst.IPMSG_CHARSET);
                 Logger.i("接收到数据：" + UDPListenResStr);
                 final String finalUDPListenResStr = UDPListenResStr;
-                ((Activity)context).runOnUiThread(new Runnable() {
+                ((Activity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         T.show(context, "接收到数据：" + finalUDPListenResStr);
@@ -160,16 +160,16 @@ public class UDPMessageListener implements Runnable {
 
     /**
      * 发送UDP数据包
-     * @param commandNo 消息命令
-     * @param targetIP 目标ID
      *
+     * @param commandNo 消息命令
+     * @param targetIP  目标ID
      */
-    public void sendUDPdata(int commandNo,String targetIP){
+    public void sendUDPdata(int commandNo, String targetIP) {
         sendUDPdata(commandNo, targetIP, null);
     }
 
     /**
-     * @param addData 附加数据
+     * @param addData   附加数据
      * @param commandNo
      * @param targetIP
      */
@@ -178,17 +178,17 @@ public class UDPMessageListener implements Runnable {
 
         String imei = ""; //
 
-        if(addData==null){
-            ipmsgProtocol = new IPMSGProtocol(imei,commandNo);
-        }else if(addData instanceof WFile ){
-            ipmsgProtocol = new IPMSGProtocol(imei,commandNo,(WFile)addData);
-        }else if(addData instanceof String ){
-            ipmsgProtocol = new IPMSGProtocol(imei,commandNo,(String)addData);
+        if (addData == null) {
+            ipmsgProtocol = new IPMSGProtocol(imei, commandNo);
+        } else if (addData instanceof WFile) {
+            ipmsgProtocol = new IPMSGProtocol(imei, commandNo, (WFile) addData);
+        } else if (addData instanceof String) {
+            ipmsgProtocol = new IPMSGProtocol(imei, commandNo, (String) addData);
         }
-        sendUDPdata(ipmsgProtocol,targetIP);
+        sendUDPdata(ipmsgProtocol, targetIP);
     }
 
-    public void sendUDPdata(final IPMSGProtocol ipmsgProtocol, final String targetIP){
+    public void sendUDPdata(final IPMSGProtocol ipmsgProtocol, final String targetIP) {
 
         exector.execute(new Runnable() {
             @Override
@@ -197,11 +197,11 @@ public class UDPMessageListener implements Runnable {
                     InetAddress targetAddr = InetAddress.getByName(targetIP);
                     sendBuffer = ipmsgProtocol.getProtocolJSON().getBytes(IPMSGConst.IPMSG_CHARSET);
                     sendDatagramPacket = new DatagramPacket(sendBuffer, sendBuffer.length, targetAddr, IPMSGConst.PORT);
-                        //绑定端口
-                        if (udpSocket == null) {
-                            udpSocket = new DatagramSocket(IPMSGConst.PORT);
-                            Logger.i("connectUDPSocket()绑定端口成功");
-                        }
+                    //绑定端口
+                    if (udpSocket == null) {
+                        udpSocket = new DatagramSocket(IPMSGConst.PORT);
+                        Logger.i("connectUDPSocket()绑定端口成功");
+                    }
 
                     udpSocket.send(sendDatagramPacket);
                     Logger.i("数据UDP发送成功");

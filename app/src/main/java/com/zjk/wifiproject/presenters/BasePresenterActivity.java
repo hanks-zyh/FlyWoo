@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 public abstract class BasePresenterActivity<V extends Vu> extends Activity {
 
-    protected V vu;
+    public V vu;
 
     protected Context context;
 

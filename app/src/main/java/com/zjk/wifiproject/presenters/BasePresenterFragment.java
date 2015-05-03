@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 public abstract class BasePresenterFragment<V extends Vu> extends Fragment {
 
-    protected V vu;
+    public V vu;
     protected Context context;
 
     @Override

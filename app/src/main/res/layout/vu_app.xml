@@ -24,34 +24,5 @@
         android:overScrollMode="never" >
     </GridView>
 
-    <RelativeLayout
-        android:id="@+id/layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-54dp"
-        android:background="#FDFDFD" >
-
-        <TextView
-            android:id="@+id/tv_select_size"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="传输"
-            android:textColor="@color/text_black"
-            android:textSize="16sp" />
-
-        <ImageButton
-            android:id="@+id/ib_close"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/btn_seletor"
-            android:src="@drawable/ic_x" />
-    </RelativeLayout>
 
 </RelativeLayout>

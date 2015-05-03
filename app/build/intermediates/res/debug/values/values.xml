@@ -23,6 +23,7 @@
     <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="black">#ff000000</color>
+    <color name="black_aa">#aa000000</color>
     <color name="black_tran">#88000000</color>
     <color name="blue">#FF375BF1</color>
     <color name="bottom_text_blue">#0A76FE</color>
@@ -1108,5 +1109,11 @@ Wifi Direct连接模式"</string>
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:windowNoTitle">true</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <style name="HelpCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:button">@drawable/checkbox_selector</item>
     </style>
 </resources>

@@ -1,12 +1,13 @@
 package com.zjk.wifiproject.app;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.format.Formatter;
 
+import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
+
+import java.util.List;
 
 public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
 
@@ -28,6 +29,6 @@ public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
         vu.setAppIcon(((BitmapDrawable) item.getIcon()).getBitmap());
         vu.setAppName(item.getName());
         vu.setAppSize(Formatter.formatFileSize(context, item.length()));
-        vu.setChecked(appVu.getSelectedList().contains(item));
+        vu.setChecked(BaseApplication.getInstance().getSendFiles().contains(item));
     }
 }

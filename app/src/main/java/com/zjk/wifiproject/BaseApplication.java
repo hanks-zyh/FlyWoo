@@ -13,7 +13,6 @@ import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
 
 import java.io.File;
-import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,8 +99,15 @@ public class BaseApplication extends Application {
         return sendFiles;
     }
 
-    public void setSendFiles(List<WFile> sendFiles) {
-        this.sendFiles = sendFiles;
+    public void addSendFiles(WFile sendFile) {
+        this.sendFiles.add(sendFile);
+    }
+    public void removeSendFiles(WFile sendFile) {
+        this.sendFiles.remove(sendFile);
+    }
+
+    public void clearSendFiles() {
+        this.sendFiles.clear();
     }
 
     private void initEmoticons() {
@@ -162,21 +168,6 @@ public class BaseApplication extends Application {
         }
     }
 
-    public void addAvatarCache(String paramAvatarName, Bitmap bitmap) {
-        mAvatarCache.put(paramAvatarName, new SoftReference<Bitmap>(bitmap));
-    }
-
-    public Reference<Bitmap> getAvatarCache(String paramAvatarName) {
-        return mAvatarCache.get(paramAvatarName);
-    }
-
-    public void removeAvatarCache(String paramAvatarName) {
-        mAvatarCache.remove(paramAvatarName);
-    }
-
-    public Map<String, SoftReference<Bitmap>> getAvatarCache() {
-        return mAvatarCache;
-    }
 
     /* 设置声音提醒 */
     public static boolean getSoundFlag() {

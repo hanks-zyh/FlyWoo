@@ -1,7 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        //从中央库里面获取依赖
         mavenCentral()
     }
     dependencies {
@@ -11,7 +10,6 @@ buildscript {
 
 allprojects {
     repositories {
-        //从中央库里面获取依赖
         mavenCentral()
     }
 }

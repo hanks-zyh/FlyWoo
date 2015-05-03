@@ -1,9 +1,9 @@
 package com.zjk.wifiproject.app;
 
-import java.util.List;
-
 import com.zjk.wifiproject.presenters.BasePresenterFragment;
 import com.zjk.wifiproject.util.AppUtils;
+
+import java.util.List;
 
 public class AppFragment extends BasePresenterFragment<AppVu> {
 
