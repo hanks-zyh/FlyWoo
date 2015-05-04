@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/black_dd"
     android:layout_height="match_parent"
-    android:background="@color/text_black"
     android:orientation="vertical" >
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/relativeLayout1"
         android:layout_width="230dp"
         android:layout_height="230dp"
@@ -17,6 +18,7 @@
         </com.zjk.wifiproject.view.CircularProgress>
 
         <TextView
+            android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -24,7 +26,7 @@
             android:textColor="@color/text_black"
             android:textSize="16sp" />
     </RelativeLayout>
-
+<!--
     <Button
         android:id="@+id/close_ap"
         android:layout_width="wrap_content"
@@ -87,6 +89,68 @@
         android:id="@+id/send"
         android:layout_below="@+id/open_ap"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true" />-->
+
+
+    <CheckBox
+        android:id="@+id/helpCheckBox"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="36dp"
+        style="@style/HelpCheckBox"
+        android:layout_margin="16dp"
+        android:layout_height="36dp" />
+
+    <ImageView
+
+        android:scaleType="centerInside"
+        android:id="@+id/create"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="22dp"
+        android:layout_width="50dp"
+        android:src="@drawable/btn_create"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:id="@+id/join"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="22dp"
+        android:layout_width="50dp"
+        android:src="@drawable/btn_join"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:scaleType="centerInside"
+        android:id="@+id/hideButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:layout_width="64dp"
+        android:src="@drawable/btn_cancel"
+        android:layout_height="64dp" />
+
+    <ImageView
+        android:scaleType="centerInside"
+        android:id="@+id/rightImage"
+        android:layout_above="@+id/create"
+        android:layout_marginBottom="140dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-180dp"
+        android:layout_width="180dp"
+        android:src="@drawable/animation_rightall"
+        android:layout_height="137dp" />
+    <ImageView
+        android:scaleType="centerInside"
+        android:id="@+id/leftImage"
+        android:layout_above="@+id/create"
+        android:layout_marginBottom="2dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="-180dp"
+        android:layout_width="179dp"
+        android:src="@drawable/animation_leftall"
+        android:layout_height="185dp" />
 
 </RelativeLayout>

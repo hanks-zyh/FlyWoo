@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import com.zjk.wifiproject.util.PixelUtil;
 
@@ -59,10 +60,12 @@ public class CircularProgress extends View {
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setColor(Color.parseColor("#FF0000"));
         progressPaint.setStrokeWidth(ringWidth);
+        progressPaint.setStrokeJoin(Paint.Join.ROUND);
         progressPaint.setStyle(Paint.Style.STROKE); // 绘制空心圆
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(10000);
+                ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(15000);
+                va.setInterpolator(new LinearInterpolator());
                 va.addUpdateListener(new AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -78,10 +81,10 @@ public class CircularProgress extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         // super.onDraw(canvas);
-        // canvas.save();
+         canvas.save();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
-        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - gap, bgPaint);
+        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - gap - gap, bgPaint);
 
         RectF oval = null;
         if (oval == null) {
@@ -93,7 +96,7 @@ public class CircularProgress extends View {
         float p = 360 * curProgress;
         canvas.drawArc(oval, 270, p, false, progressPaint);
 
-        // canvas.restore();
+         canvas.restore();
     }
 
     private synchronized void setProgress(float value) {
@@ -101,5 +104,11 @@ public class CircularProgress extends View {
             curProgress = value;
             invalidate();
         }
+    }
+
+    @Override
+    public boolean isInEditMode()
+    {
+        return true;
     }
 }

@@ -1,9 +1,7 @@
 package com.zjk.wifiproject.main;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Fragment;
+import android.content.Intent;
 
 import com.zjk.wifiproject.app.AppFragment;
 import com.zjk.wifiproject.drawer.DrawerFragment;
@@ -12,6 +10,9 @@ import com.zjk.wifiproject.music.MusicFragment;
 import com.zjk.wifiproject.picture.PictureFragment;
 import com.zjk.wifiproject.presenters.BasePresenterActivity;
 import com.zjk.wifiproject.vedio.VedioFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BasePresenterActivity<MainVu> {
 
@@ -34,5 +35,12 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
     @Override
     protected Class<MainVu> getVuClass() {
         return MainVu.class;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        vu.onActivityResult(requestCode, resultCode, data);
     }
 }

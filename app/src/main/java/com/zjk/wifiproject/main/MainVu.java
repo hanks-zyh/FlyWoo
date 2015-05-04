@@ -1,9 +1,11 @@
 package com.zjk.wifiproject.main;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -16,8 +18,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.app.AppFragment;
+import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.connection.CreateConnectionActivity;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.presenters.Vu;
@@ -59,14 +60,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private View layout_bottom;//底部隐藏布局
     private TextView tv_select_size;//选中的数目
 
-    //创建或者加入的布局
-    private View layout_hide;
-    private CheckBox mHelpCheckBox;
-    private ImageView mHideButton;
-    private ImageView mCreate;
-    private ImageView mJoin;
-    private ImageView mRightImage;
-    private ImageView mLeftImage;
+
 
 
     private Context context;
@@ -99,15 +93,9 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         ib_more = (ImageButton) view.findViewById(R.id.ib_more);
         ib_search = (ImageButton) view.findViewById(R.id.ib_search);
 
-        layout_hide = view.findViewById(R.id.layout_create_or_join);
         layout_bottom = view.findViewById(R.id.layout_bottom);
 
-        mHelpCheckBox = (CheckBox) view.findViewById(R.id.helpCheckBox);
-        mHideButton = (ImageView) view.findViewById(R.id.hideButton);
-        mCreate = (ImageView) view.findViewById(R.id.create);
-        mJoin = (ImageView) view.findViewById(R.id.join);
-        mLeftImage = (ImageView) view.findViewById(R.id.leftImage);
-        mRightImage = (ImageView) view.findViewById(R.id.rightImage);
+
     }
 
     @Override
@@ -118,24 +106,9 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private void setListener() {
         ib_menu.setOnClickListener(this);
         createButton.setOnClickListener(this);
-        mHideButton.setOnClickListener(this);
         tv_select_size.setOnClickListener(this);
         view.findViewById(R.id.ib_close).setOnClickListener(this);
-        mHelpCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    showTwoImageAnimation();
-                    mHideButton.setVisibility(View.GONE);
-                }else {
-                    hideTwoImageAnimation();
-                    mHideButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
-
-
 
     public void setViewPager(List<Fragment> list) {
         this.list = list;
@@ -183,15 +156,10 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                     drawer.openDrawer(Gravity.START);
                 }
                 break;
-            case R.id.createButton:
-                layout_hide.setVisibility(View.VISIBLE);
+            case R.id.createButton://进入创建热点的界面
                 createButton.setVisibility(View.GONE);
-                showTwoButtonAnimation();
-                break;
-            case R.id.hideButton:
-                layout_hide.setVisibility(View.GONE);
-                createButton.setVisibility(View.VISIBLE);
-                showButtonAnimation();
+                Intent intent = new Intent(context,CreateConnectionActivity.class);
+                ((Activity)context).startActivityForResult(intent, ConfigIntent.REQUEST_SHOW_CREATE);
                 break;
             case R.id.ib_close:
                 hideBottomLayout();
@@ -201,26 +169,41 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                 break;
         }
     }
+
+
+
+
     /**
-     * 两侧出现小人动画
+     * 抖动按钮的动画
      */
-    private void showTwoImageAnimation() {
-        final int dis = PixelUtil.dp2px(160);
+    private void shakeButtonAnimation() {
+        createButton.setVisibility(View.VISIBLE);
+        createButton.startAnimation(
+                AnimationUtils.loadAnimation(context, R.anim.shake));
+    }
+
+
+    /**
+     * 从下面出现按钮的动画
+     */
+    private void showButtonAnimation() {
+        final int dis = PixelUtil.dp2px(150);
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
         valueAnimator.setInterpolator(new OvershootInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                mLeftImage.setTranslationX(value * dis);
-                mRightImage.setTranslationX(-value * dis);
+                createButton.setTranslationY((1- value ) * dis);
             }
         });
         valueAnimator.start();
-    }/**
-     * 隐藏两侧出现小人动画
+    }
+
+    /**
+     * 隐藏按钮的动画
      */
-    private void hideTwoImageAnimation() {
+    private void hideButtonAnimation() {
         final int dis = PixelUtil.dp2px(150);
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
         valueAnimator.setInterpolator(new AccelerateInterpolator());
@@ -228,46 +211,26 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                mLeftImage.setTranslationX((1-value) * dis);
-                mRightImage.setTranslationX((value-1) * dis);
+                createButton.setTranslationY(value * dis);
             }
         });
         valueAnimator.start();
     }
 
-
     /**
-     * 按钮出现动画
+     * 返回主界面
+     * @param requestCode
+     * @param resultCode
+     * @param data
      */
-    private void showTwoButtonAnimation() {
-        final int dis = PixelUtil.dp2px(150);
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
-        valueAnimator.setInterpolator(new AccelerateInterpolator());
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                mCreate.setTranslationY(-value * dis);
-                mCreate.setTranslationX(-value * dis * 0.1f);
-                mJoin.setTranslationX(-value * dis);
-                mJoin.setTranslationY(-value * dis *0.1f);
-                mCreate.setScaleX(0.6f + value);
-                mCreate.setScaleY(0.6f + value);
-                mJoin.setScaleX(0.6f + value);
-                mJoin.setScaleY(0.6f + value);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == ConfigIntent.REQUEST_SHOW_CREATE){
+                shakeButtonAnimation();
             }
-        });
-        valueAnimator.start();
-
+        }
     }
 
-    /**
-     * 抖动按钮的动画
-     */
-    private void showButtonAnimation() {
-        createButton.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.shake));
-    }
 
     class MainPageAdapter extends FragmentPagerAdapter {
 
@@ -294,6 +257,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             return tabs[position];
         }
     }
+
 
     //------------------------ 隐藏在底部的布局---------------------------------------------
     @Override
@@ -337,6 +301,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                 }
             });
             va.start();
+            hideButtonAnimation();
         }
         tv_select_size.setText("传输（" + BaseApplication.getInstance().getSendFiles().size() + "）");
         layout_bottom.setVisibility(View.VISIBLE);
@@ -354,7 +319,10 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             }
         });
         va.start();
+        showButtonAnimation();
         application.clearSendFiles();
         ((AppFragment) list.get(0)).vu.adapter.notifyDataSetChanged();
+
     }
+
 }

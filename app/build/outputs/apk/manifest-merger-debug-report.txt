@@ -89,6 +89,8 @@ ADDED from AndroidManifest.xml:34:9
 		ADDED from AndroidManifest.xml:34:19
 activity#com.zjk.wifiproject.connection.CreateConnectionActivity
 ADDED from AndroidManifest.xml:35:9
+	android:theme
+		ADDED from AndroidManifest.xml:35:90
 	android:name
 		ADDED from AndroidManifest.xml:35:19
 activity#com.zjk.wifiproject.connection.ConnectAcivity

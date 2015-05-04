@@ -32,7 +32,9 @@
         </activity>
         <activity android:name="com.zjk.wifiproject.main.MainActivity" />
         <activity android:name="com.zjk.wifiproject.guide.GuideActivity" />
-        <activity android:name="com.zjk.wifiproject.connection.CreateConnectionActivity" />
+        <activity
+            android:name="com.zjk.wifiproject.connection.CreateConnectionActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name="com.zjk.wifiproject.connection.ConnectAcivity" />
     </application>
 

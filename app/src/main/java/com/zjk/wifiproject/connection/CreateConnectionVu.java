@@ -1,5 +1,7 @@
 package com.zjk.wifiproject.connection;
 
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
@@ -7,15 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 
-import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.presenters.Vu;
-import com.zjk.wifiproject.socket.IPMSGConst;
 import com.zjk.wifiproject.socket.UDPMessageListener;
+import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.L;
+import com.zjk.wifiproject.util.PixelUtil;
 import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.TextUtils;
 import com.zjk.wifiproject.util.WifiUtils;
@@ -26,21 +33,56 @@ public class CreateConnectionVu implements Vu, OnClickListener {
     private Context context;
     private EditText edit;
 
+    //创建或者加入的布局
+    private View layout_hide;
+    private CheckBox mHelpCheckBox;
+    private ImageView mHideButton;
+    private ImageView mCreate;
+    private ImageView mJoin;
+    private ImageView mRightImage;
+    private ImageView mLeftImage;
+
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.activity_create_connection, null);
         context = inflater.getContext();
-        bindView(view);
+        bindViews(view);
+        setListener();
+        showTwoButtonAnimation();
     }
 
-    private void bindView(View view2) {
-        view2.findViewById(R.id.open_ap).setOnClickListener(this);
-        view2.findViewById(R.id.open_wifi).setOnClickListener(this);
-        view2.findViewById(R.id.close_ap).setOnClickListener(this);
-        view2.findViewById(R.id.close_wifi).setOnClickListener(this);
-        view2.findViewById(R.id.connect_wifi).setOnClickListener(this);
-        view2.findViewById(R.id.send).setOnClickListener(this);
-        edit = (EditText)view2.findViewById(R.id.editText);
+    private void setListener() {
+        mHideButton.setOnClickListener(this);
+        mHelpCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    showTwoImageAnimation();
+                    mHideButton.setVisibility(View.GONE);
+                } else {
+                    hideTwoImageAnimation();
+                    mHideButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void bindViews(View view2) {
+//        view2.findViewById(R.id.open_ap).setOnClickListener(this);
+//        view2.findViewById(R.id.open_wifi).setOnClickListener(this);
+//        view2.findViewById(R.id.close_ap).setOnClickListener(this);
+//        view2.findViewById(R.id.close_wifi).setOnClickListener(this);
+//        view2.findViewById(R.id.connect_wifi).setOnClickListener(this);
+//        view2.findViewById(R.id.send).setOnClickListener(this);
+//        edit = (EditText)view2.findViewById(R.id.editText);
+
+        layout_hide = view.findViewById(R.id.layout_create_or_join);
+        mHelpCheckBox = (CheckBox) view.findViewById(R.id.helpCheckBox);
+        mHideButton = (ImageView) view.findViewById(R.id.hideButton);
+        mCreate = (ImageView) view.findViewById(R.id.create);
+        mJoin = (ImageView) view.findViewById(R.id.join);
+        mLeftImage = (ImageView) view.findViewById(R.id.leftImage);
+        mRightImage = (ImageView) view.findViewById(R.id.rightImage);
     }
 
     @Override
@@ -108,33 +150,107 @@ public class CreateConnectionVu implements Vu, OnClickListener {
 
     @Override
     public void onClick(View v) {
-        L.e("v=" + v.toString());;
         switch (v.getId()) {
-            case R.id.close_ap:
-                closeAP();
+            case R.id.helpCheckBox:
+                layout_hide.setVisibility(View.VISIBLE);
+                showTwoImageAnimation();
                 break;
-            case R.id.open_ap:
-                createAP(context);
-                break;
-            case R.id.close_wifi:
-                WifiUtils.closeWifi();
-                break;
-            case R.id.open_wifi:
-                WifiUtils.OpenWifi();
-//                A.goOtherActivity(context, ConnectAcivity.class);
-                break;
-            case R.id.connect_wifi:
-                connectAp();
-                break;
-            case R.id.send:
-                String ip = WifiUtils.getServerIPAddress();
-                Logger.i("ip:" + ip);
-                UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO, ip);
-                break;
-            default:
+            case R.id.hideButton:
+                ((Activity)context).setResult(Activity.RESULT_OK);
+                A.finishSelfNoAnim(context);
                 break;
         }
     }
+
+    /**
+     * 按钮出现动画
+     */
+    private void showTwoButtonAnimation() {
+        final int dis = PixelUtil.dp2px(140);
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
+        valueAnimator.setInterpolator(new OvershootInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                mCreate.setTranslationY(-value * dis);
+                mCreate.setTranslationX(-value * dis * 0.2f);
+                mJoin.setTranslationX(-value * dis);
+                mJoin.setTranslationY(-value * dis *0.2f);
+                mCreate.setScaleX(0.7f + value);
+                mCreate.setScaleY(0.7f + value);
+                mJoin.setScaleX(0.7f + value);
+                mJoin.setScaleY(0.7f + value);
+            }
+        });
+        valueAnimator.start();
+
+    }
+
+    /**
+     * 两侧出现小人动画
+     */
+    private void showTwoImageAnimation() {
+        final int dis = PixelUtil.dp2px(160);
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
+        valueAnimator.setInterpolator(new OvershootInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                mLeftImage.setTranslationX(value * dis);
+                mRightImage.setTranslationX(-value * dis);
+            }
+        });
+        valueAnimator.start();
+    }
+    /**
+     * 隐藏两侧出现小人动画
+     */
+    private void hideTwoImageAnimation() {
+        final int dis = PixelUtil.dp2px(150);
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
+        valueAnimator.setInterpolator(new AccelerateInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                mLeftImage.setTranslationX((1-value) * dis);
+                mRightImage.setTranslationX((value-1) * dis);
+            }
+        });
+        valueAnimator.start();
+    }
+
+//    @Override
+//    public void onClick(View v) {
+//        L.e("v=" + v.toString());;
+//        switch (v.getId()) {
+//            case R.id.close_ap:
+//                closeAP();
+//                break;
+//            case R.id.open_ap:
+//                createAP(context);
+//                break;
+//            case R.id.close_wifi:
+//                WifiUtils.closeWifi();
+//                break;
+//            case R.id.open_wifi:
+//                WifiUtils.OpenWifi();
+////                A.goOtherActivity(context, ConnectAcivity.class);
+//                break;
+//            case R.id.connect_wifi:
+//                connectAp();
+//                break;
+//            case R.id.send:
+//                String ip = WifiUtils.getServerIPAddress();
+//                Logger.i("ip:" + ip);
+//                UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO, ip);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     private void connectAp() {
         String ssid = WifiUtils.getApSSID();
