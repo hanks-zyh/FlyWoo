@@ -61,8 +61,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private TextView tv_select_size;//选中的数目
 
 
-
-
     private Context context;
     private BaseApplication application;
     private boolean showAnim = false;
@@ -194,7 +192,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                createButton.setTranslationY((1- value ) * dis);
+                createButton.setTranslationY((1 - value) * dis);
             }
         });
         valueAnimator.start();
@@ -230,6 +228,8 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             }
         }
     }
+
+
 
 
     class MainPageAdapter extends FragmentPagerAdapter {

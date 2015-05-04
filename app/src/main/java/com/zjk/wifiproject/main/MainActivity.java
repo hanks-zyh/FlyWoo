@@ -43,4 +43,6 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
         super.onActivityResult(requestCode, resultCode, data);
         vu.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

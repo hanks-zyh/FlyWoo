@@ -14,4 +14,9 @@ public class CreateConnectionActivity extends BasePresenterActivity<CreateConnec
         return CreateConnectionVu.class;
     }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        vu.onBackPressed();
+    }
 }

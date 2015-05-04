@@ -156,12 +156,17 @@ public class CreateConnectionVu implements Vu, OnClickListener {
                 showTwoImageAnimation();
                 break;
             case R.id.hideButton:
-                ((Activity)context).setResult(Activity.RESULT_OK);
-                A.finishSelfNoAnim(context);
+                 onBackPressed();
                 break;
         }
     }
-
+    /**
+     * 返回按钮
+     */
+    public void onBackPressed() {
+        ((Activity)context).setResult(Activity.RESULT_OK);
+        A.finishSelfNoAnim(context);
+    }
     /**
      * 按钮出现动画
      */
