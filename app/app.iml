@@ -90,6 +90,7 @@
     <orderEntry type="library" exported="" name="logger-1.8" level="project" />
     <orderEntry type="library" exported="" name="rxjava-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+    <orderEntry type="library" exported="" name="renderscript-v8" level="project" />
     <orderEntry type="library" exported="" name="rebound-0.3.7" level="project" />
     <orderEntry type="library" exported="" name="android-support-v13" level="project" />
   </component>

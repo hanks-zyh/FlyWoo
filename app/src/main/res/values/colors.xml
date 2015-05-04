@@ -17,7 +17,7 @@
     <color name="title_red">#EF5054</color>
     <color name="pressed_gray">#33222222</color>
     <color name="black_tran">#88000000</color>
-    <color name="black_aa">#aa000000</color>
+    <color name="black_dd">#dd000000</color>
 
     <!-- app color -->
     <color name="main_red">#F44336</color>
@@ -32,10 +32,12 @@
     <color name="text_colot_1">#212121</color>
     <color name="text_colot_2">#7D7D7D</color>
     <color name="text_colot_3">#878787</color>
+    <color name="line">#F1F4F7</color>
+    <color name="blue_black">#2F2F35</color>
 
     <!-- text_press -->
     <color name="text_bg_normal">#00000000</color>
     <color name="text_bg_press">#33FFFFFF</color>
-    <color name="line">#F1F4F7</color>
+
 
 </resources>

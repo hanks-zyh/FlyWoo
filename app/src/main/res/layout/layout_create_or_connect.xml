@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:visibility="gone"
-    android:background="@color/black_aa">
+    android:background="@color/black_dd">
 
     <CheckBox
         android:id="@+id/helpCheckBox"

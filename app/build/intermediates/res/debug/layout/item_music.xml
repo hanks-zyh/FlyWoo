@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="74dp"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:padding="16dp" >
-
+    android:padding="16dp">
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        tools:text="TextView"
+        android:layout_alignParentLeft="true"
+        android:singleLine="true"
+        android:ellipsize="middle"
+        android:layout_toLeftOf="@+id/isSelect"
         android:textColor="@color/text_colot_1"
         android:textSize="16sp" />
 
+
     <TextView
+        android:layout_alignParentLeft="true"
+        android:singleLine="true"
+        android:ellipsize="middle"
+        android:layout_toLeftOf="@+id/isSelect"
+        android:textSize="14sp"
+        android:layout_below="@+id/title"
         android:id="@+id/size"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="TextView"
+        android:layout_marginTop="2dp"
+        tools:text="TextView"
         android:textColor="@color/text_colot_2" />
 
-</LinearLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/item_music.xml -->
+    <CheckBox
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/isSelect"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+
+</RelativeLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/item_music.xml -->

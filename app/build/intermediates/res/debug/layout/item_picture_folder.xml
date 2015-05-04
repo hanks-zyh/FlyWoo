@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="76dp"
-    android:minHeight="76dp"
+    android:layout_height="92dp"
+    android:minHeight="92dp"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/image"
@@ -26,15 +26,12 @@
         android:textColor="@color/text_colot_2"
         android:textSize="12sp" />
 
-    <TextView
+    <CheckBox
         android:id="@+id/select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="选择"
-        android:textColor="@color/text_colot_2"
-        android:textSize="14sp" />
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/folderName"

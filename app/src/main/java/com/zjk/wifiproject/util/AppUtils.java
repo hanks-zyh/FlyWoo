@@ -1,9 +1,5 @@
 package com.zjk.wifiproject.util;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -11,6 +7,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 
 import com.zjk.wifiproject.app.AppEntity;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * App工具类

@@ -27,7 +27,7 @@ public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
     protected void onBindItemVu(int position) {
         AppEntity item = list.get(position);
         vu.setAppIcon(((BitmapDrawable) item.getIcon()).getBitmap());
-        vu.setAppName(item.getName());
+        vu.setAppName(item.getAppName());
         vu.setAppSize(Formatter.formatFileSize(context, item.length()));
         vu.setChecked(BaseApplication.getInstance().getSendFiles().contains(item));
     }

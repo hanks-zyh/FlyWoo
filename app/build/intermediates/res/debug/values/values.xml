@@ -23,9 +23,10 @@
     <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="black">#ff000000</color>
-    <color name="black_aa">#aa000000</color>
+    <color name="black_dd">#dd000000</color>
     <color name="black_tran">#88000000</color>
     <color name="blue">#FF375BF1</color>
+    <color name="blue_black">#2F2F35</color>
     <color name="bottom_text_blue">#0A76FE</color>
     <color name="gray">#66000000</color>
     <color name="green">#FF34A350</color>

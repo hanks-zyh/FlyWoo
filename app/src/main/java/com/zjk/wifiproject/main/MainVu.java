@@ -4,9 +4,12 @@ import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,6 +48,13 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private ViewPager mViewPager;
     private SlidingTabLayout mTabs;
     private ImageView createButton;
+    private DrawerLayout drawer;
+
+    //标题bar
+    private ImageButton ib_menu;
+    private ImageButton ib_more;
+    private ImageButton ib_search;
+
 
     private View layout_bottom;//底部隐藏布局
     private TextView tv_select_size;//选中的数目
@@ -62,6 +73,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private BaseApplication application;
     private boolean showAnim = false;
     private List<Fragment> list;
+    private Bitmap background;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -81,6 +93,11 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         createButton = (ImageView) view.findViewById(R.id.createButton);
         tv_select_size = (TextView) view.findViewById(R.id.tv_select_size);
 
+        drawer = (DrawerLayout) view.findViewById(R.id.drawer);
+
+        ib_menu = (ImageButton) view.findViewById(R.id.ib_menu);
+        ib_more = (ImageButton) view.findViewById(R.id.ib_more);
+        ib_search = (ImageButton) view.findViewById(R.id.ib_search);
 
         layout_hide = view.findViewById(R.id.layout_create_or_join);
         layout_bottom = view.findViewById(R.id.layout_bottom);
@@ -99,6 +116,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     }
 
     private void setListener() {
+        ib_menu.setOnClickListener(this);
         createButton.setOnClickListener(this);
         mHideButton.setOnClickListener(this);
         tv_select_size.setOnClickListener(this);
@@ -151,11 +169,20 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         } else {
             L.e("FragmentManager is null");
         }
+
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
+            case R.id.ib_menu://打开或关闭菜单
+                if(drawer.isDrawerOpen(Gravity.START)){
+                    drawer.closeDrawer(Gravity.START);
+                }else{
+                    drawer.openDrawer(Gravity.START);
+                }
+                break;
             case R.id.createButton:
                 layout_hide.setVisibility(View.VISIBLE);
                 createButton.setVisibility(View.GONE);

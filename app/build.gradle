@@ -8,8 +8,9 @@ android {
         applicationId "com.zjk.wifiproject"
         minSdkVersion 14
         targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -19,9 +20,7 @@ android {
 }
 
 dependencies {
-    compile files('libs/android-support-v13.jar')
-    compile files('libs/picasso-2.5.2.jar')
-    compile files('libs/rebound-0.3.7.jar')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.orhanobut:logger:1.8'
     compile 'io.reactivex:rxandroid:0.24.0'
 //    compile 'com.facebook.fresco:fresco:0.3.0+'
