@@ -3,19 +3,20 @@
     android:layout_width="match_parent"
     android:background="@color/black_dd"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/relativeLayout1"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
         android:layout_width="230dp"
         android:layout_height="230dp"
-        android:layout_centerInParent="true" >
+        android:id="@+id/centerCircle"
+        android:layout_marginTop="80dp">
 
         <com.zjk.wifiproject.view.CircularProgress
+            android:id="@+id/circleProgress"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </com.zjk.wifiproject.view.CircularProgress>
+            android:layout_height="match_parent"></com.zjk.wifiproject.view.CircularProgress>
 
         <TextView
             android:id="@+id/status"
@@ -23,73 +24,90 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="正在创建热点..."
+            android:lineSpacingMultiplier="1.5"
+            android:gravity="center"
             android:textColor="@color/text_black"
             android:textSize="16sp" />
     </RelativeLayout>
-<!--
-    <Button
-        android:id="@+id/close_ap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/relativeLayout1"
-        android:layout_below="@+id/relativeLayout1"
-        android:text="关闭热点"
-        android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/open_ap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/close_ap"
-        android:layout_alignBottom="@+id/close_ap"
-        android:layout_toRightOf="@+id/close_ap"
-        android:text="打开热点"
-        android:textColor="@color/white" />
+    <RelativeLayout
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:id="@+id/centerSearch"
+        android:layout_marginTop="80dp">
 
-    <Button
-        android:id="@+id/close_wifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/close_ap"
-        android:layout_below="@+id/close_ap"
-        android:text="关闭无线"
-        android:textColor="@color/white" />
+        <com.zjk.wifiproject.view.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.zjk.wifiproject.view.SearchView>
 
-    <Button
-        android:id="@+id/open_wifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/close_ap"
-        android:layout_toRightOf="@+id/close_ap"
-        android:text="打开无线"
-        android:textColor="@color/white" />
-    <Button
-        android:id="@+id/connect_wifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="连接无线"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/open_wifi"
-        android:layout_toStartOf="@+id/open_wifi" />
+    </RelativeLayout>
+    <!--
+        <Button
+            android:id="@+id/close_ap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/relativeLayout1"
+            android:layout_below="@+id/relativeLayout1"
+            android:text="关闭热点"
+            android:textColor="@color/white" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/open_wifi"
-        android:layout_alignStart="@+id/open_wifi"
-        android:text="手动ss" />
+        <Button
+            android:id="@+id/open_ap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/close_ap"
+            android:layout_alignBottom="@+id/close_ap"
+            android:layout_toRightOf="@+id/close_ap"
+            android:text="打开热点"
+            android:textColor="@color/white" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="send"
-        android:id="@+id/send"
-        android:layout_below="@+id/open_ap"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />-->
+        <Button
+            android:id="@+id/close_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/close_ap"
+            android:layout_below="@+id/close_ap"
+            android:text="关闭无线"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/open_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/close_ap"
+            android:layout_toRightOf="@+id/close_ap"
+            android:text="打开无线"
+            android:textColor="@color/white" />
+        <Button
+            android:id="@+id/connect_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="连接无线"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/open_wifi"
+            android:layout_toStartOf="@+id/open_wifi" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/open_wifi"
+            android:layout_alignStart="@+id/open_wifi"
+            android:text="手动ss" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="send"
+            android:id="@+id/send"
+            android:layout_below="@+id/open_ap"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />-->
 
 
     <CheckBox
@@ -142,6 +160,7 @@
         android:layout_width="180dp"
         android:src="@drawable/animation_rightall"
         android:layout_height="137dp" />
+
     <ImageView
         android:scaleType="centerInside"
         android:id="@+id/leftImage"

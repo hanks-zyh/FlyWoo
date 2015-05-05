@@ -1,17 +1,17 @@
 package com.zjk.wifiproject.view;
 
 import android.animation.ValueAnimator;
-import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 
 import com.zjk.wifiproject.util.PixelUtil;
 
@@ -23,6 +23,7 @@ public class CircularProgress extends View {
     private int ringBgWidth;
     private int ringWidth;
     private int gap;
+    private ValueAnimator progressAnim;
 
     @SuppressLint("NewApi")
     public CircularProgress(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -47,7 +48,7 @@ public class CircularProgress extends View {
 
         ringBgWidth = PixelUtil.dp2px(8);
         ringWidth = PixelUtil.dp2px(8);
-        gap = PixelUtil.dp2px(2);
+        gap = PixelUtil.dp2px(50);
 
         bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bgPaint.setColor(Color.parseColor("#F7F7F7"));
@@ -62,30 +63,78 @@ public class CircularProgress extends View {
         progressPaint.setStrokeWidth(ringWidth);
         progressPaint.setStrokeJoin(Paint.Join.ROUND);
         progressPaint.setStyle(Paint.Style.STROKE); // 绘制空心圆
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(15000);
-                va.setInterpolator(new LinearInterpolator());
-                va.addUpdateListener(new AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float value = (float) animation.getAnimatedValue();
-                        setProgress(value);
-                    }
-                });
-                va.start();
-            }
-        }, 1000);
+
     }
+
+
+    /**
+     * 进度加载动画
+     */
+    public void startAnim(long delay) {
+         progressAnim = ValueAnimator.ofFloat(0, 1).setDuration(15000);
+        progressAnim.setInterpolator(new LinearInterpolator());
+        progressAnim.setStartDelay(delay);
+        progressAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                setProgress(value);
+            }
+        });
+        progressAnim.start();
+    }
+    /**
+     * finish动画
+     */
+    public void finishAnim() {
+        progressAnim.cancel();
+        final  float progress = curProgress;
+        ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(1000);
+        va.setInterpolator(new DecelerateInterpolator());
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue() + progress;
+                value  = value >1 ? 1:value;
+                setProgress(value);
+            }
+        });
+        va.start();
+    }
+
+
+
+    /**
+     * 缩放
+     */
+    public void startCircleAnim(long delay) {
+        ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(300);
+        va.setInterpolator(new OvershootInterpolator());
+        va.setStartDelay(delay);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                setRadius(value);
+            }
+        });
+        va.start();
+    }
+
+    private void setRadius(float value) {
+        gap = (int) (PixelUtil.dp2px(50)*(1-value)+.5f);
+        invalidate();
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
         // super.onDraw(canvas);
-         canvas.save();
+        canvas.save();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
-        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - gap - gap, bgPaint);
 
+        //圆环
         RectF oval = null;
         if (oval == null) {
             oval = new RectF(ringWidth + gap, ringBgWidth + gap, width - ringBgWidth - gap, height
@@ -93,10 +142,15 @@ public class CircularProgress extends View {
         }
         canvas.drawArc(oval, 0, 360, false, progressBgPaint);
 
+        //圆
+        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - ringBgWidth, bgPaint);
+
+        //进度条
         float p = 360 * curProgress;
+        p = p > 360? 360:p; //防止超出360
         canvas.drawArc(oval, 270, p, false, progressPaint);
 
-         canvas.restore();
+        canvas.restore();
     }
 
     private synchronized void setProgress(float value) {
@@ -107,8 +161,7 @@ public class CircularProgress extends View {
     }
 
     @Override
-    public boolean isInEditMode()
-    {
+    public boolean isInEditMode() {
         return true;
     }
 }

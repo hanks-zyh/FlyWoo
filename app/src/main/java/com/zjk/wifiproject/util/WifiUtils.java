@@ -1,17 +1,5 @@
 package com.zjk.wifiproject.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-import java.util.List;
-
-import org.apache.http.conn.util.InetAddressUtils;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
@@ -26,6 +14,18 @@ import android.os.Message;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.wifi.TimerCheck;
+
+import org.apache.http.conn.util.InetAddressUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Wifi 工具类
@@ -257,6 +257,9 @@ public class WifiUtils {
 
     public static void startScan() {
         mWifiManager.startScan();
+        List<ScanResult> scanResults = WifiUtils.getScanResults();
+//        mWifiList.addAll(scanResults);
+        L.d("搜索size:"+scanResults.size());
     }
 
     private static WifiConfiguration createWifiInfo(String SSID, String Password, WifiCipherType Type) {

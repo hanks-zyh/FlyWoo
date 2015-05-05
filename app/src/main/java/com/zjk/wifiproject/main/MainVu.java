@@ -169,8 +169,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     }
 
 
-
-
     /**
      * 抖动按钮的动画
      */
