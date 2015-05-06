@@ -37,6 +37,7 @@ import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.view.CircularProgress;
 import com.zjk.wifiproject.view.SearchView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -65,6 +66,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
     private View mCenterSearch;
     private SearchView mSearchView;
     private Timer timer;
+    private String localHostName ;  //创建的热点的名字
 
 
     @Override
@@ -144,8 +146,9 @@ public class CreateConnectionVu implements Vu, OnClickListener {
             WifiUtils.closeWifi();
         }
 
+        localHostName = getLocalHostName();
         // 创建热点
-        WifiUtils.startWifiAp(WifiConst.WIFI_AP_HEADER + getLocalHostName(), WifiConst.WIFI_AP_PASSWORD,
+        WifiUtils.startWifiAp(WifiConst.WIFI_AP_HEADER + localHostName, WifiConst.WIFI_AP_PASSWORD,
                 mHandler);
         //开启监听消息线程
         UDPMessageListener.getInstance(context).connectUDPSocket();
@@ -205,16 +208,16 @@ public class CreateConnectionVu implements Vu, OnClickListener {
 
 
         //如果WiFi热点开启
-        if(!WifiUtils.isWifiApEnabled()){
+//        if (!WifiUtils.isWifiApEnabled()) {
             WifiUtils.closeWifiAp();
-        }
+//        }
 
         //如果WiFi没有开启
-        if(!WifiUtils.isWifiEnabled()){
+        if (!WifiUtils.isWifiEnabled()) {
             WifiUtils.OpenWifi();
         }
 
-        //定时器
+        //定时器,延迟2秒开启
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -223,7 +226,76 @@ public class CreateConnectionVu implements Vu, OnClickListener {
                 WifiUtils.startScan();
                 mHandler.sendEmptyMessage(WifiConst.ApScanResult);
             }
-        }, new Date(), 2000);
+        }, new Date(System.currentTimeMillis() + 2000), 2000);
+
+/*
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSearchView.addApView("HTC");
+            }
+        },4000);*/
+
+        mSearchView.setOnAvatarClickListener(new SearchView.OnAvatarClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAvatarClick(v);
+            }
+        });
+
+    }
+
+    /**
+     * 点击出现的热点头像
+     *
+     * @param v
+     */
+    private void onAvatarClick(final View v) {
+        //动画
+        startAvatarClickAnim(v);
+        //停止搜索
+        if(timer!=null){
+            timer.cancel();
+        }
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScanResult wifi = (ScanResult) v.getTag();
+                connectAp(wifi.SSID);
+            }
+        },1500);
+
+    }
+
+    private void startAvatarClickAnim(final View v) {
+        int[] mAvatarLocation = new int[2];
+        v.getLocationOnScreen(mAvatarLocation);
+
+        int mCenterSearchLocation[] = new int[2];
+        mSearchView.getLocationOnScreen(mCenterSearchLocation);
+
+        int mLeft =  mCenterSearchLocation[0] + mSearchView.getWidth()/2 -  mAvatarLocation[0] - v.getWidth()/2;
+        int mTop =  mCenterSearchLocation[1] + mSearchView.getHeight()/2 -  mAvatarLocation[1] - v.getHeight()/2+PixelUtil.dp2px(13);
+
+        mSearchView.clearApViewButOne(v);//清除其他view
+        mSearchView.hideBackground(); //隐藏背景红
+        v.animate().translationX(mLeft).translationY(mTop).
+                setDuration(300).setInterpolator(new DecelerateInterpolator()).start(); //头像移动到中心
+        //300ms后执行的
+        v.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCenterCircle.setVisibility(View.VISIBLE);
+                mStatus.setText("正在连接");
+                mCircleProgress.startScaleAnim(0); //圆+圆环动画
+                mCircleProgress.startAnim(800); //进度条动画
+            }
+        }, 300);
+        mSearchView.setTextColor(v, Color.BLACK); //设置字体颜色
+
+
+
     }
 
     /**
@@ -269,7 +341,6 @@ public class CreateConnectionVu implements Vu, OnClickListener {
                 setDuration(1000).setInterpolator(new DecelerateInterpolator()).start();
         mJoin.animate().scaleX(0).scaleY(0).alpha(0).
                 setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
-
         mSearchView.startSearchAnim(1000);
     }
 
@@ -285,7 +356,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
             public void run() {
                 createAP(context);
             }
-        },2000);
+        }, 2000);
     }
 
     /**
@@ -361,7 +432,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
      * 返回按钮
      */
     public void onBackPressed() {
-        if(timer!=null){
+        if (timer != null) {
             timer.cancel();
         }
         ((Activity) context).setResult(Activity.RESULT_OK);
@@ -460,21 +531,19 @@ public class CreateConnectionVu implements Vu, OnClickListener {
 //    }
 
     private void connectAp(String hostName) {
-        String ssid = WifiUtils.getApSSID();
-        L.e(ssid);
-        if (ssid.startsWith(WifiConst.WIFI_AP_HEADER)) {
+        L.d(hostName);
+        if (hostName.startsWith(WifiConst.WIFI_AP_HEADER)) {
             // 连接网络
             boolean connFlag = WifiUtils.connectWifi(hostName, WifiConst.WIFI_AP_PASSWORD,
                     WifiUtils.WifiCipherType.WIFICIPHER_WPA);
             if (connFlag) {
                 T.show(context, "已连接");
-//                edit.setText("已连接");
-//                new Thread(new ConnectAPThread()).start();
+                mHandler.sendEmptyMessage(WifiConst.WiFiConnectSuccess);
             }
         }
     }
 
-    private List<ScanResult> mList;//扫描到的WiFi列表
+    private List<String> mList = new ArrayList<>();//扫描到的WiFi列表
 
     private Handler mHandler = new Handler() {
         @Override
@@ -485,8 +554,11 @@ public class CreateConnectionVu implements Vu, OnClickListener {
                     createApSuccess();
                     break;
                 case WifiConst.ApScanResult:
-                    mList = WifiUtils.getScanResults();
-                    handleList();
+                    handleList(WifiUtils.getScanResults());
+                    break;
+                case WifiConst.WiFiConnectSuccess:
+                    mCircleProgress.finishAnim();
+                    mStatus.setText("连接成功");
                     break;
             }
         }
@@ -494,16 +566,22 @@ public class CreateConnectionVu implements Vu, OnClickListener {
 
     /**
      * 处理扫描到的Wifi列表
+     *
+     * @param scanResults
      */
-    private void handleList() {
-        for(ScanResult wifi : mList){
+    private void handleList(List<ScanResult> scanResults) {
+        //遍历扫描到的结果
+        for(ScanResult wifi : scanResults){
             String s = wifi.SSID;
-            L.d("----------------"+wifi.SSID);
+            //以ZChat_开头
             if(s.startsWith(WifiConst.WIFI_AP_HEADER)){
-                L.e("----------------"+wifi.SSID);
-                mSearchView.addApView(wifi.SSID);
+                if(!mList.contains(s)){//没有添加过
+                    mList.add(wifi.SSID);
+                    mSearchView.addApView(wifi);
+                }
             }
         }
+
     }
 
     /**
@@ -511,10 +589,10 @@ public class CreateConnectionVu implements Vu, OnClickListener {
      */
     private void createApSuccess() {
 
-        String s = "创建成功\n请朋友加入\""+ getLocalHostName()+"\"";
+        String s = "创建成功\n请朋友加入\"" + localHostName + "\"";
         SpannableString ss = new SpannableString(s);
-        ss.setSpan(new ForegroundColorSpan(Color.GREEN),0,4,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new RelativeSizeSpan(1.5f),0,4,SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(Color.RED), 0, 4, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new RelativeSizeSpan(1.2f), 0, 4, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         mStatus.setText(ss);
         mCircleProgress.finishAnim();
     }

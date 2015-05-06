@@ -8,8 +8,8 @@
     <RelativeLayout
         android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:id="@+id/centerCircle"
         android:layout_marginTop="80dp">
 
@@ -19,13 +19,14 @@
             android:layout_height="match_parent"></com.zjk.wifiproject.view.CircularProgress>
 
         <TextView
+            android:gravity="center"
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:text="正在创建热点..."
+            android:layout_marginTop="50dp"
             android:lineSpacingMultiplier="1.5"
-            android:gravity="center"
+            android:layout_centerHorizontal="true"
             android:textColor="@color/text_black"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -33,8 +34,8 @@
     <RelativeLayout
         android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:id="@+id/centerSearch"
         android:layout_marginTop="80dp">
 

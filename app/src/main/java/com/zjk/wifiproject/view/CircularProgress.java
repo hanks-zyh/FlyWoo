@@ -1,5 +1,6 @@
 package com.zjk.wifiproject.view;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,7 +12,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 import com.zjk.wifiproject.util.PixelUtil;
 
@@ -22,7 +22,7 @@ public class CircularProgress extends View {
 
     private int ringBgWidth;
     private int ringWidth;
-    private int gap;
+    private int gap,bgGap;
     private ValueAnimator progressAnim;
 
     @SuppressLint("NewApi")
@@ -48,13 +48,14 @@ public class CircularProgress extends View {
 
         ringBgWidth = PixelUtil.dp2px(8);
         ringWidth = PixelUtil.dp2px(8);
-        gap = PixelUtil.dp2px(50);
+        gap = PixelUtil.dp2px(125);
+        bgGap = PixelUtil.dp2px(0);
 
         bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bgPaint.setColor(Color.parseColor("#F7F7F7"));
 
         progressBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        progressBgPaint.setColor(Color.parseColor("#88444459"));
+        progressBgPaint.setColor(Color.parseColor("#AA444459"));
         progressBgPaint.setStrokeWidth(ringBgWidth);
         progressBgPaint.setStyle(Paint.Style.STROKE); // 绘制空心圆
 
@@ -71,7 +72,7 @@ public class CircularProgress extends View {
      * 进度加载动画
      */
     public void startAnim(long delay) {
-         progressAnim = ValueAnimator.ofFloat(0, 1).setDuration(15000);
+        progressAnim = ValueAnimator.ofFloat(0, 1).setDuration(20000);
         progressAnim.setInterpolator(new LinearInterpolator());
         progressAnim.setStartDelay(delay);
         progressAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -103,13 +104,12 @@ public class CircularProgress extends View {
     }
 
 
-
     /**
-     * 缩放
+     * 外圆环的缩放
      */
     public void startCircleAnim(long delay) {
-        ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(300);
-        va.setInterpolator(new OvershootInterpolator());
+        ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(400);
+        va.setInterpolator(new DecelerateInterpolator());
         va.setStartDelay(delay);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -120,9 +120,57 @@ public class CircularProgress extends View {
         });
         va.start();
     }
+    /**
+     * 圆背景+外圆环的缩放
+     */
+    public void startScaleAnim(long delay) {
+        ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(400);
+        va.setInterpolator(new LinearInterpolator());
+        va.setStartDelay(delay);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                setBgRadius(value);
+            }
+        });
+        va.start();
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                setVisibility(VISIBLE);
+            }
 
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                startCircleAnim(0);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+    }
+
+    /**
+     * 设置背景圆变化
+     * @param value
+     */
+    private void setBgRadius(float value) {
+        bgGap = (int) (PixelUtil.dp2px(120)*(1-value)+.5f);
+        invalidate();
+    }
+
+    /**
+     * 设置圆环变化
+     * @param value
+     */
     private void setRadius(float value) {
-        gap = (int) (PixelUtil.dp2px(50)*(1-value)+.5f);
+        gap = (int) (PixelUtil.dp2px(125)*(1-value)+.5f);
         invalidate();
     }
 
@@ -143,7 +191,7 @@ public class CircularProgress extends View {
         canvas.drawArc(oval, 0, 360, false, progressBgPaint);
 
         //圆
-        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - ringBgWidth, bgPaint);
+        canvas.drawCircle(width / 2, height / 2, width / 2 - ringBgWidth - ringBgWidth - bgGap , bgPaint);
 
         //进度条
         float p = 360 * curProgress;

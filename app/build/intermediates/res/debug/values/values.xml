@@ -54,6 +54,8 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="yellow">#FFF7D23E</color>
+    <declare-styleable name="CircularImageView"><attr format="boolean" name="border"/><attr format="color" name="border_color"/><attr format="dimension" name="border_width"/><attr format="boolean" name="selector"/><attr format="color" name="selector_color"/><attr format="color" name="selector_stroke_color"/><attr format="dimension" name="selector_stroke_width"/><attr format="boolean" name="shadow"/></declare-styleable>
+    <declare-styleable name="CustomCircularImageViewTheme"><attr format="reference" name="circularImageViewStyle"/></declare-styleable>
     <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>

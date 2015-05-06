@@ -2,32 +2,11 @@
 <items version="2" >
 
     <item
-        jar="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-59f435334fa6650b1f5385ac152b227dba567470.jar" />
-    </item>
-    <item
-        jar="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\0.3.0\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="90a9afd83c93d7983396e55c80d0f27a89f7aa4c">
-        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-b97f7f376732bf50f598e2159ae7f0fa9e9937e6.jar" />
-    </item>
-    <item
         jar="E:\bysj\WifiProject-AS\WifiProject\app\libs\picasso-2.5.2.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
         <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-b4dfe1a374fecea5f4d6a9a73f857b1e81a26e33.jar" />
-    </item>
-    <item
-        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\io.reactivex\rxandroid\0.24.0\42dab493b8f74b164e082f281480c9d493ff89da\rxandroid-0.24.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="42dab493b8f74b164e082f281480c9d493ff89da">
-        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rxandroid-0.24.0-54a70d496759fa4a9b2a85d2c40170ac51412347.jar" />
     </item>
     <item
         jar="E:\android-sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
@@ -42,13 +21,6 @@
         revision="22.0.1"
         sha1="914cb7e79b8292b2c90ba58c7d213ac3b89f05dd">
         <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-503ec053dd02160440c7d10844982898901e61f6.jar" />
-    </item>
-    <item
-        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="129874135e6081269ace2312092031558865de12">
-        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-a27a8f82ac0b46c0541b7fd779ecc0cc456b9053.jar" />
     </item>
     <item
         jar="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
@@ -98,6 +70,34 @@
         revision="22.0.1"
         sha1="2b276904cd854be6d460f2bcec9cf2cddaf580c1">
         <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\renderscript-v8-59795d2483d4aceff6f94ad9ff39046131be9161.jar" />
+    </item>
+    <item
+        jar="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-59f435334fa6650b1f5385ac152b227dba567470.jar" />
+    </item>
+    <item
+        jar="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\0.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="90a9afd83c93d7983396e55c80d0f27a89f7aa4c">
+        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-b97f7f376732bf50f598e2159ae7f0fa9e9937e6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\io.reactivex\rxandroid\0.24.0\42dab493b8f74b164e082f281480c9d493ff89da\rxandroid-0.24.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="42dab493b8f74b164e082f281480c9d493ff89da">
+        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rxandroid-0.24.0-54a70d496759fa4a9b2a85d2c40170ac51412347.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="129874135e6081269ace2312092031558865de12">
+        <dex dex="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-a27a8f82ac0b46c0541b7fd779ecc0cc456b9053.jar" />
     </item>
     <item
         jar="E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\exploded-aar\com.orhanobut\logger\1.8\classes.jar"
