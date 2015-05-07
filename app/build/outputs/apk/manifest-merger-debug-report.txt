@@ -18,6 +18,24 @@ ADDED from AndroidManifest.xml:2:1
 uses-sdk
 ADDED from AndroidManifest.xml:7:5
 MERGED from com.orhanobut:logger:1.8:7:5
+MERGED from com.android.support:appcompat-v7:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v13:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:palette-v7:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:recyclerview-v7:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:cardview-v7:21.0.3:15:5
+MERGED from com.facebook.fresco:fresco:0.3.0:5:5
+MERGED from com.facebook.fresco:imagepipeline:0.3.0:5:5
+MERGED from com.facebook.fresco:fbcore:0.3.0:5:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.facebook.fresco:fbcore:0.3.0:5:5
+MERGED from com.facebook.fresco:drawee:0.3.0:5:5
+MERGED from com.facebook.fresco:fbcore:0.3.0:5:5
+MERGED from com.android.support:support-v4:22.1.1:20:5
 	android:targetSdkVersion
 		ADDED from AndroidManifest.xml:9:9
 		INJECTED from AndroidManifest.xml:0:0
@@ -53,6 +71,18 @@ ADDED from AndroidManifest.xml:16:5
 application
 ADDED from AndroidManifest.xml:18:5
 MERGED from com.orhanobut:logger:1.8:11:5
+MERGED from com.android.support:appcompat-v7:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v13:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:palette-v7:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:recyclerview-v7:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:cardview-v7:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.1.1:22:5
 	android:label
 		ADDED from AndroidManifest.xml:22:9
 	android:allowBackup
@@ -97,3 +127,13 @@ activity#com.zjk.wifiproject.connection.ConnectAcivity
 ADDED from AndroidManifest.xml:36:9
 	android:name
 		ADDED from AndroidManifest.xml:36:19
+activity#com.zjk.wifiproject.chat.ChatActivity
+ADDED from AndroidManifest.xml:37:9
+	android:name
+		ADDED from AndroidManifest.xml:37:19
+activity#android.support.v7.widget.TestActivity
+ADDED from com.android.support:recyclerview-v7:22.1.1:23:9
+	android:label
+		ADDED from com.android.support:recyclerview-v7:22.1.1:25:13
+	android:name
+		ADDED from com.android.support:recyclerview-v7:22.1.1:24:13

@@ -34,6 +34,7 @@
         <activity android:name="com.zjk.wifiproject.guide.GuideActivity" />
         <activity android:name="com.zjk.wifiproject.connection.CreateConnectionActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name="com.zjk.wifiproject.connection.ConnectAcivity" />
+        <activity android:name="com.zjk.wifiproject.chat.ChatActivity" />
     </application>
 
 </manifest>

@@ -1,176 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/black_dd"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:id="@+id/centerCircle"
-        android:layout_marginTop="80dp">
+        android:layout_width="match_parent"
+        android:background="@color/black_dd"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.zjk.wifiproject.view.CircularProgress
-            android:id="@+id/circleProgress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.zjk.wifiproject.view.CircularProgress>
-
-        <TextView
-            android:gravity="center"
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="正在创建热点..."
-            android:layout_marginTop="50dp"
-            android:lineSpacingMultiplier="1.5"
+        <RelativeLayout
+            android:visibility="invisible"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/text_black"
-            android:textSize="16sp" />
-    </RelativeLayout>
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:id="@+id/centerCircle"
+            android:layout_marginTop="80dp">
 
-    <RelativeLayout
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:id="@+id/centerSearch"
-        android:layout_marginTop="80dp">
+            <com.zjk.wifiproject.view.CircularProgress
+                android:id="@+id/circleProgress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.zjk.wifiproject.view.CircularProgress>
 
-        <com.zjk.wifiproject.view.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.zjk.wifiproject.view.SearchView>
+            <TextView
+                android:gravity="center"
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正在创建热点..."
+                android:layout_marginTop="50dp"
+                android:lineSpacingMultiplier="1.5"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+        </RelativeLayout>
 
-    </RelativeLayout>
-    <!--
-        <Button
-            android:id="@+id/close_ap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/relativeLayout1"
-            android:layout_below="@+id/relativeLayout1"
-            android:text="关闭热点"
-            android:textColor="@color/white" />
+        <RelativeLayout
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:id="@+id/centerSearch"
+            android:layout_marginTop="80dp">
 
-        <Button
-            android:id="@+id/open_ap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/close_ap"
-            android:layout_alignBottom="@+id/close_ap"
-            android:layout_toRightOf="@+id/close_ap"
-            android:text="打开热点"
-            android:textColor="@color/white" />
+            <com.zjk.wifiproject.view.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.zjk.wifiproject.view.SearchView>
 
-        <Button
-            android:id="@+id/close_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/close_ap"
-            android:layout_below="@+id/close_ap"
-            android:text="关闭无线"
-            android:textColor="@color/white" />
+        </RelativeLayout>
+        <!--
+            <Button
+                android:id="@+id/close_ap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/relativeLayout1"
+                android:layout_below="@+id/relativeLayout1"
+                android:text="关闭热点"
+                android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/open_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/close_ap"
-            android:layout_toRightOf="@+id/close_ap"
-            android:text="打开无线"
-            android:textColor="@color/white" />
-        <Button
-            android:id="@+id/connect_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="连接无线"
-            android:textColor="@color/white"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/open_wifi"
-            android:layout_toStartOf="@+id/open_wifi" />
+            <Button
+                android:id="@+id/open_ap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/close_ap"
+                android:layout_alignBottom="@+id/close_ap"
+                android:layout_toRightOf="@+id/close_ap"
+                android:text="打开热点"
+                android:textColor="@color/white" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/open_wifi"
-            android:layout_alignStart="@+id/open_wifi"
-            android:text="手动ss" />
+            <Button
+                android:id="@+id/close_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/close_ap"
+                android:layout_below="@+id/close_ap"
+                android:text="关闭无线"
+                android:textColor="@color/white" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="send"
-            android:id="@+id/send"
-            android:layout_below="@+id/open_ap"
+            <Button
+                android:id="@+id/open_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/close_ap"
+                android:layout_toRightOf="@+id/close_ap"
+                android:text="打开无线"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/connect_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="连接无线"
+                android:textColor="@color/white"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/open_wifi"
+                android:layout_toStartOf="@+id/open_wifi" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@+id/open_wifi"
+                android:layout_alignStart="@+id/open_wifi"
+                android:text="手动ss" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="send"
+                android:id="@+id/send"
+                android:layout_below="@+id/open_ap"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />-->
+
+
+        <CheckBox
+            android:id="@+id/helpCheckBox"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />-->
+            android:layout_alignParentTop="true"
+            android:layout_width="36dp"
+            style="@style/HelpCheckBox"
+            android:layout_margin="16dp"
+            android:layout_height="36dp" />
 
+        <ImageView
 
-    <CheckBox
-        android:id="@+id/helpCheckBox"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_width="36dp"
-        style="@style/HelpCheckBox"
-        android:layout_margin="16dp"
-        android:layout_height="36dp" />
+            android:scaleType="centerInside"
+            android:id="@+id/create"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="22dp"
+            android:layout_width="50dp"
+            android:src="@drawable/btn_create"
+            android:layout_height="50dp" />
 
-    <ImageView
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:scaleType="centerInside"
+            android:id="@+id/join"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="22dp"
+            android:layout_width="50dp"
+            android:src="@drawable/btn_join"
+            android:layout_height="50dp" />
 
-        android:scaleType="centerInside"
-        android:id="@+id/create"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="22dp"
-        android:layout_width="50dp"
-        android:src="@drawable/btn_create"
-        android:layout_height="50dp" />
+        <ImageView
+            android:scaleType="centerInside"
+            android:id="@+id/hideButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="16dp"
+            android:layout_width="64dp"
+            android:src="@drawable/btn_cancel"
+            android:layout_height="64dp" />
 
-    <ImageView
-        android:layout_alignParentRight="true"
-        android:scaleType="centerInside"
-        android:id="@+id/join"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="22dp"
-        android:layout_width="50dp"
-        android:src="@drawable/btn_join"
-        android:layout_height="50dp" />
+        <ImageView
+            android:scaleType="centerInside"
+            android:id="@+id/rightImage"
+            android:layout_above="@+id/create"
+            android:layout_marginBottom="140dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="-180dp"
+            android:layout_width="180dp"
+            android:src="@drawable/animation_rightall"
+            android:layout_height="137dp" />
 
-    <ImageView
-        android:scaleType="centerInside"
-        android:id="@+id/hideButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:layout_width="64dp"
-        android:src="@drawable/btn_cancel"
-        android:layout_height="64dp" />
+        <ImageView
+            android:scaleType="centerInside"
+            android:id="@+id/leftImage"
+            android:layout_above="@+id/create"
+            android:layout_marginBottom="2dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-180dp"
+            android:layout_width="179dp"
+            android:src="@drawable/animation_leftall"
+            android:layout_height="185dp" />
 
-    <ImageView
-        android:scaleType="centerInside"
-        android:id="@+id/rightImage"
-        android:layout_above="@+id/create"
-        android:layout_marginBottom="140dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="-180dp"
-        android:layout_width="180dp"
-        android:src="@drawable/animation_rightall"
-        android:layout_height="137dp" />
-
-    <ImageView
-        android:scaleType="centerInside"
-        android:id="@+id/leftImage"
-        android:layout_above="@+id/create"
-        android:layout_marginBottom="2dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="-180dp"
-        android:layout_width="179dp"
-        android:src="@drawable/animation_leftall"
-        android:layout_height="185dp" />
-
+    </RelativeLayout>
 </RelativeLayout>

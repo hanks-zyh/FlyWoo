@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.app.AppFragment;
@@ -30,10 +33,14 @@ import com.zjk.wifiproject.connection.CreateConnectionActivity;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.util.A;
+import com.zjk.wifiproject.util.BlurBuilder;
+import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
 import com.zjk.wifiproject.view.tabs.SlidingTabLayout;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**
@@ -156,7 +163,10 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                 break;
             case R.id.createButton://进入创建热点的界面
                 createButton.setVisibility(View.GONE);
+                String blurPath = takeScreenShot((Activity)context);
                 Intent intent = new Intent(context,CreateConnectionActivity.class);
+                Logger.d(blurPath);
+                intent.putExtra(ConfigIntent.EXTRA_BLUR_PATH,blurPath);
                 ((Activity)context).startActivityForResult(intent, ConfigIntent.REQUEST_SHOW_CREATE);
                 break;
             case R.id.ib_close:
@@ -166,6 +176,50 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                 A.goOtherActivity(context, CreateConnectionActivity.class);
                 break;
         }
+    }
+
+    public String takeScreenShot(Activity activity){
+
+        String filePath = FileUtils.getProjectPictureDir();
+
+        View rootView = activity.getWindow().getDecorView();
+        // 允许当前窗口保存缓存信息
+        rootView.setDrawingCacheEnabled(true);
+        rootView.buildDrawingCache();
+
+        // 获取状态栏高度
+        Rect rect = new Rect();
+        rootView.getWindowVisibleDisplayFrame(rect);
+        int statusBarHeights = rect.top;
+        Display display = activity.getWindowManager().getDefaultDisplay();
+
+        // 获取屏幕宽和高
+        int widths = display.getWidth();
+        int heights = display.getHeight();
+
+        // 去掉状态栏
+        Bitmap bitmap = Bitmap.createBitmap(rootView.getDrawingCache(), 0,
+                statusBarHeights, widths, heights - statusBarHeights);
+
+        File imagePath = new File(filePath,System.currentTimeMillis()+".jpg");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(imagePath);
+            bitmap = BlurBuilder.blur(context, bitmap);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+            fos.flush();
+        } catch (Exception e) {
+        }finally {
+            try{
+                fos.close();
+                bitmap.recycle();
+                bitmap = null;
+            }catch(Exception e){
+            }
+            rootView.destroyDrawingCache();
+            rootView.setDrawingCacheEnabled(false);
+        }
+        return imagePath.getAbsolutePath();
     }
 
 

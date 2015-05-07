@@ -15,4 +15,8 @@ public class ConfigIntent {
      */
     public static final int REQUEST_SHOW_CREATING = 0x02;
 
+    /**
+     * 模糊后图片的存储地址
+     */
+    public static final String EXTRA_BLUR_PATH = "blur_path";
 }

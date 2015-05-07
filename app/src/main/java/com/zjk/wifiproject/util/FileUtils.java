@@ -210,9 +210,10 @@ public class FileUtils {
                 android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
         if (sdCardExist) {
             sdDir = Environment.getExternalStorageDirectory();// 获取跟目录
-            return sdDir.toString();
+            return sdDir.getAbsolutePath();
+        }else{
+            return Environment.getDataDirectory().getAbsolutePath();
         }
-        return null;
     }
 
     /**
@@ -353,6 +354,19 @@ public class FileUtils {
         File file = new File(getSDPath()+"/WifiProject");
         if(!file.exists()){
             file.mkdirs();
+        }
+        return file.getAbsolutePath();
+    }
+
+    public static String getProjectPictureDir() {
+        File file = new File(getProjectDir()+"/pictures");
+
+        if(!file.exists()){
+            file.mkdirs();
+        }else {
+            for (File f : file.listFiles()){
+                f.delete();
+            }
         }
         return file.getAbsolutePath();
     }

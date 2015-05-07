@@ -30,6 +30,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
         list.add(new VedioFragment());
         list.add(new FileFragment());
         vu.setViewPager(list);
+
     }
 
     @Override

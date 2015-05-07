@@ -36,6 +36,10 @@
             android:name="com.zjk.wifiproject.connection.CreateConnectionActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name="com.zjk.wifiproject.connection.ConnectAcivity" />
+        <activity android:name="com.zjk.wifiproject.chat.ChatActivity" />
+        <activity
+            android:name="android.support.v7.widget.TestActivity"
+            android:label="RecyclerViewTestActivity" />
     </application>
 
 </manifest>
