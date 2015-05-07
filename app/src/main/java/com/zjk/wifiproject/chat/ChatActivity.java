@@ -13,7 +13,10 @@ public class ChatActivity extends BasePresenterActivity<ChatVu>{
     @Override
     protected void onBindVu() {
         List<ChatEntity> list = new ArrayList<>();
-        list.add(new ChatEntity("哈哈哈"));
+        ChatEntity msg = new ChatEntity("哈哈哈");
+        msg.setType(ChatEntityType.STRING);
+        msg.setIsSend(true);
+        list.add(msg);
         vu.setDate(list);
     }
 

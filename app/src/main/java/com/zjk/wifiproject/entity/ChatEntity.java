@@ -6,7 +6,7 @@ import com.zjk.wifiproject.chat.ChatEntityType;
  * 聊天的实体类
  * Created by Administrator on 2015/5/7.
  */
-public class ChatEntity{
+public class ChatEntity {
 
     public ChatEntity(String content) {
         this.content = content;
@@ -14,12 +14,12 @@ public class ChatEntity{
 
     private ChatEntityType type;
     private String content;
-    private long  time;
+    private long time;
     private WFile file;
     /**
      * 是否是自己发出的
      */
-    private boolean isOut;
+    private boolean isSend;
 
     public ChatEntityType getType() {
         return type;
@@ -53,11 +53,11 @@ public class ChatEntity{
         this.file = file;
     }
 
-    public boolean isOut() {
-        return isOut;
+    public boolean isSend() {
+        return isSend;
     }
 
-    public void setIsOut(boolean isOut) {
-        this.isOut = isOut;
+    public void setIsSend(boolean isSend) {
+        this.isSend = isSend;
     }
 }

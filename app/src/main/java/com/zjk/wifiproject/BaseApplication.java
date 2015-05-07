@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.util.FileUtils;
@@ -86,7 +87,7 @@ public class BaseApplication extends Application {
         // L.setLogStatus(isPrintLog); // 设置是否显示日志
 
         //初始化Fresco库
-//        Fresco.initialize(this);
+        Fresco.initialize(this);
 
         initEmoticons();
         initNotification();

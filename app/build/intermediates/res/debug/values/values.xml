@@ -98,6 +98,7 @@
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
     <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/values/colors.xml -->
     <eat-comment/>
+    <color name="mainBg">#ffbeb7c5</color>
     <color name="main_blue">#289CCF</color>
     <color name="main_red">#F44336</color>
     <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
@@ -328,6 +329,7 @@ All Rights Reserved."</string>
     <string name="audio_head_artist">歌手</string>
     <string name="audio_head_letter">字母</string>
     <string name="bind_no_web">网络不可用，请检查网络后重试</string>
+    <string name="camera">照相</string>
     <string name="chat_choose_temp">选择文件</string>
     <string name="chat_copied_to_clipboard">内容已复制到粘贴版</string>
     <string name="chat_first_prompt">.组内聊天,分享音乐视频</string>
@@ -836,6 +838,7 @@ All Rights Reserved."</string>
     <string name="leave_group_notic">退出当前连接?</string>
     <string name="local_app">本地应用</string>
     <string name="local_game">本地游戏</string>
+    <string name="location">位置</string>
     <string name="logs_add_to_transfer">已经加入传输队列，请切换到传输界面查看</string>
     <string name="logs_add_to_transfer_get">正在传输，可到历史传输中安装~</string>
     <string name="logs_add_to_transfer_upgrade">正在传输，可到历史传输中升级~</string>
@@ -964,6 +967,7 @@ All Rights Reserved."</string>
     <string name="nearby_action_back">返回</string>
     <string name="nearby_edit_prompt">继续完善WiFi信息，方便他人快速发现连网</string>
     <string name="nearby_noaps_prompt">当前周边没有热点信息</string>
+    <string name="network_tips">当前网络不可用</string>
     <string name="new_message_notification">新消息通知</string>
     <string name="not_support_play">暂不支持该站点视频在线播放，请选择其它来源</string>
     <string name="offical_contact">"快牙开通各种渠道，方便与你的沟通互动。
@@ -982,6 +986,7 @@ All Rights Reserved."</string>
     <string name="password_size">密码位数不正确</string>
     <string name="password_status">密码保存成功</string>
     <string name="password_zn">不能包含中文</string>
+    <string name="picture">图片</string>
     <string name="play_for_a_while_more">再玩一会儿？</string>
     <string name="play_games_hot">热传</string>
     <string name="play_games_versus">对战</string>
@@ -1183,6 +1188,10 @@ All Rights Reserved."</string>
     <string name="video_omni_zapya_video">万能影视</string>
     <string name="video_toast_select_site">，请切换来源</string>
     <string name="videocracker_version_later">万能影视版本过低</string>
+    <string name="voice_cancel_tips">松开手指，取消发送</string>
+    <string name="voice_seconds_tips">还可以说%1$s秒</string>
+    <string name="voice_short_tips">录音时间太短</string>
+    <string name="voice_up_tips">手指上滑,取消发送</string>
     <string name="web_games_no_data_a">"最近什么游戏最火？最潮？最好玩？
 这里全都是牙粉们传疯了的游戏！
 赶快下载和小伙伴一起玩耍吧~"</string>

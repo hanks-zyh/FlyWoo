@@ -32,7 +32,8 @@
             android:gravity="center"
             android:onClick="toAction" />
 
-        <EditText
+        <com.zjk.wifiproject.view.emoj.EmoticonsEditText
+            android:background="@drawable/base_edit_input"
             android:id="@+id/edit_user_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:orientation="vertical" >
+        android:orientation="vertical" >g
 
         <LinearLayout
             android:id="@+id/layout_emo"
@@ -112,10 +113,10 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-     <!--   <include
+        <include
             android:id="@+id/layout_add"
             android:visibility="gone"
-            layout="@layout/include_chat_add" />-->
+            layout="@layout/include_chat_add" />
     </LinearLayout>
 
 </LinearLayout>

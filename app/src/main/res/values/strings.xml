@@ -1039,5 +1039,13 @@ Wifi Direct连接模式"</string>
     <string name="toast_contact_deletecontact_myself_failed">不能删除自己</string>
     <string name="toast_contact_addfriend_reject">拒绝了你的好友请求</string>
     <string name="action_settings">Setting</string>
+    <string name="picture">图片</string>
+    <string name="camera">照相</string>
+    <string name="location">位置</string>
+    <string name="voice_up_tips">手指上滑,取消发送</string>
+    <string name="voice_cancel_tips">松开手指，取消发送</string>
+    <string name="voice_seconds_tips">还可以说%1$s秒</string>
+    <string name="voice_short_tips">录音时间太短</string>
+    <string name="network_tips">当前网络不可用</string>
 
 </resources>

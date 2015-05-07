@@ -38,6 +38,7 @@
     <!-- text_press -->
     <color name="text_bg_normal">#00000000</color>
     <color name="text_bg_press">#33FFFFFF</color>
+    <color name="mainBg">#ffbeb7c5</color>
 
 
 </resources>
