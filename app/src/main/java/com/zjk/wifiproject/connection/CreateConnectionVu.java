@@ -33,8 +33,8 @@ import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.chat.ChatActivity;
 import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.presenters.Vu;
-import com.zjk.wifiproject.socket.IPMSGConst;
-import com.zjk.wifiproject.socket.UDPMessageListener;
+import com.zjk.wifiproject.socket.udp.UdpReceiverThread;
+import com.zjk.wifiproject.socket.udp.UdpSendThread;
 import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
@@ -76,7 +76,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
 
     private View mCenterSearch;
     private SearchView mSearchView;
-    private Timer timer;
+    private Timer timer, cennectTimer;
     private String localHostName;  //创建的热点的名字
     private File file;
 
@@ -132,7 +132,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         mLeftImage = (ImageView) view.findViewById(R.id.leftImage);
         mRightImage = (ImageView) view.findViewById(R.id.rightImage);
 
-        String path = ((Activity)context).getIntent().getStringExtra(ConfigIntent.EXTRA_BLUR_PATH);
+        String path = ((Activity) context).getIntent().getStringExtra(ConfigIntent.EXTRA_BLUR_PATH);
         view.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeFile(path)));
 
     }
@@ -149,24 +149,20 @@ public class CreateConnectionVu implements Vu, OnClickListener {
      * @version 1.0
      * @author zyh
      */
-    public void createAP(Context context) {
+    public void createAP(final Context context) {
         // WifiUtils wifiUtils = WifiUtils.getInstance(context);
         // WifiConfiguration wifiConfiguration =
         // wifiUtils.createWifiInfo(WifiConst.WIFI_AP_HEADER,
         // WifiConst.WIFI_AP_PASSWORD, 3, "ap");
         // wifiUtils.createWiFiAP(wifiConfiguration, true);
-
         if (WifiUtils.isWifiEnabled()) {
             // 执行关闭wifi
             WifiUtils.closeWifi();
         }
-
         localHostName = getLocalHostName();
         // 创建热点
         WifiUtils.startWifiAp(WifiConst.WIFI_AP_HEADER + localHostName, WifiConst.WIFI_AP_PASSWORD,
                 mHandler);
-        //开启监听消息线程
-        UDPMessageListener.getInstance(context).connectUDPSocket();
     }
 
     public void closeAP() {
@@ -219,8 +215,6 @@ public class CreateConnectionVu implements Vu, OnClickListener {
      */
     private void onJoinButtonClick() {
 
-        ///测试------
-        A.goOtherActivity(context, ChatActivity.class);
 //        return;
 
 
@@ -239,10 +233,10 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         }
 
         JSONObject json = new JSONObject();
-        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/.z");
+        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/.z");
         try {
-            json.put("",file);
-            Logger.d(""+json.toString());
+            json.put("", file);
+            Logger.d("" + json.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -529,45 +523,22 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         valueAnimator.start();
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        L.e("v=" + v.toString());;
-//        switch (v.getId()) {
-//            case R.id.close_ap:
-//                closeAP();
-//                break;
-//            case R.id.open_ap:
-//                createAP(context);
-//                break;
-//            case R.id.close_wifi:
-//                WifiUtils.closeWifi();
-//                break;
-//            case R.id.open_wifi:
-//                WifiUtils.OpenWifi();
-////                A.goOtherActivity(context, ConnectAcivity.class);
-//                break;
-//            case R.id.connect_wifi:
-//                connectAp();
-//                break;
-//            case R.id.send:
-//                String ip = WifiUtils.getServerIPAddress();
-//                Logger.i("ip:" + ip);
-//                UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO, ip);
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
-    private void connectAp(String hostName) {
-        L.d(hostName);
+    private void connectAp(final String hostName) {
         if (hostName.startsWith(WifiConst.WIFI_AP_HEADER)) {
             // 连接网络
             boolean connFlag = WifiUtils.connectWifi(hostName, WifiConst.WIFI_AP_PASSWORD,
                     WifiUtils.WifiCipherType.WIFICIPHER_WPA);
             if (connFlag) {
                 T.show(context, "已连接");
-                mHandler.sendEmptyMessage(WifiConst.WiFiConnectSuccess);
+                mCircleProgress.finishAnim();
+                cennectTimer = new Timer();
+                cennectTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Message.obtain(mHandler, WifiConst.WiFiConnectSuccess, hostName).sendToTarget();
+//                        mHandler.sendEmptyMessage(WifiConst.WiFiConnectSuccess);
+                    }
+                }, new Date(), 1000);
             }
         }
     }
@@ -577,7 +548,6 @@ public class CreateConnectionVu implements Vu, OnClickListener {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
             switch (msg.what) {
                 case WifiConst.ApCreateApSuccess:
                     createApSuccess();
@@ -586,16 +556,18 @@ public class CreateConnectionVu implements Vu, OnClickListener {
                     handleList(WifiUtils.getScanResults());
                     break;
                 case WifiConst.WiFiConnectSuccess:
-                    mCircleProgress.finishAnim();
-                    mStatus.setText("连接成功");
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            String ip = WifiUtils.getServerIPAddress();
-                            Logger.i("ip:" + ip);
-                            UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO, ip);
-                        }
-                    }, 3000);
+                    String host = (String) msg.obj;
+                    String ip = WifiUtils.getSSID();
+                    L.d(host + ",ip=" + ip);
+                    if (ip.contains(host)) { //已连接上
+                        mStatus.setText("连接成功");
+                        cennectTimer.cancel();
+                        Logger.i("ip=" + ip);
+                        new UdpSendThread(context, mHandler, ip).send("zyh进去聊天界面");
+//开启监听消息线程
+//                        new Thread(new UdpReceiverThread(context, mHandler)).start();
+                        A.goOtherActivityFinish(context, ChatActivity.class);
+                    }
                     break;
             }
         }
@@ -631,6 +603,8 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         ss.setSpan(new RelativeSizeSpan(1.2f), 0, 4, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         mStatus.setText(ss);
         mCircleProgress.finishAnim();
+        //开启监听消息线程
+        new Thread(new UdpReceiverThread(context, mHandler)).start();
     }
 
 }

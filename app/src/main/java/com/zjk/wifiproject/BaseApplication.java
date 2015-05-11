@@ -60,6 +60,7 @@ public class BaseApplication extends Application {
 
 
     private   List<WFile> sendFiles;
+    private static  boolean isClient = true;
 
     /**
      * <p>
@@ -151,7 +152,7 @@ public class BaseApplication extends Application {
             if (null == SAVE_PATH) {
                 SAVE_PATH = instance.getFilesDir().toString();// 获取内置存储区目录
             }
-            SAVE_PATH += File.separator + instance.getString(R.string.app_name);
+            SAVE_PATH += File.separator + "WifiProject";
             IMAG_PATH = SAVE_PATH + File.separator + "image";
             THUMBNAIL_PATH = SAVE_PATH + File.separator + "thumbnail";
             VOICE_PATH = SAVE_PATH + File.separator + "voice";
@@ -199,5 +200,12 @@ public class BaseApplication extends Application {
             notiVibrator.vibrate(200);
         }
 
+    }
+
+    public boolean isClient() {
+            return isClient;
+    }
+    public void setIsClient(boolean isClient) {
+            this.isClient = isClient;
     }
 }

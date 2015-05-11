@@ -41,9 +41,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private final int TYPE_RECEIVER_FILE = 13;
 
 
-
-
-    private   List<ChatEntity> list;
+    private List<ChatEntity> list;
 
     ChatAdapter(List<ChatEntity> list) {
         this.list = list;
@@ -51,36 +49,50 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     /**
      * 根据type创建ViewHolder
+     *
      * @param parent
      * @param viewType
      * @return
      */
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(parent,viewType);
+        return getViewHolder(parent, viewType);
     }
 
 
     /**
      * 创建对应的ViewHolder
+     *
      * @param parent
      * @param viewType
      * @return
      */
     private BaseViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_chat_sent_message, parent, false);
-        BaseViewHolder vh = new TextViewHolder(v);
+        View v = null;
+        BaseViewHolder vh = null;
+        switch (viewType) {
+            case TYPE_SEND_TXT:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_sent_message, parent, false);
+                vh = new TextViewHolder(v);
+                break;
+            case TYPE_RECEIVER_TXT:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_message, parent, false);
+                vh = new TextViewHolder(v);
+                break;
+        }
         return vh;
     }
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-       holder.update(position);
+        holder.update(position);
     }
 
     /**
      * 返回的item的类型
+     *
      * @param position
      * @return
      */
@@ -88,7 +100,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public int getItemViewType(int position) {
         ChatEntity msg = list.get(position);
         int type = TYPE_SEND_TXT;
-        switch (msg.getType()){
+        switch (msg.getType()) {
             case STRING:
                 type = msg.isSend() ? TYPE_SEND_TXT : TYPE_RECEIVER_TXT;
                 break;
@@ -111,11 +123,10 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 type = msg.isSend() ? TYPE_SEND_FILE : TYPE_RECEIVER_FILE;
                 break;
         }
-        return  type;
+        return type;
     }
 
-
-        @Override
+    @Override
     public int getItemCount() {
         return list.size();
     }
@@ -139,4 +150,5 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             mMessage.setText(item.getContent());
         }
     }
+
 }

@@ -14,6 +14,12 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
     <application
         android:name="com.zjk.wifiproject.BaseApplication"
@@ -34,7 +40,7 @@
         <activity android:name="com.zjk.wifiproject.guide.GuideActivity" />
         <activity android:name="com.zjk.wifiproject.connection.CreateConnectionActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name="com.zjk.wifiproject.connection.ConnectAcivity" />
-        <activity android:name="com.zjk.wifiproject.chat.ChatActivity" />
+        <activity android:name="com.zjk.wifiproject.chat.ChatActivity" android:launchMode="singleTask" />
     </application>
 
 </manifest>

@@ -162,6 +162,10 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                 }
                 break;
             case R.id.createButton://进入创建热点的界面
+
+
+//                A.goOtherActivity(context, ChatActivity.class);
+
                 createButton.setVisibility(View.GONE);
                 String blurPath = takeScreenShot((Activity)context);
                 Intent intent = new Intent(context,CreateConnectionActivity.class);
@@ -280,8 +284,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             }
         }
     }
-
-
 
 
     class MainPageAdapter extends FragmentPagerAdapter {

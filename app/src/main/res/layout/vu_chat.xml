@@ -9,10 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"
         layout="@layout/layout_title">
-
     </include>
-
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -23,7 +20,6 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-
         <RelativeLayout
             android:id="@+id/layout_record"
             android:layout_width="150dp"
@@ -45,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_voice_tips"
+                android:gravity="center"
                 android:layout_below="@id/iv_record"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
@@ -52,6 +49,5 @@
                 android:textSize="14sp" />
         </RelativeLayout>
     </FrameLayout>
-
     <include layout="@layout/include_chat_bottom_bar" />
 </LinearLayout>

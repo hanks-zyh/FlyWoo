@@ -6,4 +6,5 @@ package com.zjk.wifiproject.config;
  */
 public class ConfigBroadcast {
     public static final String ACTION_CLEAR_SEND_FILES = "action.CLEAR_SEND_FILES" ;
+    public static final String ACTION_NEW_MSG = "action.NEW_MSG";
 }

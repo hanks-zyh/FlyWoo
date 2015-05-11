@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * Wifi 工具类
- * 
+ * <p/>
  * 封装了Wifi的基础操作方法，方便获取Wifi连接信息以及操作Wifi
  */
 
@@ -94,19 +94,19 @@ public class WifiUtils {
             method1.invoke(mWifiManager, netConfig, true);
 
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (SecurityException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }
@@ -123,16 +123,16 @@ public class WifiUtils {
                         WifiConfiguration.class, boolean.class);
                 method2.invoke(mWifiManager, config, false);
             } catch (NoSuchMethodException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             }
         }
@@ -144,7 +144,7 @@ public class WifiUtils {
             method.setAccessible(true);
             return (Boolean) method.invoke(mWifiManager);
         } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,8 +165,8 @@ public class WifiUtils {
 
     /**
      * 判断是否连接上wifi
-     * 
-     * @return boolean值(isConnect),对应已连接(true)和未连接(false)
+     *
+     * @return boolean值(isConnect), 对应已连接(true)和未连接(false)
      */
     public static boolean isWifiConnect() {
         NetworkInfo mNetworkInfo = ((ConnectivityManager) mContext
@@ -202,18 +202,17 @@ public class WifiUtils {
 
     /**
      * Function: 连接Wifi热点 <br>
-     * 
+     *
+     * @param SSID
+     * @param Password
+     * @param Type     <br>
+     *                 没密码： {@linkplain WifiCipherType#WIFICIPHER_NOPASS}<br>
+     *                 WEP加密: {@linkplain WifiCipherType#WIFICIPHER_WEP}<br>
+     *                 WPA加密： {@linkplain WifiCipherType#WIFICIPHER_WPA}<br>
+     * @return true:连接成功；false:连接失败
      * @date 2015年2月14日 上午11:17
      * @change hillfly
      * @version 1.0
-     * @param SSID
-     * @param Password
-     * @param Type
-     * <br>
-     *            没密码： {@linkplain WifiCipherType#WIFICIPHER_NOPASS}<br>
-     *            WEP加密: {@linkplain WifiCipherType#WIFICIPHER_WEP}<br>
-     *            WPA加密： {@linkplain WifiCipherType#WIFICIPHER_WPA}<br>
-     * @return true:连接成功；false:连接失败
      */
     public static boolean connectWifi(String SSID, String Password, WifiCipherType Type) {
         if (!isWifiEnabled()) {
@@ -259,7 +258,7 @@ public class WifiUtils {
         mWifiManager.startScan();
         List<ScanResult> scanResults = WifiUtils.getScanResults();
 //        mWifiList.addAll(scanResults);
-        L.d("搜索size:"+scanResults.size());
+        L.d("搜索size:" + scanResults.size());
     }
 
     private static WifiConfiguration createWifiInfo(String SSID, String Password, WifiCipherType Type) {
@@ -381,7 +380,7 @@ public class WifiUtils {
         System.setProperty("java.net.preferIPv4Stack", "true");
         try {
             for (Enumeration<NetworkInterface> niEnum = NetworkInterface.getNetworkInterfaces(); niEnum
-                    .hasMoreElements();) {
+                    .hasMoreElements(); ) {
                 NetworkInterface ni = niEnum.nextElement();
                 if (!ni.isLoopback()) {
                     for (InterfaceAddress interfaceAddress : ni.getInterfaceAddresses()) {
