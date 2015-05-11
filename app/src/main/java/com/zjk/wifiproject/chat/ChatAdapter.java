@@ -101,24 +101,24 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         ChatEntity msg = list.get(position);
         int type = TYPE_SEND_TXT;
         switch (msg.getType()) {
-            case STRING:
+            case TEXT:
                 type = msg.isSend() ? TYPE_SEND_TXT : TYPE_RECEIVER_TXT;
                 break;
             case IMAGE:
                 type = msg.isSend() ? TYPE_SEND_IMAGE : TYPE_RECEIVER_IMAGE;
                 break;
-            case AUDIO:
-                type = msg.isSend() ? TYPE_SEND_AUDIO : TYPE_RECEIVER_AUDIO;
-                break;
-            case MUSIC:
-                type = msg.isSend() ? TYPE_SEND_MUSIC : TYPE_RECEIVER_MUSIC;
-                break;
-            case VEDIO:
-                type = msg.isSend() ? TYPE_SEND_VEDIO : TYPE_RECEIVER_VEDIO;
-                break;
-            case APK:
-                type = msg.isSend() ? TYPE_SEND_APK : TYPE_RECEIVER_APK;
-                break;
+//            case AUDIO:
+//                type = msg.isSend() ? TYPE_SEND_AUDIO : TYPE_RECEIVER_AUDIO;
+//                break;
+//            case MUSIC:
+//                type = msg.isSend() ? TYPE_SEND_MUSIC : TYPE_RECEIVER_MUSIC;
+//                break;
+//            case VEDIO:
+//                type = msg.isSend() ? TYPE_SEND_VEDIO : TYPE_RECEIVER_VEDIO;
+//                break;
+//            case APK:
+//                type = msg.isSend() ? TYPE_SEND_APK : TYPE_RECEIVER_APK;
+//                break;
             case FILE:
                 type = msg.isSend() ? TYPE_SEND_FILE : TYPE_RECEIVER_FILE;
                 break;

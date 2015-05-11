@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,9 +38,16 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.base.BaseActivity;
 import com.zjk.wifiproject.config.ConfigBroadcast;
 import com.zjk.wifiproject.entity.ChatEntity;
+import com.zjk.wifiproject.entity.Message;
+import com.zjk.wifiproject.entity.Users;
+import com.zjk.wifiproject.socket.udp.IPMSGConst;
+import com.zjk.wifiproject.socket.udp.UDPMessageListener;
+import com.zjk.wifiproject.sql.SqlDBOperate;
 import com.zjk.wifiproject.util.AlertDialogUtils;
+import com.zjk.wifiproject.util.DateUtils;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
+import com.zjk.wifiproject.util.SessionUtils;
 import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.view.emoj.EmoViewPagerAdapter;
 import com.zjk.wifiproject.view.emoj.EmoteAdapter;
@@ -55,7 +61,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/5/6.
  */
-public class ChatActivity extends BaseActivity implements View.OnClickListener {
+public class ChatActivity extends BaseActivity implements View.OnClickListener, UDPMessageListener.OnNewMsgListener {
 
     //消息列表
     private List<ChatEntity> list = new ArrayList<>();
@@ -89,6 +95,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     //Handler
     private Handler mHandler;
     private MessageReveiver messageReveiver;
+    private UDPMessageListener udpMessageListener;
+
+
+    private String mIMEI;
+    private Users mChatUser;
+    private SqlDBOperate mDBOperate;
+    private int mSenderID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +119,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         bindViews();
         initView();
         initListener();
+        initHandler();
     }
 
     private void initListener() {
@@ -114,6 +128,19 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConfigBroadcast.ACTION_NEW_MSG);
         registerReceiver(messageReveiver, filter);
+
+
+        //初始化消息监听
+        udpMessageListener = UDPMessageListener.getInstance(context);
+        udpMessageListener.addMsgListener(this);
+
+
+//        mID = SessionUtils.getLocalUserID();
+//        mNickName = SessionUtils.getNickname();
+        mIMEI = SessionUtils.getIMEI();
+        mChatUser = getIntent().getParcelableExtra(Users.ENTITY_PEOPLE);
+        mDBOperate = new SqlDBOperate(this);
+//        mSenderID = mDBOperate.getIDByIMEI(mChatUser.getIMEI());
     }
 
     @Override
@@ -203,6 +230,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
+
+    @Override
+    public void processMessage(android.os.Message pMsg) {
+        mHandler.sendEmptyMessage(pMsg.what);
+    }
+
 
     /**
      * 长按说话
@@ -685,15 +718,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     return;
                 }
                 sendTextMessage(msg);
-
-
 //                // 组装BmobMessage对象
 //                BmobMsg message = BmobMsg.createTextSendMsg(this, targetId, msg);
 //                // 默认发送完成，将数据保存到本地消息表和最近会话表中
 //                manager.sendTextMessage(targetUser, message);
                 // 刷新界面
 //                refreshMessage(message);
-
                 break;
             case R.id.tv_camera:// 拍照
                 selectImageFromCamera();
@@ -718,12 +748,55 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 //        new Thread(new TcpSendThread(context, mHandler, targetIp)).start();
         ChatEntity chatMsg = new ChatEntity(msg);
         chatMsg.setIsSend(true);
-        chatMsg.setType(ChatEntityType.STRING);
+        chatMsg.setType(Message.CONTENT_TYPE.TEXT);
         list.add(chatMsg);
         mAdapter.notifyDataSetChanged();
-//        UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_SEND_TXT, targetIp, new IPMSGProtocol(msg));
-//        new UdpSendThread(context,mHandler, "").send(msg);
+//        udpMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG,targetIp,new com.zjk.wifiproject.entity.Message());
+        sendMessage(msg, Message.CONTENT_TYPE.TEXT);
+
+
     }
+
+    private void initHandler() {
+
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(android.os.Message msg) {
+                switch (msg.what){
+                    case IPMSGConst.IPMSG_RECVMSG: //对方接收到字符串返回的确认
+
+                        break;
+                }
+            }
+        };
+
+    }
+
+
+    public void sendMessage(String content, Message.CONTENT_TYPE type) {
+        String nowtime = DateUtils.getNowtime();
+        Message msg = new Message(mIMEI, nowtime, content, type);
+//        mMessagesList.add(msg);
+//        mUDPListener.addLastMsgCache(mChatUser.getIMEI(), msg); // 更新消息缓存
+        switch (type) {
+            case TEXT:
+                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), msg);
+                break;
+            case IMAGE:
+                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_IMAGE_DATA, mChatUser.getIpaddress());
+                break;
+            case VOICE:
+                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_VOICE_DATA, mChatUser.getIpaddress());
+                break;
+            case FILE:
+//                Message fileMsg = msg.clone();
+//                fileMsg.setMsgContent(FileUtils.getNameByPath(msg.getMsgContent()));
+//                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), fileMsg);
+                break;
+        }
+//        mDBOperate.addChattingInfo(mID, mSenderID, nowtime, content, type);
+    }
+
 
     /**
      * 启动地图
@@ -941,7 +1014,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
+        public void handleMessage(android.os.Message msg) {
             if (msg.what == NEW_MESSAGE) {
 //                BmobMsg message = (BmobMsg) msg.obj;
 //                String uid = message.getBelongId();
@@ -1087,7 +1160,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             String msg = intent.getExtras().getString("msg");
             ChatEntity chatMsg = new ChatEntity(msg);
             chatMsg.setIsSend(false);
-            chatMsg.setType(ChatEntityType.STRING);
+            chatMsg.setType(Message.CONTENT_TYPE.TEXT);
             list.add(chatMsg);
             mAdapter.notifyDataSetChanged();
         }

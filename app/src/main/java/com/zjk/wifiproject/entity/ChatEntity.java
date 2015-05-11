@@ -1,7 +1,5 @@
 package com.zjk.wifiproject.entity;
 
-import com.zjk.wifiproject.chat.ChatEntityType;
-
 /**
  * 聊天的实体类
  * Created by Administrator on 2015/5/7.
@@ -12,7 +10,7 @@ public class ChatEntity {
         this.content = content;
     }
 
-    private ChatEntityType type;
+    private Message.CONTENT_TYPE type;
     private String content;
     private long time;
     private WFile file;
@@ -21,11 +19,11 @@ public class ChatEntity {
      */
     private boolean isSend;
 
-    public ChatEntityType getType() {
+    public Message.CONTENT_TYPE getType() {
         return type;
     }
 
-    public void setType(ChatEntityType type) {
+    public void setType(Message.CONTENT_TYPE type) {
         this.type = type;
     }
 

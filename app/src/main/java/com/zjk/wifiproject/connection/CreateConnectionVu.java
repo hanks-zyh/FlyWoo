@@ -3,6 +3,7 @@ package com.zjk.wifiproject.connection;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,12 +33,16 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.chat.ChatActivity;
 import com.zjk.wifiproject.config.ConfigIntent;
+import com.zjk.wifiproject.entity.Users;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
 import com.zjk.wifiproject.socket.udp.UDPMessageListener;
+import com.zjk.wifiproject.sql.SqlDBOperate;
 import com.zjk.wifiproject.util.A;
+import com.zjk.wifiproject.util.DateUtils;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
+import com.zjk.wifiproject.util.SessionUtils;
 import com.zjk.wifiproject.util.TextUtils;
 import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.view.CircularProgress;
@@ -83,6 +88,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     private String localIPaddress; // 本地WifiIP
     private String serverIPaddres; // 热点IP
     private UDPMessageListener mUDPListener;
+    private SqlDBOperate mSqlDBOperate;
 
 
     @Override
@@ -574,16 +580,36 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
                     }
                     break;
                 case IPMSGConst.IPMSG_ANSENTRY: // 用户上线应答
-                    Logger.i("用户上线");
-                    A.goOtherActivityFinish(context, ChatActivity.class);
-                    break;
                 case IPMSGConst.IPMSG_BR_ENTRY: // 用户上线应答
                     Logger.i("用户上线");
-                    A.goOtherActivityFinish(context, ChatActivity.class);
+
+                    goChatActivity();
+
+
                     break;
             }
         }
     };
+
+    private void goChatActivity() {
+
+
+        String IMEI = SessionUtils.getIMEI();
+        String constellation = SessionUtils.getConstellation();
+        String device = getPhoneModel();
+        String logintime = DateUtils.getNowtime();
+
+        Users user = new Users();
+        user.setIMEI(IMEI);
+        user.setConstellation(constellation);
+        user.setDevice(device);
+        user.setLogintime(logintime);
+        user.setIpaddress(serverIPaddres);
+
+        Intent i = new Intent(context, ChatActivity.class);
+        i.putExtra(Users.ENTITY_PEOPLE, user);
+        A.goOtherActivityFinish(context, i);
+    }
 
     /**
      * 处理扫描到的Wifi列表
@@ -663,8 +689,8 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         mHandler.sendEmptyMessage(pMsg.what);
     }
 
-    public void onDestroy(){
-        if(mUDPListener!=null) {
+    public void onDestroy() {
+        if (mUDPListener != null) {
             mUDPListener.removeMsgListener(this);
         }
     }

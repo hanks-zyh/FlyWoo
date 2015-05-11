@@ -9,7 +9,7 @@ public class Message extends Entity {
 
     private String senderIMEI;
     private String sendTime;
-    private String MsgContent;
+    private String msgContent;
     private CONTENT_TYPE contentType;
     private int percent;
 
@@ -18,7 +18,7 @@ public class Message extends Entity {
             CONTENT_TYPE paramContentType) {
         this.senderIMEI = paramSenderIMEI;
         this.sendTime = paramSendTime;
-        this.MsgContent = paramMsgContent;
+        this.msgContent = paramMsgContent;
         this.contentType = paramContentType;
     }
     public Message(){
@@ -95,7 +95,7 @@ public class Message extends Entity {
      * @return
      */
     public String getMsgContent() {
-        return MsgContent;
+        return msgContent;
     }
 
     /**
@@ -104,7 +104,7 @@ public class Message extends Entity {
      * @param paramMsgContent
      */
     public void setMsgContent(String paramMsgContent) {
-        this.MsgContent = paramMsgContent;
+        this.msgContent = paramMsgContent;
     }
 
     /**
@@ -114,7 +114,7 @@ public class Message extends Entity {
      */
 
     public Message clone() {
-        return new Message(senderIMEI, sendTime, MsgContent, contentType);
+        return new Message(senderIMEI, sendTime, msgContent, contentType);
     }
 
     // @JSONField(serialize = false)

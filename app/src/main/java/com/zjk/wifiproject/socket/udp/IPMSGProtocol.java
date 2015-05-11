@@ -55,7 +55,7 @@ public class IPMSGProtocol {
             JSONObject protocolJSON = new JSONObject(paramProtocolJSON);
             packetNo = protocolJSON.getString(PACKETNO);
             commandNo = protocolJSON.getInt(COMMANDNO);
-            senderIMEI = protocolJSON.getString(Users.IMEI);
+//            senderIMEI = protocolJSON.getString(Users.IMEI);
             if (protocolJSON.has(ADDTYPE)) { // 若有附加信息
                 String addJSONStr = null;
                 if (protocolJSON.has(ADDOBJECT)) { // 若为Entity类型
