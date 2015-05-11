@@ -1,9 +1,11 @@
 package com.zjk.wifiproject.socket.tcp;
 
+
 import android.content.Context;
 import android.os.Handler;
 
 import com.zjk.wifiproject.BaseApplication;
+import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.util.L;
@@ -18,21 +20,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-
-
-
-
 public class TcpService implements Runnable {
-    public static final int TCP_SERVER_RECEIVE_PORT = 4447; // 主机接收端口
-    public static int READ_BUFFER_SIZE = 1024*4;// 文件流缓冲大小
     private static final String TAG = "SZU_TcpService";
 
-    private ServerSocket serviceSocket; //创建Socket服务端
+    private ServerSocket serviceSocket;
     private boolean SCAN_FLAG = false; // 接收扫描标识
     private Thread mThread;
-    ArrayList<FileState> receivedFileNames;    //接收的文件列表
-    ArrayList<SaveFileToDisk> saveFileToDisks; //保存的文件列表
-    private static Handler mHandler;           //
+    ArrayList<FileState> receivedFileNames;
+    ArrayList<SaveFileToDisk> saveFileToDisks;
+    private static Handler mHandler;
     private String filePath = null; // 存放接收文件的路径
 
     private static Context mContext;
@@ -42,11 +38,12 @@ public class TcpService implements Runnable {
 
     private TcpService() {
         try {
-            serviceSocket = new ServerSocket(TCP_SERVER_RECEIVE_PORT);
+            serviceSocket = new ServerSocket(Constant.TCP_SERVER_RECEIVE_PORT);
             saveFileToDisks = new ArrayList<SaveFileToDisk>();
             L.d(TAG, "建立监听服务器ServerSocket成功");
-        } catch (IOException e) {
-            
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
             L.d(TAG, "建立监听服务器ServerSocket失败");
             e.printStackTrace();
         }
@@ -54,9 +51,9 @@ public class TcpService implements Runnable {
     }
 
     /**
-     * <p/>
+     * <p>
      * 获取TcpService实例
-     * <p/>
+     * <p>
      * 单例模式，返回唯一实例
      */
     public static TcpService getInstance(Context context) {
@@ -91,7 +88,8 @@ public class TcpService implements Runnable {
             SaveFileToDisk fileToDisk = new SaveFileToDisk(socket, filePath);
             fileToDisk.start();
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             L.d(TAG, "客户端连接失败");
             SCAN_FLAG = false;
@@ -100,7 +98,7 @@ public class TcpService implements Runnable {
 
     @Override
     public void run() {
-        
+        // TODO Auto-generated method stub
         L.d(TAG, "TCP_Service线程开启");
         while (!IS_THREAD_STOP) {
             if (SCAN_FLAG) {
@@ -115,8 +113,9 @@ public class TcpService implements Runnable {
             try {
                 serviceSocket.close();
                 serviceSocket = null;
-            } catch (IOException e) {
-                
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         while (SCAN_FLAG == true)
@@ -148,17 +147,18 @@ public class TcpService implements Runnable {
         private boolean SCAN_RECIEVE = true;
         private InputStream input = null;
         private DataInputStream dataInput;
-        private byte[] mBuffer = new byte[READ_BUFFER_SIZE];// 声明接收数组
+        private byte[] mBuffer = new byte[Constant.READ_BUFFER_SIZE];// 声明接收数组
         private String savePath;
-        private String type[] = {"TEXT", "IMAGE", "FILE", "VOICE"};
+        private String type[] = { "TEXT", "IMAGE", "FILE", "VOICE" };
 
         public SaveFileToDisk(Socket socket) {
             try {
                 input = socket.getInputStream();
                 dataInput = new DataInputStream(input);
                 L.d(TAG, "获取网络输入流成功");
-            } catch (IOException e) {
-                
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
                 L.d(TAG, "获取网络输入流失败");
                 SCAN_RECIEVE = false;
                 e.printStackTrace();
@@ -170,9 +170,6 @@ public class TcpService implements Runnable {
             this.savePath = savePath;
         }
 
-        /**
-         * 接收文件
-         */
         public void recieveFile() {
             int readSize = 0;
             FileOutputStream fileOutputStream = null;
@@ -259,8 +256,9 @@ public class TcpService implements Runnable {
                 }
 
                 BaseApplication.recieveFileStates.remove(fs.fileName);
-            } catch (IOException e) {
-                
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
                 L.d(TAG, "写入文件失败");
                 e.printStackTrace();
             }

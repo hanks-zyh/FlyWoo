@@ -33,12 +33,11 @@ import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.chat.ChatActivity;
 import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.presenters.Vu;
-import com.zjk.wifiproject.socket.udp.UdpReceiverThread;
-import com.zjk.wifiproject.socket.udp.UdpSendThread;
+import com.zjk.wifiproject.socket.udp.IPMSGConst;
+import com.zjk.wifiproject.socket.udp.UDPMessageListener;
 import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
-import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.TextUtils;
 import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.view.CircularProgress;
@@ -54,7 +53,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CreateConnectionVu implements Vu, OnClickListener {
+public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListener.OnNewMsgListener {
 
     private View view;
     private Context context;
@@ -79,6 +78,11 @@ public class CreateConnectionVu implements Vu, OnClickListener {
     private Timer timer, cennectTimer;
     private String localHostName;  //创建的热点的名字
     private File file;
+
+
+    private String localIPaddress; // 本地WifiIP
+    private String serverIPaddres; // 热点IP
+    private UDPMessageListener mUDPListener;
 
 
     @Override
@@ -108,6 +112,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         });
     }
 
+
     private void bindViews() {
 //        view2.findViewById(R.id.open_ap).setOnClickListener(this);
 //        view2.findViewById(R.id.open_wifi).setOnClickListener(this);
@@ -134,7 +139,6 @@ public class CreateConnectionVu implements Vu, OnClickListener {
 
         String path = ((Activity) context).getIntent().getStringExtra(ConfigIntent.EXTRA_BLUR_PATH);
         view.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeFile(path)));
-
     }
 
     @Override
@@ -311,7 +315,7 @@ public class CreateConnectionVu implements Vu, OnClickListener {
             @Override
             public void run() {
                 mCenterCircle.setVisibility(View.VISIBLE);
-                mStatus.setText("正在连接");
+                mStatus.setText("正在连接...");
                 mCircleProgress.startScaleAnim(0); //圆+圆环动画
                 mCircleProgress.startAnim(800); //进度条动画
             }
@@ -529,7 +533,6 @@ public class CreateConnectionVu implements Vu, OnClickListener {
             boolean connFlag = WifiUtils.connectWifi(hostName, WifiConst.WIFI_AP_PASSWORD,
                     WifiUtils.WifiCipherType.WIFICIPHER_WPA);
             if (connFlag) {
-                T.show(context, "已连接");
                 mCircleProgress.finishAnim();
                 cennectTimer = new Timer();
                 cennectTimer.schedule(new TimerTask() {
@@ -556,18 +559,27 @@ public class CreateConnectionVu implements Vu, OnClickListener {
                     handleList(WifiUtils.getScanResults());
                     break;
                 case WifiConst.WiFiConnectSuccess:
-                    String host = (String) msg.obj;
-                    String ip = WifiUtils.getSSID();
-                    L.d(host + ",ip=" + ip);
-                    if (ip.contains(host)) { //已连接上
+
+                    Logger.i("ip=" + serverIPaddres);
+                    if (isValidated()) { //已连接上
                         mStatus.setText("连接成功");
                         cennectTimer.cancel();
-                        Logger.i("ip=" + ip);
-                        new UdpSendThread(context, mHandler, ip).send("zyh进去聊天界面");
+//                        new UdpSendThread(context, mHandler, ip).send("zyh进去聊天界面");
 //开启监听消息线程
 //                        new Thread(new UdpReceiverThread(context, mHandler)).start();
-                        A.goOtherActivityFinish(context, ChatActivity.class);
+                        mUDPListener = UDPMessageListener.getInstance(context);
+                        mUDPListener.addMsgListener(CreateConnectionVu.this);
+                        mUDPListener.connectUDPSocket();
+                        mUDPListener.sendUDPdata(IPMSGConst.IPMSG_BR_ENTRY, serverIPaddres);
                     }
+                    break;
+                case IPMSGConst.IPMSG_ANSENTRY: // 用户上线应答
+                    Logger.i("用户上线");
+                    A.goOtherActivityFinish(context, ChatActivity.class);
+                    break;
+                case IPMSGConst.IPMSG_BR_ENTRY: // 用户上线应答
+                    Logger.i("用户上线");
+                    A.goOtherActivityFinish(context, ChatActivity.class);
                     break;
             }
         }
@@ -603,8 +615,57 @@ public class CreateConnectionVu implements Vu, OnClickListener {
         ss.setSpan(new RelativeSizeSpan(1.2f), 0, 4, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         mStatus.setText(ss);
         mCircleProgress.finishAnim();
+
+//        mUDPListener.connectUDPSocket();
+//        mUDPListener.notifyOnline();
+        mUDPListener = UDPMessageListener.getInstance(context);
+        mUDPListener.addMsgListener(this);
+        mUDPListener.connectUDPSocket();
         //开启监听消息线程
-        new Thread(new UdpReceiverThread(context, mHandler)).start();
+//        UDPMessageListener.getInstance(context).connectUDPSocket();
+//        new Thread(new UdpReceiverThread(context, mHandler)).start();
     }
 
+
+    /**
+     * 设置IP地址信息
+     */
+    public void setIPaddress() {
+        if (WifiUtils.isWifiApEnabled()) {
+            serverIPaddres = localIPaddress = "192.168.43.1";
+        } else {
+            localIPaddress = WifiUtils.getLocalIPAddress();
+            serverIPaddres = WifiUtils.getServerIPAddress();
+        }
+        L.i("localIPaddress:" + localIPaddress + " serverIPaddres:" + serverIPaddres);
+    }
+
+    /**
+     * IP地址正确性验证
+     *
+     * @return boolean 返回是否为正确， 正确(true),不正确(false)
+     */
+    private boolean isValidated() {
+
+        setIPaddress();
+        String nullIP = "0.0.0.0";
+
+        if (nullIP.equals(localIPaddress) || nullIP.equals(serverIPaddres)
+                || localIPaddress == null || serverIPaddres == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void processMessage(Message pMsg) {
+        mHandler.sendEmptyMessage(pMsg.what);
+    }
+
+    public void onDestroy(){
+        if(mUDPListener!=null) {
+            mUDPListener.removeMsgListener(this);
+        }
+    }
 }

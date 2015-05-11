@@ -19,4 +19,10 @@ public class CreateConnectionActivity extends BasePresenterActivity<CreateConnec
 //        super.onBackPressed();
         vu.onBackPressed();
     }
+
+    @Override
+    protected void onDestroyVu() {
+        super.onDestroyVu();
+        vu.onDestroy();
+    }
 }

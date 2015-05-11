@@ -5,7 +5,7 @@ package com.zjk.wifiproject.entity;
  * 
  * @author _Hill3
  */
-public class Message extends WFile {
+public class Message extends Entity {
 
     private String senderIMEI;
     private String sendTime;
@@ -13,17 +13,16 @@ public class Message extends WFile {
     private CONTENT_TYPE contentType;
     private int percent;
 
-    public Message(String path) {
-        super(path);
-    }
 
     public Message(String paramSenderIMEI, String paramSendTime, String paramMsgContent,
             CONTENT_TYPE paramContentType) {
-        super("");
         this.senderIMEI = paramSenderIMEI;
         this.sendTime = paramSendTime;
         this.MsgContent = paramMsgContent;
         this.contentType = paramContentType;
+    }
+    public Message(){
+
     }
 
     /** 消息内容类型 **/

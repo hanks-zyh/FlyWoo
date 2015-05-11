@@ -16,6 +16,7 @@ E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\libra
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-503ec053dd02160440c7d10844982898901e61f6.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-b4dfe1a374fecea5f4d6a9a73f857b1e81a26e33.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\renderscript-v8-59795d2483d4aceff6f94ad9ff39046131be9161.jar
+E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\gson-2.2.4-d25ca1d2265bdda5f24e17374e0865ebfb9eadd4.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-40a5fc30c76cc77ba8997fce88b8d5056d480e17.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-230e2acd3f4052e1f5cccc664d2bd0321802e608.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-4e381743c7cba7307340967c0c631bd93e3f1571.jar

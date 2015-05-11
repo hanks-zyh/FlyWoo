@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class BaseApplication extends Application {
 
-    public static boolean isDebugmode = false;
+    public static boolean isDebugmode = true;
     private boolean isPrintLog = true;
 
     /** 静音、震动默认开关 **/

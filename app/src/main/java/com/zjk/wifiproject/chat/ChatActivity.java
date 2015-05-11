@@ -39,7 +39,6 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.base.BaseActivity;
 import com.zjk.wifiproject.config.ConfigBroadcast;
 import com.zjk.wifiproject.entity.ChatEntity;
-import com.zjk.wifiproject.socket.udp.UdpSendThread;
 import com.zjk.wifiproject.util.AlertDialogUtils;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
@@ -723,7 +722,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         list.add(chatMsg);
         mAdapter.notifyDataSetChanged();
 //        UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_SEND_TXT, targetIp, new IPMSGProtocol(msg));
-        new UdpSendThread(context,mHandler, "").send(msg);
+//        new UdpSendThread(context,mHandler, "").send(msg);
     }
 
     /**

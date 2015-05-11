@@ -1,18 +1,20 @@
 package com.zjk.wifiproject.socket.tcp;
 
+
 import android.content.Context;
 import android.os.Handler;
-import android.telephony.TelephonyManager;
 
 import com.zjk.wifiproject.BaseApplication;
+import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
+import com.zjk.wifiproject.entity.FileStyle;
 import com.zjk.wifiproject.entity.Message;
-import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
 import com.zjk.wifiproject.socket.udp.UDPMessageListener;
 import com.zjk.wifiproject.util.DateUtils;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
+import com.zjk.wifiproject.util.SessionUtils;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -24,11 +26,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class TcpClient implements Runnable {
-
-
-    public static final int TCP_SERVER_RECEIVE_PORT = 4447; // 主机接收端口
-    public static int READ_BUFFER_SIZE = 1024*4;// 文件流缓冲大小
-
     private static final String TAG = "SZU_TcpClient";
 
     private Thread mThread;
@@ -41,11 +38,10 @@ public class TcpClient implements Runnable {
     private ArrayList<SendFileThread> sendFileThreads;
     private SendFileThread sendFileThread;
     private static Handler mHandler = null;
-    private UDPMessageListener udpMessageListener;
+
     private TcpClient() {
-        sendFileThreads = new ArrayList<TcpClient.SendFileThread>();
+        sendFileThreads = new ArrayList<SendFileThread>();
         mThread = new Thread(this);
-        udpMessageListener = UDPMessageListener.getInstance(mContext);
         L.d(TAG, "建立线程成功");
 
     }
@@ -59,9 +55,9 @@ public class TcpClient implements Runnable {
     }
 
     /**
-     * <p/>
+     * <p>
      * 获取TcpService实例
-     * <p/>
+     * <p>
      * 单例模式，返回唯一实例
      */
     public static TcpClient getInstance(Context context) {
@@ -72,13 +68,13 @@ public class TcpClient implements Runnable {
         return instance;
     }
 
-    public void sendFile(ArrayList<WFile> fileStyles, ArrayList<FileState> fileStates,
-                         String target_IP) {
+    public void sendFile(ArrayList<FileStyle> fileStyles, ArrayList<FileState> fileStates,
+            String target_IP) {
         while (SEND_FLAG == true)
             ;
 
-        for (WFile fileStyle : fileStyles) {
-            SendFileThread sendFileThread = new SendFileThread(target_IP, fileStyle.getAbsolutePath());
+        for (FileStyle fileStyle : fileStyles) {
+            SendFileThread sendFileThread = new SendFileThread(target_IP, fileStyle.fullPath);
             sendFileThreads.add(sendFileThread);
         }
         SEND_FLAG = true;
@@ -116,6 +112,7 @@ public class TcpClient implements Runnable {
 
     @Override
     public void run() {
+        // TODO Auto-generated method stub
         L.d(TAG, "TCP_Client初始化");
 
         while (!IS_THREAD_STOP) {
@@ -141,7 +138,7 @@ public class TcpClient implements Runnable {
     public class SendFileThread extends Thread {
         private static final String TAG = "SZU_SendFileThread";
         private boolean SEND_FLAG = true; // 是否发送广播标志
-        private byte[] mBuffer = new byte[READ_BUFFER_SIZE]; // 数据报内容
+        private byte[] mBuffer = new byte[Constant.READ_BUFFER_SIZE]; // 数据报内容
         private OutputStream output = null;
         private DataOutputStream dataOutput;
         private FileInputStream fileInputStream;
@@ -160,19 +157,16 @@ public class TcpClient implements Runnable {
             this.type = type;
         }
 
-        /**
-         * 发送文件
-         */
         public void sendFile() {
             int readSize = 0;
             try {
-                socket = new Socket(target_IP, TCP_SERVER_RECEIVE_PORT);
+                socket = new Socket(target_IP, Constant.TCP_SERVER_RECEIVE_PORT);
                 fileInputStream = new FileInputStream(new File(filePath));
                 output = socket.getOutputStream();
                 dataOutput = new DataOutputStream(output);
                 int fileSize = fileInputStream.available();
                 dataOutput.writeUTF(filePath.substring(filePath.lastIndexOf(File.separator) + 1)
-                        + "!" + fileSize + "!" + getIMEI() + "!" + type);
+                        + "!" + fileSize + "!" + SessionUtils.getIMEI() + "!" + type);
                 int count = 0;
                 long length = 0;
 
@@ -212,18 +206,18 @@ public class TcpClient implements Runnable {
 
                 switch (type) {
                     case IMAGE:
-                        Message imageMsg = new Message(getIMEI(),
+                        Message imageMsg = new Message(SessionUtils.getIMEI(),
                                 DateUtils.getNowtime(), fs.fileName, type);
                         imageMsg.setMsgContent(FileUtils.getNameByPath(imageMsg.getMsgContent()));
-                        udpMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, imageMsg);
+                        UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, imageMsg);
                         L.d(TAG, "图片发送完毕");
                         break;
 
                     case VOICE:
-                        Message voiceMsg = new Message(getIMEI(),
+                        Message voiceMsg = new Message(SessionUtils.getIMEI(),
                                 DateUtils.getNowtime(), fs.fileName, type);
                         voiceMsg.setMsgContent(FileUtils.getNameByPath(voiceMsg.getMsgContent()));
-                        udpMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, voiceMsg);
+                        UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, voiceMsg);
                         L.d(TAG, "语音发送完毕");
                         break;
 
@@ -239,32 +233,31 @@ public class TcpClient implements Runnable {
                 }
 
                 BaseApplication.sendFileStates.remove(fs.fileName);
-            } catch (UnknownHostException e) {
-
+            }
+            catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
                 L.d(TAG, "建立客户端socket失败");
                 SEND_FLAG = false;
                 e.printStackTrace();
-            } catch (IOException e) {
-
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
                 L.d(TAG, "建立客户端socket失败");
                 SEND_FLAG = false;
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 // IS_THREAD_STOP=true;
             }
         }
 
         @Override
         public void run() {
+            // TODO Auto-generated method stub
             L.d(TAG, "SendFileThread初始化");
             if (SEND_FLAG) {
                 sendFile();
             }
         }
-    }
-
-    private String getIMEI() {
-            return  ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))
-                    .getDeviceId();
     }
 }
