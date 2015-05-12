@@ -181,6 +181,10 @@ ADDED from AndroidManifest.xml:50:9
 		ADDED from AndroidManifest.xml:50:19
 	android:launchMode
 		ADDED from AndroidManifest.xml:50:72
+activity#com.zjk.wifiproject.picture.AlbumActivity
+ADDED from AndroidManifest.xml:51:9
+	android:name
+		ADDED from AndroidManifest.xml:51:19
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:22.1.1:23:9
 	android:label

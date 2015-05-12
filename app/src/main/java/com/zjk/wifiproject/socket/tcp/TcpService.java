@@ -184,7 +184,8 @@ public class TcpService implements Runnable {
                 long length = Long.parseLong(strData[1]);// 文件大小
 
                 L.d(TAG, "传输文件类型:" + strData[3]);
-                fileSavePath = savePath + File.separator + strData[2] + File.separator + strData[0];
+//                fileSavePath = savePath + File.separator + strData[2] + File.separator + strData[0];
+                fileSavePath = savePath  + File.separator + strData[0];
                 fileOutputStream = new FileOutputStream(new File(fileSavePath));// 创建文件流
                 L.d(TAG, "文件存储路径:" + fileSavePath);
                 FileState fileState = new FileState(length, 0, fileSavePath, getType(strData[3]));

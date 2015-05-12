@@ -54,4 +54,6 @@ public class IPMSGConst {
 	public static final int AN_CONNECT_SUCCESS       = 0x00000201;  //服务器确认连接成功;
 	public static final int NO_SEND_TXT              = 0x00000202;  //发送文本消息;
 	public static final int AN_SEND_TXT              = 0x00000203;  //确认接收到了文本消息;
+	public static final int NO_SEND_IMAGE            = 0x00000204;  //发送图片
+	public static final int AN_SEND_IMAGE            = 0x00000205;  //确认接收图片
 }

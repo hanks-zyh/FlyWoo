@@ -1047,5 +1047,6 @@ Wifi Direct连接模式"</string>
     <string name="voice_seconds_tips">还可以说%1$s秒</string>
     <string name="voice_short_tips">录音时间太短</string>
     <string name="network_tips">当前网络不可用</string>
+    <string name="finish">完成</string>
 
 </resources>

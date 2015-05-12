@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.orhanobut.logger.Logger;
+import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.Users;
+import com.zjk.wifiproject.socket.tcp.TcpClient;
 import com.zjk.wifiproject.socket.tcp.TcpService;
 import com.zjk.wifiproject.sql.SqlDBOperate;
 import com.zjk.wifiproject.util.GsonUtils;
@@ -56,6 +58,7 @@ public class UDPMessageListener implements Runnable {
 
     private static Context mContext;
     private static UDPMessageListener instance;
+
 
     private UDPMessageListener() {
         BROADCASTIP = "255.255.255.255";
@@ -157,6 +160,7 @@ public class UDPMessageListener implements Runnable {
         Logger.i("处理来自：" + senderIp + "命令：" + commandNo);
 
         TcpService tcpService;
+        TcpClient tcpClient;
         switch (commandNo) {
 
 
@@ -164,38 +168,53 @@ public class UDPMessageListener implements Runnable {
             case IPMSGConst.NO_CONNECT_SUCCESS: { //接收到客户端连接成功
 
                 showToast("收到上线通知");
-                //回调处理
-                callBack(ipmsgRes);
+
 
                 //确认指令
-                sendUDPdata(getConfirmCommand(IPMSGConst.AN_CONNECT_SUCCESS,ipmsgRes.targetIP,senderIp));
+                sendUDPdata(getConfirmCommand(IPMSGConst.AN_CONNECT_SUCCESS, ipmsgRes.targetIP, senderIp));
 
                 L.i(TAG, "成功发送上线应答");
                 showToast("成功发送上线应答");
             }
             break;
 
-
             case IPMSGConst.NO_SEND_TXT: { //客户端发来文本消息
-
-                Logger.i( "客户端发来文本消息");
+                Logger.i("客户端发来文本消息");
                 //回调处理
-                callBack(ipmsgRes);
-
-                sendUDPdata(getConfirmCommand(IPMSGConst.AN_SEND_TXT,ipmsgRes.targetIP,senderIp));
-
+                sendUDPdata(getConfirmCommand(IPMSGConst.AN_SEND_TXT, ipmsgRes.targetIP, senderIp));
             }
             break;
 
+            case IPMSGConst.NO_SEND_IMAGE: { //客户端发来图片
+                Logger.i("客户端发来图片请求");
+                showToast("客户端发来图片请求");
+                tcpService = TcpService.getInstance(mContext);
+                tcpService.setSavePath(BaseApplication.IMAG_PATH);
+                tcpService.startReceive();
+
+                IPMSGProtocol command = getConfirmCommand(IPMSGConst.AN_SEND_IMAGE, ipmsgRes.targetIP, senderIp);
+                command.addObject = ipmsgRes.addObject;
+                sendUDPdata(command);
+            }
+            break;
 
             /*-------------------客户端------------------------------*/
             case IPMSGConst.AN_CONNECT_SUCCESS: { //服务器确认连接成功
-                callBack(ipmsgRes);
+
             }
             break;
 
             case IPMSGConst.AN_SEND_TXT: { //服务器确认成功接收文本消息
-                callBack(ipmsgRes);
+            }
+            break;
+
+            case IPMSGConst.AN_SEND_IMAGE: { //服务器确认成功接收图片
+                Message textMsg2 =  ipmsgRes.addObject;
+                Logger.d( "接收方确认图片请求,发送的文件为" + textMsg2.getMsgContent());
+                showToast("开始发送图片");
+                tcpClient = TcpClient.getInstance(mContext);
+                tcpClient.startSend();
+                tcpClient.sendFile(textMsg2.getMsgContent(), senderIp,Message.CONTENT_TYPE.IMAGE);
             }
             break;
 
@@ -329,18 +348,20 @@ public class UDPMessageListener implements Runnable {
                 break;
 */
         } // End of switch
-
+        //回调处理
+        callBack(ipmsgRes);
     }
 
     /**
      * 创建一个新的指令
+     *
      * @param commandNo
      * @param senderIp
      * @param targetIP
      */
     private IPMSGProtocol getConfirmCommand(int commandNo, String senderIp, String targetIP) {
         IPMSGProtocol command = new IPMSGProtocol();
-        command.commandNo = IPMSGConst.AN_CONNECT_SUCCESS;
+        command.commandNo = commandNo;
         command.senderIP = senderIp;
         command.targetIP = targetIP;
         command.packetNo = new Date().getTime() + "";
@@ -428,8 +449,7 @@ public class UDPMessageListener implements Runnable {
                     Logger.i(targetIP);
                     InetAddress targetAddr = InetAddress.getByName(targetIP); // 目的地址
                     sendBuffer = GsonUtils.beanToJson(ipmsgProtocol).getBytes("gbk");
-                    sendDatagramPacket = new DatagramPacket(sendBuffer, sendBuffer.length,
-                            targetAddr, IPMSGConst.PORT);
+                    sendDatagramPacket = new DatagramPacket(sendBuffer, sendBuffer.length, targetAddr, IPMSGConst.PORT);
                     UDPSocket.send(sendDatagramPacket);
                     L.i(TAG, "sendUDPdata() 数据发送成功");
                 } catch (Exception e) {
@@ -441,7 +461,6 @@ public class UDPMessageListener implements Runnable {
         });
 
     }
-
 
 
     public Users getOnlineUser(String paramIMEI) {

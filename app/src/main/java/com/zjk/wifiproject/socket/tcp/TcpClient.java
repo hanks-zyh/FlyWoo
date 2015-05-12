@@ -4,6 +4,7 @@ package com.zjk.wifiproject.socket.tcp;
 import android.content.Context;
 import android.os.Handler;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
@@ -96,6 +97,7 @@ public class TcpClient implements Runnable {
     }
 
     public void sendFile(String filePath, String target_IP, Message.CONTENT_TYPE type) {
+        Logger.i("发送文件："+filePath+",SEND_FLAG:"+SEND_FLAG);
         SendFileThread sendFileThread = new SendFileThread(target_IP, filePath, type);
         while (SEND_FLAG == true)
             ;
@@ -107,7 +109,7 @@ public class TcpClient implements Runnable {
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
+        
         L.d(TAG, "TCP_Client初始化");
 
         while (!IS_THREAD_STOP) {
@@ -161,7 +163,7 @@ public class TcpClient implements Runnable {
                 dataOutput = new DataOutputStream(output);
                 int fileSize = fileInputStream.available();
                 dataOutput.writeUTF(filePath.substring(filePath.lastIndexOf(File.separator) + 1)
-                        + "!" + fileSize + "!" + type);
+                        + "!" + fileSize +"!IMEI!" + type);
                 int count = 0;
                 long length = 0;
 
@@ -199,9 +201,9 @@ public class TcpClient implements Runnable {
                 dataOutput.close();
                 socket.close();
 
-                switch (type) {
-                  /*  case IMAGE:
-                        Message imageMsg = new Message(SessionUtils.getIMEI(),
+               /* switch (type) {
+                    case IMAGE:
+                        Message imageMsg = new Message("",
                                 DateUtils.getNowtime(), fs.fileName, type);
                         imageMsg.setMsgContent(FileUtils.getNameByPath(imageMsg.getMsgContent()));
                         UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, imageMsg);
@@ -224,8 +226,8 @@ public class TcpClient implements Runnable {
                         break;
 
                     default:
-                        break;*/
-                }
+                        break;
+                }*/
 
                 BaseApplication.sendFileStates.remove(fs.fileName);
             }
@@ -236,7 +238,6 @@ public class TcpClient implements Runnable {
                 e.printStackTrace();
             }
             catch (IOException e) {
-                // TODO Auto-generated catch block
                 L.d(TAG, "建立客户端socket失败");
                 SEND_FLAG = false;
                 e.printStackTrace();
@@ -248,7 +249,6 @@ public class TcpClient implements Runnable {
 
         @Override
         public void run() {
-            // TODO Auto-generated method stub
             L.d(TAG, "SendFileThread初始化");
             if (SEND_FLAG) {
                 sendFile();

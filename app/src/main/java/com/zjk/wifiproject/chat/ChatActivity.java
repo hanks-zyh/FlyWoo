@@ -41,6 +41,8 @@ import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.entity.ChatEntity;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.Users;
+import com.zjk.wifiproject.picture.AlbumActivity;
+import com.zjk.wifiproject.socket.tcp.TcpClient;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
 import com.zjk.wifiproject.socket.udp.IPMSGProtocol;
 import com.zjk.wifiproject.socket.udp.UDPMessageListener;
@@ -105,6 +107,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private Users mChatUser;
     private SqlDBOperate mDBOperate;
     private int mSenderID;
+    private TcpClient tcpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,8 +235,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void processMessage(IPMSGProtocol pMsg) {
-
-        Logger.i( "ChatActivity处理消息消息："+ GsonUtils.beanToJson(pMsg));
+        Logger.i("ChatActivity处理消息消息：" + GsonUtils.beanToJson(pMsg));
         android.os.Message msg = android.os.Message.obtain();
         msg.what = pMsg.commandNo;
         msg.obj = pMsg;
@@ -767,8 +769,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
                     case IPMSGConst.NO_SEND_TXT: //接收到文本消息
-                        IPMSGProtocol caommand = (IPMSGProtocol) msg.obj;
-                        Message textMsg = (Message) caommand.addObject;
+                        IPMSGProtocol command = (IPMSGProtocol) msg.obj;
+                        Message textMsg =   command.addObject;
 
                         Logger.i(textMsg.getMsgContent());
 
@@ -777,6 +779,19 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         chatMsg.setType(Message.CONTENT_TYPE.TEXT);
 
                         refreshMessage(chatMsg);
+                        break;
+
+                    case IPMSGConst.AN_SEND_TXT:
+                        //消除progress
+
+                        break;
+
+                    case IPMSGConst.NO_SEND_IMAGE: //客户端发送图片的请求
+
+                        break;
+
+                    case IPMSGConst.AN_SEND_IMAGE: //
+
                         break;
                 }
             }
@@ -791,22 +806,22 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      */
     public void sendMessage(String content, Message.CONTENT_TYPE type) {
         String nowtime = DateUtils.getNowtime();
-        IPMSGProtocol command = new IPMSGProtocol();
 
-//        Message msg = new Message(mIMEI, nowtime, content, type);
-//        mMessagesList.add(msg);
-//        mUDPListener.addLastMsgCache(mChatUser.getIMEI(), msg); // 更新消息缓存
+        IPMSGProtocol command = new IPMSGProtocol();
+        command.targetIP = mChatUser.getIpaddress();
+        command.senderIP = WifiUtils.getLocalIPAddress();
+        command.packetNo = new Date().getTime() + "";
+
         switch (type) {
             case TEXT:
 //                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), msg);
                 command.commandNo = IPMSGConst.NO_SEND_TXT;
-                command.targetIP = mChatUser.getIpaddress();
-                command.senderIP = WifiUtils.getLocalIPAddress();
-                command.packetNo = new Date().getTime() + "";
                 command.addObject = new Message("", nowtime, content, type);
                 break;
             case IMAGE:
 //              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_IMAGE_DATA, mChatUser.getIpaddress());
+                command.commandNo = IPMSGConst.NO_SEND_IMAGE;
+                command.addObject = new Message("", nowtime, content, type);
                 break;
             case VOICE:
 //              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_VOICE_DATA, mChatUser.getIpaddress());
@@ -860,54 +875,27 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * @Description: TODO
      */
     public void selectImageFromLocal() {
-//        Intent intent;
-//        if (Build.VERSION.SDK_INT < 19) {
-//            intent = new Intent(Intent.ACTION_GET_CONTENT);
-//            intent.setType("image/*");
-//        } else {
-//            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        }
-//        startActivityForResult(intent, Constants.REQUESTCODE_TAKE_LOCAL);
+
+        startActivityForResult(new Intent(context, AlbumActivity.class), ConfigIntent.REQUEST_PICK_IMAGE);
+
     }
-//
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            switch (requestCode) {
-//                case Constants.REQUESTCODE_TAKE_CAMERA:// 当取到值的时候才上传path路径下的图片到服务器
-//                    L.i("本地图片的地址：" + localCameraPath);
-//                    sendImageMessage(localCameraPath);
-//                    break;
-//                case Constants.REQUESTCODE_TAKE_LOCAL:
-//                    if (data != null) {
-//                        Uri selectedImage = data.getData();
-//                        if (selectedImage != null) {
-//                            Cursor cursor = getContentResolver().query(selectedImage, null, null, null, null);
-//                            cursor.moveToFirst();
-//                            int columnIndex = cursor.getColumnIndex("_data");
-//                            String localSelectPath = cursor.getString(columnIndex);
-//                            cursor.close();
-//                            if (localSelectPath == null || localSelectPath.equals("null")) {
-//                                T.show(context, "找不到您想要的图片");
-//                                return;
-//                            }
-//                            sendImageMessage(localSelectPath);
-//                        }
-//                    }
-//                    break;
-//                case Constants.REQUESTCODE_TAKE_LOCATION:// 地理位置
-//                    double latitude = data.getDoubleExtra("x", 0);// 维度
-//                    double longtitude = data.getDoubleExtra("y", 0);// 经度
-//                    String address = data.getStringExtra("address");
-//                    if (address != null && !address.equals("")) {
-//                        sendLocationMessage(address, latitude, longtitude);
-//                    } else {
-//                        T.show(context, "无法获取到您的位置信息!");
-//                    }
-//                    break;
-//            }
-//        }
-//    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ConfigIntent.REQUEST_PICK_IMAGE:// 当取到值的时候才上传path路径下的图片到服务器
+
+                    List<String> images = data.getStringArrayListExtra(AlbumActivity.INTENT_SELECTED_PICTURE);
+                    for (String s : images) {
+                        L.i("本地图片的地址：" + s);
+                        sendImageMessage(s);
+                    }
+                    break;
+            }
+        }
+    }
 
     /**
      * 发送位置信息
@@ -944,30 +932,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * @Description: TODO
      */
     private void sendImageMessage(String local) {
-//        if (layout_more.getVisibility() == View.VISIBLE) {
-//            layout_more.setVisibility(View.GONE);
-//            layout_add.setVisibility(View.GONE);
-//            layout_emo.setVisibility(View.GONE);
-//        }
-//        manager.sendImageMessage(targetUser, local, new UploadListener() {
-//
-//            @Override
-//            public void onStart(BmobMsg msg) {
-//                L.i("开始上传onStart：" + msg.getContent() + ",状态：" + msg.getStatus());
-//                refreshMessage(msg);
-//            }
-//
-//            @Override
-//            public void onSuccess() {
-//                mAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(int error, String arg1) {
-//                L.i("上传失败 -->arg1：" + arg1);
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        });
+        if (layout_more.getVisibility() == View.VISIBLE) {
+            layout_more.setVisibility(View.GONE);
+            layout_add.setVisibility(View.GONE);
+            layout_emo.setVisibility(View.GONE);
+        }
+        sendMessage(local, Message.CONTENT_TYPE.IMAGE);
     }
 
     /**
@@ -1035,9 +1005,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //            NewRecordPlayClickListener.currentPlayListener.stopPlayRecord();
 //        }
 
-//    }
-
-
+    //    }
     public static final int NEW_MESSAGE = 0x001;// 收到消息
 
     NewBroadcastReceiver receiver;

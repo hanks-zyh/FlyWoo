@@ -24,4 +24,11 @@ public class ConfigIntent {
     public static final String EXTRA_SENDER_IP = "sender_ip";
 
     public static final String EXTRA_CHAT_USER = "chat_user";
+
+
+    /**
+     * 获取图片
+     */
+    public static final int REQUEST_PICK_IMAGE = 0x000300;
+
 }
