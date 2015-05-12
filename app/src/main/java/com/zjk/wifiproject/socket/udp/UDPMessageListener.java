@@ -3,9 +3,12 @@ package com.zjk.wifiproject.socket.udp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
+import com.zjk.wifiproject.config.ConfigBroadcast;
+import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.Users;
 import com.zjk.wifiproject.socket.tcp.TcpClient;
@@ -180,7 +183,14 @@ public class UDPMessageListener implements Runnable {
 
             case IPMSGConst.NO_SEND_TXT: { //客户端发来文本消息
                 Logger.i("客户端发来文本消息");
-                //回调处理
+
+                //新消息广播
+                Message textMsg = ipmsgRes.addObject;
+                Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,ConfigIntent.NEW_MSG_TYPE_TXT);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT,textMsg.getMsgContent());
+                mContext.sendBroadcast(intent);
+
                 sendUDPdata(getConfirmCommand(IPMSGConst.AN_SEND_TXT, ipmsgRes.targetIP, senderIp));
             }
             break;

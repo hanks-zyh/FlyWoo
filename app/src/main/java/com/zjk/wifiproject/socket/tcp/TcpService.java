@@ -2,9 +2,12 @@ package com.zjk.wifiproject.socket.tcp;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 
 import com.zjk.wifiproject.BaseApplication;
+import com.zjk.wifiproject.config.ConfigBroadcast;
+import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
@@ -255,8 +258,13 @@ public class TcpService implements Runnable {
                     default:
                         break;
                 }
-
                 BaseApplication.recieveFileStates.remove(fs.fileName);
+
+                Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_IMAGE);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT,fileSavePath);
+                mContext.sendBroadcast(intent);
+
             }
             catch (IOException e) {
                 // TODO Auto-generated catch block

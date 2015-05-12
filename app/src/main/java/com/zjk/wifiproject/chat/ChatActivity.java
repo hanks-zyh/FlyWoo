@@ -751,16 +751,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * @param msg
      */
     private void sendTextMessage(String msg) {
-//        new Thread(new TcpSendThread(context, mHandler, targetIp)).start();
-        ChatEntity chatMsg = new ChatEntity(msg);
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(msg);
         chatMsg.setIsSend(true);
         chatMsg.setType(Message.CONTENT_TYPE.TEXT);
-        list.add(chatMsg);
-        mAdapter.notifyDataSetChanged();
-//        udpMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG,targetIp,new com.zjk.wifiproject.entity.Message());
+        refreshMessage(chatMsg);
+
+        //发送UDP
         sendMessage(msg, Message.CONTENT_TYPE.TEXT);
-
-
     }
 
     private void initHandler() {
@@ -769,16 +767,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
                     case IPMSGConst.NO_SEND_TXT: //接收到文本消息
-                        IPMSGProtocol command = (IPMSGProtocol) msg.obj;
-                        Message textMsg =   command.addObject;
 
-                        Logger.i(textMsg.getMsgContent());
-
-                        ChatEntity chatMsg = new ChatEntity(textMsg.getMsgContent());
-                        chatMsg.setIsSend(false);
-                        chatMsg.setType(Message.CONTENT_TYPE.TEXT);
-
-                        refreshMessage(chatMsg);
                         break;
 
                     case IPMSGConst.AN_SEND_TXT:
@@ -937,6 +926,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             layout_add.setVisibility(View.GONE);
             layout_emo.setVisibility(View.GONE);
         }
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(local);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
+        refreshMessage(chatMsg);
+        //发送UDP
         sendMessage(local, Message.CONTENT_TYPE.IMAGE);
     }
 
@@ -1055,7 +1050,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private void refreshMessage(ChatEntity msg) {
         // 更新界面
         list.add(msg);
-//        mAdapter.add(msg);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
         edit_user_comment.setText("");
@@ -1132,10 +1126,21 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     public class MessageReveiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String msg = intent.getExtras().getString("msg");
-            ChatEntity chatMsg = new ChatEntity(msg);
+
+            int type = intent.getIntExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,ConfigIntent.NEW_MSG_TYPE_TXT);//默认是TXT
+            String content = intent.getExtras().getString(ConfigIntent.EXTRA_NEW_MSG_CONTENT);
+
+            ChatEntity chatMsg = new ChatEntity();
             chatMsg.setIsSend(false);
-            chatMsg.setType(Message.CONTENT_TYPE.TEXT);
+            chatMsg.setContent(content);
+            switch (type){
+                case ConfigIntent.NEW_MSG_TYPE_TXT:
+                    chatMsg.setType(Message.CONTENT_TYPE.TEXT);
+                    break;
+                case ConfigIntent.NEW_MSG_TYPE_IMAGE:
+                    chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
+                    break;
+            }
             refreshMessage(chatMsg);
         }
     }

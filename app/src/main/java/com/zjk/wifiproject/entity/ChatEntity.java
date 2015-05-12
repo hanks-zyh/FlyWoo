@@ -6,9 +6,6 @@ package com.zjk.wifiproject.entity;
  */
 public class ChatEntity {
 
-    public ChatEntity(String content) {
-        this.content = content;
-    }
 
     private Message.CONTENT_TYPE type;
     private String content;

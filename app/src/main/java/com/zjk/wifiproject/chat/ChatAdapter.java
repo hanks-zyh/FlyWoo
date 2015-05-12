@@ -1,11 +1,13 @@
 package com.zjk.wifiproject.chat;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.entity.ChatEntity;
 
@@ -76,10 +78,22 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         .inflate(R.layout.item_chat_sent_message, parent, false);
                 vh = new TextViewHolder(v);
                 break;
+
             case TYPE_RECEIVER_TXT:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_received_message, parent, false);
                 vh = new TextViewHolder(v);
+                break;
+
+            case TYPE_SEND_IMAGE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_sent_image, parent, false);
+                vh = new ImageViewHolder(v);
+                break;
+            case TYPE_RECEIVER_IMAGE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_image, parent, false);
+                vh = new ImageViewHolder(v);
                 break;
         }
         return vh;
@@ -151,4 +165,22 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
+    private class ImageViewHolder extends BaseViewHolder {
+        private SimpleDraweeView iv_picture;
+
+        public ImageViewHolder(View v) {
+            super(v);
+        }
+
+        @Override
+        protected void bindViews(View itemView) {
+            iv_picture = (SimpleDraweeView) itemView.findViewById(R.id.iv_picture);
+        }
+
+        @Override
+        public void update(int position) {
+            ChatEntity item = list.get(position);
+            iv_picture.setImageURI(Uri.parse("file://"+item.getContent()));
+        }
+    }
 }
