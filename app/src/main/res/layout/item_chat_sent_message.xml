@@ -8,6 +8,7 @@
     android:paddingTop="13dp">
 
     <TextView
+        style="@style/chat_text_date_style"
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

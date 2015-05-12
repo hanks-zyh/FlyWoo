@@ -131,8 +131,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         //初始化消息监听
         udpMessageListener = UDPMessageListener.getInstance(context);
         udpMessageListener.addMsgListener(this);
-
-
 //        mID = SessionUtils.getLocalUserID();
 //        mNickName = SessionUtils.getNickname();
         mIMEI = "";
@@ -316,24 +314,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * @Description: TODO
      */
     private void sendVoiceMessage(String local, int length) {
-//        manager.sendVoiceMessage(targetUser, local, length, new UploadListener() {
-//
-//            @Override
-//            public void onStart(BmobMsg msg) {
-//                refreshMessage(msg);
-//            }
-//
-//            @Override
-//            public void onSuccess() {
-//                mAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(int error, String arg1) {
-//                L.i("上传语音失败 -->arg1：" + arg1);
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        });
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(local);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.VOICE);
+        chatMsg.setTime(System.currentTimeMillis());
+        refreshMessage(chatMsg);
+        //发送UDP
+        sendMessage(local, Message.CONTENT_TYPE.VOICE);
     }
 
     private Toast toast;
@@ -814,6 +802,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case VOICE:
 //              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_VOICE_DATA, mChatUser.getIpaddress());
+                command.commandNo = IPMSGConst.NO_SEND_VOICE;
+                command.addObject = new Message("", nowtime, content, type);
                 break;
             case FILE:
 //                Message fileMsg = msg.clone();
@@ -929,6 +919,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         ChatEntity chatMsg = new ChatEntity();
         chatMsg.setContent(local);
         chatMsg.setIsSend(true);
+        chatMsg.setTime(System.currentTimeMillis());
         chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
         refreshMessage(chatMsg);
         //发送UDP
@@ -1133,12 +1124,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             ChatEntity chatMsg = new ChatEntity();
             chatMsg.setIsSend(false);
             chatMsg.setContent(content);
+            chatMsg.setTime(System.currentTimeMillis());
             switch (type){
                 case ConfigIntent.NEW_MSG_TYPE_TXT:
                     chatMsg.setType(Message.CONTENT_TYPE.TEXT);
                     break;
                 case ConfigIntent.NEW_MSG_TYPE_IMAGE:
                     chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
+                    break;
+                case ConfigIntent.NEW_MSG_TYPE_VOICE:
+                    chatMsg.setType(Message.CONTENT_TYPE.VOICE);
                     break;
             }
             refreshMessage(chatMsg);

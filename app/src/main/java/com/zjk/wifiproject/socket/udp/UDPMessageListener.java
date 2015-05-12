@@ -187,8 +187,8 @@ public class UDPMessageListener implements Runnable {
                 //新消息广播
                 Message textMsg = ipmsgRes.addObject;
                 Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
-                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,ConfigIntent.NEW_MSG_TYPE_TXT);
-                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT,textMsg.getMsgContent());
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_TXT);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, textMsg.getMsgContent());
                 mContext.sendBroadcast(intent);
 
                 sendUDPdata(getConfirmCommand(IPMSGConst.AN_SEND_TXT, ipmsgRes.targetIP, senderIp));
@@ -208,6 +208,19 @@ public class UDPMessageListener implements Runnable {
             }
             break;
 
+            case IPMSGConst.NO_SEND_VOICE: { //客户端发来语音
+                Logger.i("客户端发来语音请求");
+                showToast("客户端发来语音请求");
+                tcpService = TcpService.getInstance(mContext);
+                tcpService.setSavePath(BaseApplication.VOICE_PATH);
+                tcpService.startReceive();
+
+                IPMSGProtocol command = getConfirmCommand(IPMSGConst.AN_SEND_VOICE, ipmsgRes.targetIP, senderIp);
+                command.addObject = ipmsgRes.addObject;
+                sendUDPdata(command);
+            }
+            break;
+
             /*-------------------客户端------------------------------*/
             case IPMSGConst.AN_CONNECT_SUCCESS: { //服务器确认连接成功
 
@@ -219,12 +232,22 @@ public class UDPMessageListener implements Runnable {
             break;
 
             case IPMSGConst.AN_SEND_IMAGE: { //服务器确认成功接收图片
-                Message textMsg2 =  ipmsgRes.addObject;
-                Logger.d( "接收方确认图片请求,发送的文件为" + textMsg2.getMsgContent());
+                Message textMsg =  ipmsgRes.addObject;
+                Logger.d( "接收方确认图片请求,发送的文件为" + textMsg.getMsgContent());
                 showToast("开始发送图片");
                 tcpClient = TcpClient.getInstance(mContext);
                 tcpClient.startSend();
-                tcpClient.sendFile(textMsg2.getMsgContent(), senderIp,Message.CONTENT_TYPE.IMAGE);
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp,Message.CONTENT_TYPE.IMAGE);
+            }
+            break;
+
+            case IPMSGConst.AN_SEND_VOICE: { //服务器确认成功接收图片
+                Message textMsg =  ipmsgRes.addObject;
+                Logger.d( "接收方确认语音请求,发送的文件为" + textMsg.getMsgContent());
+                showToast("开始发送语音");
+                tcpClient = TcpClient.getInstance(mContext);
+                tcpClient.startSend();
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp,Message.CONTENT_TYPE.VOICE);
             }
             break;
 

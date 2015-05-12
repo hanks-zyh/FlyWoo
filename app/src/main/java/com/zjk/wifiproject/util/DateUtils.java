@@ -1,16 +1,12 @@
 package com.zjk.wifiproject.util;
 
+import android.content.Context;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.content.Context;
-
 /**
- * @fileName DateUtils.java
- * @package szu.wifichat.android.util
  * @description 时间日期工具类
- * @author _Hill3
  */
 public class DateUtils {
 
@@ -18,7 +14,7 @@ public class DateUtils {
 
     /**
      * 获取yyyyMMdd格式日期
-     * 
+     *
      * @param time
      * @return
      */
@@ -27,8 +23,7 @@ public class DateUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         try {
             date = format.parse(time);
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
@@ -47,7 +42,7 @@ public class DateUtils {
 
     /**
      * 返回此时时间
-     * 
+     *
      * @return String: XXX年XX月XX日 XX:XX:XX
      */
     public static String getNowtime() {
@@ -56,9 +51,8 @@ public class DateUtils {
 
     /**
      * 格式化输出指定时间点与现在的差
-     * 
-     * @param paramTime
-     *            指定的时间点
+     *
+     * @param paramTime 指定的时间点
      * @return 格式化后的时间差，类似 X秒前、X小时前、X年前
      */
     public static String getBetweentime(String paramTime) {
@@ -70,25 +64,47 @@ public class DateUtils {
             long betweenForSec = Math.abs(mDate.getTime() - nowData.getTime()) / 1000; // 秒
             if (betweenForSec < 60) {
                 returnStr = betweenForSec + "秒前";
-            }
-            else if (betweenForSec < (60 * 60)) {
+            } else if (betweenForSec < (60 * 60)) {
                 returnStr = betweenForSec / 60 + "分钟前";
-            }
-            else if (betweenForSec < (60 * 60 * 24)) {
+            } else if (betweenForSec < (60 * 60 * 24)) {
                 returnStr = betweenForSec / (60 * 60) + "小时前";
-            }
-            else if (betweenForSec < (60 * 60 * 24 * 30)) {
+            } else if (betweenForSec < (60 * 60 * 24 * 30)) {
                 returnStr = betweenForSec / (60 * 60 * 24) + "天前";
-            }
-            else if (betweenForSec < (60 * 60 * 24 * 30 * 12)) {
+            } else if (betweenForSec < (60 * 60 * 24 * 30 * 12)) {
                 returnStr = betweenForSec / (60 * 60 * 24 * 30) + "个月前";
-            }
-            else
+            } else
                 returnStr = betweenForSec / (60 * 60 * 24 * 30 * 12) + "年前";
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             returnStr = "TimeError"; // 错误提示
         }
         return returnStr;
     }
+
+    /**
+     * 格式化输出指定时间点与现在的差
+     *
+     * @param paramTime 指定的时间点
+     * @return 格式化后的时间差，类似 X秒前、X小时前、X年前
+     */
+    public static String getBetweentime(long paramTime) {
+        String returnStr = null;
+            Date nowData = new Date();
+            Date mDate = new Date(paramTime);
+            long betweenForSec = Math.abs(mDate.getTime() - nowData.getTime()) / 1000; // 秒
+            if (betweenForSec < 60) {
+                returnStr = betweenForSec + "秒前";
+            } else if (betweenForSec < (60 * 60)) {
+                returnStr = betweenForSec / 60 + "分钟前";
+            } else if (betweenForSec < (60 * 60 * 24)) {
+                returnStr = betweenForSec / (60 * 60) + "小时前";
+            } else if (betweenForSec < (60 * 60 * 24 * 30)) {
+                returnStr = betweenForSec / (60 * 60 * 24) + "天前";
+            } else if (betweenForSec < (60 * 60 * 24 * 30 * 12)) {
+                returnStr = betweenForSec / (60 * 60 * 24 * 30) + "个月前";
+            } else
+                returnStr = betweenForSec / (60 * 60 * 24 * 30 * 12) + "年前";
+        return returnStr;
+    }
+
+
 }

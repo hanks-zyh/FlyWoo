@@ -241,13 +241,15 @@ public class TcpService implements Runnable {
                 bufferOutput.close();
                 fileOutputStream.close();
 
+                int type = ConfigIntent.NEW_MSG_TYPE_FILE;
                 switch (fs.type) {
                     case IMAGE:
+                        type = ConfigIntent.NEW_MSG_TYPE_IMAGE;
                         break;
 
                     case VOICE:
+                        type = ConfigIntent.NEW_MSG_TYPE_VOICE;
                         break;
-
                     case FILE:
                         android.os.Message msg = mHandler.obtainMessage();
                         fs.percent = 100;
@@ -261,7 +263,7 @@ public class TcpService implements Runnable {
                 BaseApplication.recieveFileStates.remove(fs.fileName);
 
                 Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
-                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_IMAGE);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,type);
                 intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT,fileSavePath);
                 mContext.sendBroadcast(intent);
 

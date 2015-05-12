@@ -28,9 +28,10 @@ public class ConfigIntent {
 
     public static final String EXTRA_NEW_MSG_CONTENT = "new_msg_content";
     public static final String EXTRA_NEW_MSG_TYPE = "new_msg_type";
-    public static final int NEW_MSG_TYPE_TXT = 0x401;
+    public static final int NEW_MSG_TYPE_TXT   = 0x401;
     public static final int NEW_MSG_TYPE_IMAGE = 0x402;
     public static final int NEW_MSG_TYPE_VOICE = 0x403;
+    public static final int NEW_MSG_TYPE_FILE  = 0x404;
 
 
     /**

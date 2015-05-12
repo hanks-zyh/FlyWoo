@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.entity.ChatEntity;
+import com.zjk.wifiproject.util.DateUtils;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private final int TYPE_SEND_MUSIC = 4;
     private final int TYPE_RECEIVER_MUSIC = 5;
     // 语音
-    private final int TYPE_SEND_AUDIO = 6;
-    private final int TYPE_RECEIVER_AUDIO = 7;
+    private final int TYPE_SEND_VOICE = 6;
+    private final int TYPE_RECEIVER_VOICE = 7;
     //视频
     private final int TYPE_SEND_VEDIO = 8;
     private final int TYPE_RECEIVER_VEDIO = 9;
@@ -95,6 +96,17 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         .inflate(R.layout.item_chat_received_image, parent, false);
                 vh = new ImageViewHolder(v);
                 break;
+
+            case TYPE_SEND_VOICE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_sent_voice, parent, false);
+                vh = new VoiceViewHolder(v);
+                break;
+            case TYPE_RECEIVER_VOICE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_voice, parent, false);
+                vh = new VoiceViewHolder(v);
+                break;
         }
         return vh;
     }
@@ -121,9 +133,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             case IMAGE:
                 type = msg.isSend() ? TYPE_SEND_IMAGE : TYPE_RECEIVER_IMAGE;
                 break;
-//            case AUDIO:
-//                type = msg.isSend() ? TYPE_SEND_AUDIO : TYPE_RECEIVER_AUDIO;
-//                break;
+            case VOICE:
+                type = msg.isSend() ? TYPE_SEND_VOICE : TYPE_RECEIVER_VOICE;
+                break;
 //            case MUSIC:
 //                type = msg.isSend() ? TYPE_SEND_MUSIC : TYPE_RECEIVER_MUSIC;
 //                break;
@@ -147,7 +159,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public class TextViewHolder extends BaseViewHolder {
 
-        public TextView mMessage;
+        public TextView tv_message;
+        private TextView tv_time;
 
         public TextViewHolder(View itemView) {
             super(itemView);
@@ -155,19 +168,21 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         @Override
         protected void bindViews(View itemView) {
-            mMessage = (TextView) itemView.findViewById(R.id.tv_message);
+            tv_message = (TextView) itemView.findViewById(R.id.tv_message);
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
         }
 
         @Override
         public void update(int position) {
             ChatEntity item = list.get(position);
-            mMessage.setText(item.getContent());
+            tv_message.setText(item.getContent());
+            tv_time.setText(DateUtils.getBetweentime(item.getTime()));
         }
     }
 
     private class ImageViewHolder extends BaseViewHolder {
         private SimpleDraweeView iv_picture;
-
+        private TextView tv_time;
         public ImageViewHolder(View v) {
             super(v);
         }
@@ -175,12 +190,35 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         protected void bindViews(View itemView) {
             iv_picture = (SimpleDraweeView) itemView.findViewById(R.id.iv_picture);
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
         }
 
         @Override
         public void update(int position) {
             ChatEntity item = list.get(position);
-            iv_picture.setImageURI(Uri.parse("file://"+item.getContent()));
+            iv_picture.setImageURI(Uri.parse("file://" + item.getContent()));
+            tv_time.setText(DateUtils.getBetweentime(item.getTime()));
+        }
+    }
+
+    private class VoiceViewHolder extends BaseViewHolder {
+        private TextView tv_time,tv_voice_length;
+        public VoiceViewHolder(View v) {
+            super(v);
+        }
+
+        @Override
+        protected void bindViews(View itemView) {
+
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            tv_voice_length = (TextView) itemView.findViewById(R.id.tv_voice_length);
+        }
+
+        @Override
+        public void update(int position) {
+            ChatEntity item = list.get(position);
+            tv_time.setText(DateUtils.getBetweentime(item.getTime()));
+            tv_voice_length.setText("20s");
         }
     }
 }
