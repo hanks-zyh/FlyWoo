@@ -9,12 +9,7 @@ import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.FileStyle;
 import com.zjk.wifiproject.entity.Message;
-import com.zjk.wifiproject.socket.udp.IPMSGConst;
-import com.zjk.wifiproject.socket.udp.UDPMessageListener;
-import com.zjk.wifiproject.util.DateUtils;
-import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
-import com.zjk.wifiproject.util.SessionUtils;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -166,7 +161,7 @@ public class TcpClient implements Runnable {
                 dataOutput = new DataOutputStream(output);
                 int fileSize = fileInputStream.available();
                 dataOutput.writeUTF(filePath.substring(filePath.lastIndexOf(File.separator) + 1)
-                        + "!" + fileSize + "!" + SessionUtils.getIMEI() + "!" + type);
+                        + "!" + fileSize + "!" + type);
                 int count = 0;
                 long length = 0;
 
@@ -205,7 +200,7 @@ public class TcpClient implements Runnable {
                 socket.close();
 
                 switch (type) {
-                    case IMAGE:
+                  /*  case IMAGE:
                         Message imageMsg = new Message(SessionUtils.getIMEI(),
                                 DateUtils.getNowtime(), fs.fileName, type);
                         imageMsg.setMsgContent(FileUtils.getNameByPath(imageMsg.getMsgContent()));
@@ -229,7 +224,7 @@ public class TcpClient implements Runnable {
                         break;
 
                     default:
-                        break;
+                        break;*/
                 }
 
                 BaseApplication.sendFileStates.remove(fs.fileName);

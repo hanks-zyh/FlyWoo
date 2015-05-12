@@ -11,8 +11,6 @@ import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.presenters.Vu;
-import com.zjk.wifiproject.socket.udp.IPMSGConst;
-import com.zjk.wifiproject.socket.udp.UDPMessageListener;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.WifiUtils;
@@ -68,8 +66,7 @@ public class ConnectVu implements Vu, OnClickListener {
 //                new Thread(new ConnectAPThread()).start();
                 String ip = WifiUtils.getServerIPAddress();
                 Logger.i("ip:"+ip);
-                UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO,ip);
-
+//                UDPMessageListener.getInstance(context).sendUDPdata(IPMSGConst.IPMSG_GETINFO,ip);
             }
         }
     }

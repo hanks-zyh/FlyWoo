@@ -19,5 +19,9 @@ public class ConfigIntent {
      * 模糊后图片的存储地址
      */
     public static final String EXTRA_BLUR_PATH = "blur_path";
+
+
     public static final String EXTRA_SENDER_IP = "sender_ip";
+
+    public static final String EXTRA_CHAT_USER = "chat_user";
 }

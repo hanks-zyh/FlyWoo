@@ -36,7 +36,6 @@ public class ActivitiesManager {
     }
 
     public static void finishAllActivities() {
-        mListener.notifyOffline();
         mListener.stopUDPSocketThread();
         mListener = null;
         for (BaseActivity activity : queue) {

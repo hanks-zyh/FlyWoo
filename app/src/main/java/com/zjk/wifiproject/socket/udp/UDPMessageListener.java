@@ -3,22 +3,16 @@ package com.zjk.wifiproject.socket.udp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 
 import com.orhanobut.logger.Logger;
-import com.zjk.wifiproject.BaseApplication;
-import com.zjk.wifiproject.config.ConfigBroadcast;
-import com.zjk.wifiproject.entity.Entity;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.Users;
 import com.zjk.wifiproject.socket.tcp.TcpService;
 import com.zjk.wifiproject.sql.SqlDBOperate;
-import com.zjk.wifiproject.util.ImageUtils;
+import com.zjk.wifiproject.util.GsonUtils;
 import com.zjk.wifiproject.util.L;
-import com.zjk.wifiproject.util.SessionUtils;
 import com.zjk.wifiproject.util.T;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
@@ -26,6 +20,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -74,6 +69,7 @@ public class UDPMessageListener implements Runnable {
 
         int cpuNums = Runtime.getRuntime().availableProcessors();
         executor = Executors.newFixedThreadPool(cpuNums * POOL_SIZE); // 根据CPU数目初始化线程池
+
     }
 
     /**
@@ -118,37 +114,27 @@ public class UDPMessageListener implements Runnable {
                 continue;
             }
 
-            String UDPListenResStr = "";
+            String resStr = ""; //接收到的字符串
             try {
-                UDPListenResStr = new String(receiveBuffer, 0, receiveDatagramPacket.getLength(),
-                        "gbk");
+                resStr = new String(receiveBuffer, 0, receiveDatagramPacket.getLength(), "gbk");
             } catch (UnsupportedEncodingException e) {
                 L.e(TAG, "系统不支持GBK编码");
             }
 
-            showToast(UDPListenResStr);
-            Logger.i(UDPListenResStr);
-            IPMSGProtocol ipmsgRes = new IPMSGProtocol(UDPListenResStr);
-            int commandNo = ipmsgRes.getCommandNo(); // 获取命令字
-            String senderIMEI = ipmsgRes.getSenderIMEI();
-            String senderIp = receiveDatagramPacket.getAddress().getHostAddress();
+            //打印一下
+            showToast(resStr);
+            Logger.i("接收到" + resStr);
 
-//            if (BaseApplication.isDebugmode) {
-//                processMessage(commandNo, ipmsgRes, senderIMEI, senderIp);
-//            }
-//            else {
-//                if (!SessionUtils.isLocalUser(senderIMEI)) {
-            processMessage(commandNo, ipmsgRes, senderIMEI, senderIp);
-//                }
-//            }
+            String senderIp = receiveDatagramPacket.getAddress().getHostAddress();
+            IPMSGProtocol ipmsgRes = GsonUtils.jsonToBean(resStr, IPMSGProtocol.class);
+            processMessage(ipmsgRes, senderIp);
 
             // 每次接收完UDP数据后，重置长度。否则可能会导致下次收到数据包被截断。
             if (receiveDatagramPacket != null) {
                 receiveDatagramPacket.setLength(BUFFERLENGTH);
             }
 
-
-        }
+        }//while
 
         receiveDatagramPacket = null;
         if (UDPSocket != null) {
@@ -159,18 +145,66 @@ public class UDPMessageListener implements Runnable {
 
     }
 
-    public void processMessage(int commandNo, IPMSGProtocol ipmsgRes, String senderIMEI,
-                               String senderIp) {
-        showToast("处理命令：" + commandNo);
+    /**
+     * 处理接收到的UDP数据
+     *
+     * @param ipmsgRes
+     * @param senderIp
+     */
+    public void processMessage(IPMSGProtocol ipmsgRes, String senderIp) {
+
+        int commandNo = ipmsgRes.commandNo;
+        Logger.i("处理来自：" + senderIp + "命令：" + commandNo);
+
         TcpService tcpService;
         switch (commandNo) {
 
-            // 收到上线数据包，添加用户，并回送IPMSG_ANSENTRY应答。
+
+            /*-------------------服务器------------------------------*/
+            case IPMSGConst.NO_CONNECT_SUCCESS: { //接收到客户端连接成功
+
+                showToast("收到上线通知");
+                //回调处理
+                callBack(ipmsgRes);
+
+                //确认指令
+                sendUDPdata(getConfirmCommand(IPMSGConst.AN_CONNECT_SUCCESS,ipmsgRes.targetIP,senderIp));
+
+                L.i(TAG, "成功发送上线应答");
+                showToast("成功发送上线应答");
+            }
+            break;
+
+
+            case IPMSGConst.NO_SEND_TXT: { //客户端发来文本消息
+
+                Logger.i( "客户端发来文本消息");
+                //回调处理
+                callBack(ipmsgRes);
+
+                sendUDPdata(getConfirmCommand(IPMSGConst.AN_SEND_TXT,ipmsgRes.targetIP,senderIp));
+
+            }
+            break;
+
+
+            /*-------------------客户端------------------------------*/
+            case IPMSGConst.AN_CONNECT_SUCCESS: { //服务器确认连接成功
+                callBack(ipmsgRes);
+            }
+            break;
+
+            case IPMSGConst.AN_SEND_TXT: { //服务器确认成功接收文本消息
+                callBack(ipmsgRes);
+            }
+            break;
+
+           /* // 收到上线数据包，添加用户，并回送IPMSG_ANSENTRY应答。
             case IPMSGConst.IPMSG_BR_ENTRY: {
                 L.i(TAG, "收到上线通知");
                 showToast("收到上线通知");
 //                addUser(ipmsgRes);
-                sendUDPdata(IPMSGConst.IPMSG_ANSENTRY, receiveDatagramPacket.getAddress(),
+                sendUDPdata(IPMSGConst.IPMSG_ANSENTRY, senderIp,
                         mLocalUser);
                 L.i(TAG, "成功发送上线应答");
                 showToast("成功发送上线应答");
@@ -217,7 +251,7 @@ public class UDPMessageListener implements Runnable {
                 switch (msg.getContentType()) {
                     case TEXT:
                         Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
-                        intent.putExtra("msg",msg.getMsgContent());
+                        intent.putExtra("msg", msg.getMsgContent());
                         mContext.sendBroadcast(intent);
                         sendUDPdata(IPMSGConst.IPMSG_RECVMSG, senderIp, ipmsgRes.getPacketNo());
                         break;
@@ -271,6 +305,7 @@ public class UDPMessageListener implements Runnable {
                 for (int i = 0; i < mListenerList.size(); i++) {
                     android.os.Message pMsg = new android.os.Message();
                     pMsg.what = commandNo;
+
                     mListenerList.get(i).processMessage(pMsg);
                 }
 //                }
@@ -291,15 +326,36 @@ public class UDPMessageListener implements Runnable {
 ////                    v.processMessage(pMessage);
 //                }
 
-
                 break;
-
+*/
         } // End of switch
+
+    }
+
+    /**
+     * 创建一个新的指令
+     * @param commandNo
+     * @param senderIp
+     * @param targetIP
+     */
+    private IPMSGProtocol getConfirmCommand(int commandNo, String senderIp, String targetIP) {
+        IPMSGProtocol command = new IPMSGProtocol();
+        command.commandNo = IPMSGConst.AN_CONNECT_SUCCESS;
+        command.senderIP = senderIp;
+        command.targetIP = targetIP;
+        command.packetNo = new Date().getTime() + "";
+        return command;
+    }
+
+    /**
+     * 回调给Listener
+     *
+     * @param ipmsgRes
+     */
+    private void callBack(IPMSGProtocol ipmsgRes) {
         showToast("listenerSize=" + mListenerList.size());
         for (int i = 0; i < mListenerList.size(); i++) {
-            android.os.Message pMsg = new android.os.Message();
-            pMsg.what = commandNo;
-            mListenerList.get(i).processMessage(pMsg);
+            mListenerList.get(i).processMessage(ipmsgRes);
         }
     }
 
@@ -355,94 +411,23 @@ public class UDPMessageListener implements Runnable {
         this.mListenerList.remove(listener);
     }
 
-    /**
-     * 用户上线通知 *
-     */
-    public void notifyOnline() {
-        // 获取本机用户数据
-        mLocalUser = SessionUtils.getLocalUserInfo();
-        sendUDPdata(IPMSGConst.IPMSG_BR_ENTRY, BROADCASTIP, mLocalUser);
-        L.i(TAG, "notifyOnline() 上线通知成功");
-    }
-
-    /**
-     * 用户下线通知 *
-     */
-    public void notifyOffline() {
-        sendUDPdata(IPMSGConst.IPMSG_BR_EXIT, BROADCASTIP);
-        L.i(TAG, "notifyOffline() 下线通知成功");
-    }
-
-    /**
-     * 刷新用户列表 *
-     */
-    public void refreshUsers() {
-        removeOnlineUser(null, 0); // 清空在线用户列表
-        notifyOnline();
-    }
-
-    /**
-     * 添加用户到在线列表中 (线程安全的)
-     *
-     * @param paramIPMSGProtocol 包含用户信息的IPMSGProtocol字符串
-     */
-    private void addUser(IPMSGProtocol paramIPMSGProtocol) {
-        String receiveIMEI = paramIPMSGProtocol.getSenderIMEI();
-        if (BaseApplication.isDebugmode) {
-            Users newUser = (Users) paramIPMSGProtocol.getAddObject();
-            addOnlineUser(receiveIMEI, newUser);
-            mDBOperate.addUserInfo(newUser);
-        } else {
-            if (!SessionUtils.isLocalUser(receiveIMEI)) {
-                Users newUser = (Users) paramIPMSGProtocol.getAddObject();
-                addOnlineUser(receiveIMEI, newUser);
-                mDBOperate.addUserInfo(newUser);
-            }
-        }
-        L.i(TAG, "成功添加imei为" + receiveIMEI + "的用户");
-    }
 
     /**
      * 发送UDP数据包
      *
-     * @param commandNo 消息命令
-     * @param targetIP  目标地址
-     * @see IPMSGConst
+     * @param ipmsgProtocol 附加的Json指令
      */
-    public static void sendUDPdata(int commandNo, String targetIP) {
-        sendUDPdata(commandNo, targetIP, null);
-    }
+    public static void sendUDPdata(final IPMSGProtocol ipmsgProtocol) {
 
-    public static void sendUDPdata(int commandNo, InetAddress targetIP) {
-        sendUDPdata(commandNo, targetIP, null);
-    }
+        final String targetIP = ipmsgProtocol.targetIP;
 
-    public static void sendUDPdata(int commandNo, InetAddress targetIP, Object addData) {
-        sendUDPdata(commandNo, targetIP.getHostAddress(), addData);
-    }
-
-    public static void sendUDPdata(int commandNo, String targetIP, Object addData) {
-        IPMSGProtocol ipmsgProtocol = null;
-        String imei = SessionUtils.getIMEI();
-
-        if (addData == null) {
-            ipmsgProtocol = new IPMSGProtocol(imei, commandNo);
-        } else if (addData instanceof Entity) {
-            ipmsgProtocol = new IPMSGProtocol(imei, commandNo, (Entity) addData);
-        } else if (addData instanceof String) {
-            ipmsgProtocol = new IPMSGProtocol(imei, commandNo, (String) addData);
-        }
-        sendUDPdata(ipmsgProtocol, targetIP);
-    }
-
-    public static void sendUDPdata(final IPMSGProtocol ipmsgProtocol, final String targetIP) {
         executor.execute(new Runnable() {
-
             @Override
             public void run() {
                 try {
+                    Logger.i(targetIP);
                     InetAddress targetAddr = InetAddress.getByName(targetIP); // 目的地址
-                    sendBuffer = ipmsgProtocol.getProtocolJSON().getBytes("gbk");
+                    sendBuffer = GsonUtils.beanToJson(ipmsgProtocol).getBytes("gbk");
                     sendDatagramPacket = new DatagramPacket(sendBuffer, sendBuffer.length,
                             targetAddr, IPMSGConst.PORT);
                     UDPSocket.send(sendDatagramPacket);
@@ -457,43 +442,12 @@ public class UDPMessageListener implements Runnable {
 
     }
 
-    public synchronized void addOnlineUser(String paramIMEI, Users paramObject) {
-        mOnlineUsers.put(paramIMEI, paramObject);
 
-        for (int i = 0; i < mListenerList.size(); i++) {
-            android.os.Message pMsg = new android.os.Message();
-            pMsg.what = IPMSGConst.IPMSG_BR_ENTRY;
-            mListenerList.get(i).processMessage(pMsg);
-        }
-
-        L.d(TAG, "addUser | OnlineUsersNum：" + mOnlineUsers.size());
-    }
 
     public Users getOnlineUser(String paramIMEI) {
         return mOnlineUsers.get(paramIMEI);
     }
 
-    /**
-     * 移除在线用户
-     *
-     * @param paramIMEI 需要移除的用户IMEI
-     * @param paramtype 操作类型，0:清空在线列表，1:移除指定用户
-     */
-    public void removeOnlineUser(String paramIMEI, int paramtype) {
-        if (paramtype == 1) {
-            mOnlineUsers.remove(paramIMEI);
-            for (int i = 0; i < mListenerList.size(); i++) {
-                android.os.Message pMsg = new android.os.Message();
-                pMsg.what = IPMSGConst.IPMSG_BR_EXIT;
-                mListenerList.get(i).processMessage(pMsg);
-            }
-
-        } else if (paramtype == 0) {
-            mOnlineUsers.clear();
-        }
-
-        L.d(TAG, "removeUser | OnlineUsersNum：" + mOnlineUsers.size());
-    }
 
     public HashMap<String, Users> getOnlineUserMap() {
         return mOnlineUsers;
@@ -597,7 +551,7 @@ public class UDPMessageListener implements Runnable {
      * 新消息处理接口
      */
     public interface OnNewMsgListener {
-        public void processMessage(android.os.Message pMsg);
+        void processMessage(IPMSGProtocol pMsg);
     }
 
     public void showToast(final String s) {

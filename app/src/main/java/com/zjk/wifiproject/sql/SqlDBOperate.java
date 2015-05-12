@@ -67,24 +67,24 @@ public class SqlDBOperate {
 
     /* 获取在线信息尚未完善,默认在线状态(0) */
     public void addUserInfo(Users people) {
-        ContentValues values = new ContentValues();
-        values.put("name", people.getNickname());
-        values.put("sex", people.getGender());
-        values.put("age", people.getAge());
-        values.put("IMEI", people.getIMEI());
-        values.put("ip", people.getIpaddress());
-        values.put("status", people.getOnlineStateInt());
-        values.put("avater", people.getAvatar());
-        values.put("lastdate", people.getLogintime());
-        values.put("device", people.getDevice());
-        values.put("constellation", people.getConstellation());
-        int id = getIDByIMEI(people.getIMEI());
-        if (id != 0) {
-            userDataBase.update(userSQLHelper.getTableName(), values, "id = ?",
-                    new String[] { String.valueOf(id) });
-        }
-        else
-            userDataBase.insert(userSQLHelper.getTableName(), "id", values);
+//        ContentValues values = new ContentValues();
+//        values.put("name", people.getNickname());
+//        values.put("sex", people.getGender());
+//        values.put("age", people.getAge());
+//        values.put("IMEI", people.getIMEI());
+//        values.put("ip", people.getIpaddress());
+//        values.put("status", people.getOnlineStateInt());
+//        values.put("avater", people.getAvatar());
+//        values.put("lastdate", people.getLogintime());
+//        values.put("device", people.getDevice());
+//        values.put("constellation", people.getConstellation());
+//        int id = getIDByIMEI(people.getIMEI());
+//        if (id != 0) {
+//            userDataBase.update(userSQLHelper.getTableName(), values, "id = ?",
+//                    new String[] { String.valueOf(id) });
+//        }
+//        else
+//            userDataBase.insert(userSQLHelper.getTableName(), "id", values);
     }
 
     /*

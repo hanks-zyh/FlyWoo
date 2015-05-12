@@ -36,13 +36,11 @@ import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.entity.Users;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
+import com.zjk.wifiproject.socket.udp.IPMSGProtocol;
 import com.zjk.wifiproject.socket.udp.UDPMessageListener;
-import com.zjk.wifiproject.sql.SqlDBOperate;
 import com.zjk.wifiproject.util.A;
-import com.zjk.wifiproject.util.DateUtils;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
-import com.zjk.wifiproject.util.SessionUtils;
 import com.zjk.wifiproject.util.TextUtils;
 import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.view.CircularProgress;
@@ -88,7 +86,8 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     private String localIPaddress; // 本地WifiIP
     private String serverIPaddres; // 热点IP
     private UDPMessageListener mUDPListener;
-    private SqlDBOperate mSqlDBOperate;
+
+    private List<String> mList = new ArrayList<>();//扫描到的WiFi列表
 
 
     @Override
@@ -100,24 +99,10 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         showTwoButtonAnimation();
     }
 
-    private void setListener() {
-        mHideButton.setOnClickListener(this);
-        mCreate.setOnClickListener(this);
-        mJoin.setOnClickListener(this);
-        mHelpCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    showTwoImageAnimation();
-                    mHideButton.setVisibility(View.GONE);
-                } else {
-                    hideTwoImageAnimation();
-                    mHideButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+    @Override
+    public View getView() {
+        return view;
     }
-
 
     private void bindViews() {
 //        view2.findViewById(R.id.open_ap).setOnClickListener(this);
@@ -147,9 +132,22 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         view.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeFile(path)));
     }
 
-    @Override
-    public View getView() {
-        return view;
+    private void setListener() {
+        mHideButton.setOnClickListener(this);
+        mCreate.setOnClickListener(this);
+        mJoin.setOnClickListener(this);
+        mHelpCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    showTwoImageAnimation();
+                    mHideButton.setVisibility(View.GONE);
+                } else {
+                    hideTwoImageAnimation();
+                    mHideButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     /**
@@ -209,6 +207,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
                 showTwoImageAnimation();
                 break;
             case R.id.hideButton:
+                closeAP();
                 onBackPressed();
                 break;
             case R.id.create:
@@ -552,62 +551,77 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         }
     }
 
-    private List<String> mList = new ArrayList<>();//扫描到的WiFi列表
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case WifiConst.ApCreateApSuccess:
+                case WifiConst.ApCreateApSuccess: //创建AP热点成功
                     createApSuccess();
                     break;
                 case WifiConst.ApScanResult:
                     handleList(WifiUtils.getScanResults());
                     break;
                 case WifiConst.WiFiConnectSuccess:
-
                     Logger.i("ip=" + serverIPaddres);
                     if (isValidated()) { //已连接上
+
                         mStatus.setText("连接成功");
                         cennectTimer.cancel();
-//                        new UdpSendThread(context, mHandler, ip).send("zyh进去聊天界面");
-//开启监听消息线程
-//                        new Thread(new UdpReceiverThread(context, mHandler)).start();
+
+                        //开启UDP连接
                         mUDPListener = UDPMessageListener.getInstance(context);
                         mUDPListener.addMsgListener(CreateConnectionVu.this);
                         mUDPListener.connectUDPSocket();
-                        mUDPListener.sendUDPdata(IPMSGConst.IPMSG_BR_ENTRY, serverIPaddres);
+
+                        //创建"连接成功"指令 发送给服务器
+                        IPMSGProtocol command = new IPMSGProtocol();
+
+                        command.senderIP = localIPaddress;
+                        command.targetIP = serverIPaddres;
+                        command.commandNo = IPMSGConst.NO_CONNECT_SUCCESS; //连接成功指令发送给服务器，服务器确认后再跳展
+                        command.packetNo =  new Date().getTime()+"";
+
+                        mUDPListener.sendUDPdata(command); //通知服务器已连接
+
                     }
                     break;
-                case IPMSGConst.IPMSG_ANSENTRY: // 用户上线应答
-                case IPMSGConst.IPMSG_BR_ENTRY: // 用户上线应答
-                    Logger.i("用户上线");
-
-                    goChatActivity();
 
 
+                //------------------------处理UDP指令
+                //--------------------服务端
+                case IPMSGConst.NO_CONNECT_SUCCESS: // 客户端连接成功
+                    IPMSGProtocol command = (IPMSGProtocol) msg.obj;
+
+                    Users user = new Users();
+                    user.setIpaddress(command.senderIP);
+                    user.setDevice(getPhoneModel());
+                    goChatActivity(user);
                     break;
+
+                //-------------------客户端
+                case IPMSGConst.AN_CONNECT_SUCCESS: // 服务器确认连接成功
+                    Users user2 = new Users();
+                    user2.setDevice(getPhoneModel());
+                    user2.setIpaddress(serverIPaddres);
+                    goChatActivity(user2);
+                    break;
+
+                /*case IPMSGConst.IPMSG_ANSENTRY: // 用户上线应答
+                    goChatActivity(null);
+                    break;
+                case IPMSGConst.IPMSG_BR_ENTRY: // 服务器收到用户上线应答
+                    Logger.i("用户上线");
+                    Users user = (Users) msg.obj; //取出客户端信息
+                    goChatActivity(user);
+                    break;*/
             }
         }
     };
 
-    private void goChatActivity() {
 
-
-        String IMEI = SessionUtils.getIMEI();
-        String constellation = SessionUtils.getConstellation();
-        String device = getPhoneModel();
-        String logintime = DateUtils.getNowtime();
-
-        Users user = new Users();
-        user.setIMEI(IMEI);
-        user.setConstellation(constellation);
-        user.setDevice(device);
-        user.setLogintime(logintime);
-        user.setIpaddress(serverIPaddres);
-
+    private void goChatActivity( Users user) {
         Intent i = new Intent(context, ChatActivity.class);
-        i.putExtra(Users.ENTITY_PEOPLE, user);
+        i.putExtra(ConfigIntent.EXTRA_CHAT_USER, user);
         A.goOtherActivityFinish(context, i);
     }
 
@@ -642,16 +656,12 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         mStatus.setText(ss);
         mCircleProgress.finishAnim();
 
-//        mUDPListener.connectUDPSocket();
-//        mUDPListener.notifyOnline();
+        //开始监听 UDP
         mUDPListener = UDPMessageListener.getInstance(context);
         mUDPListener.addMsgListener(this);
         mUDPListener.connectUDPSocket();
-        //开启监听消息线程
-//        UDPMessageListener.getInstance(context).connectUDPSocket();
-//        new Thread(new UdpReceiverThread(context, mHandler)).start();
-    }
 
+    }
 
     /**
      * 设置IP地址信息
@@ -672,7 +682,6 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
      * @return boolean 返回是否为正确， 正确(true),不正确(false)
      */
     private boolean isValidated() {
-
         setIPaddress();
         String nullIP = "0.0.0.0";
 
@@ -684,9 +693,16 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         return true;
     }
 
+    /**
+     * 接收到指令的回调处理
+     * @param pMsg
+     */
     @Override
-    public void processMessage(Message pMsg) {
-        mHandler.sendEmptyMessage(pMsg.what);
+    public void processMessage(IPMSGProtocol pMsg) {
+        Message msg = Message.obtain();
+        msg.what = pMsg.commandNo;
+        msg.obj  = pMsg;
+        mHandler.sendMessage(msg);
     }
 
     public void onDestroy() {

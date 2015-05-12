@@ -50,4 +50,8 @@ public class IPMSGConst {
 	public static final int IPMSG_FILEATTACHOPT 	 = 0x00200000;	//附加文件
 	public static final int IPMSG_ENCRYPTOPT		 = 0x00400000;	//加密
 
+	public static final int NO_CONNECT_SUCCESS       = 0x00000200;	//连接服务器成功;
+	public static final int AN_CONNECT_SUCCESS       = 0x00000201;  //服务器确认连接成功;
+	public static final int NO_SEND_TXT              = 0x00000202;  //发送文本消息;
+	public static final int AN_SEND_TXT              = 0x00000203;  //确认接收到了文本消息;
 }
