@@ -272,7 +272,7 @@ public class AlbumActivity extends Activity {
                 holder.checkBox.setVisibility(View.VISIBLE);
                 final ImageItem item = currentImageFolder.images.get(position);
 
-                Picasso.with(context).load("file://" + item.path).centerCrop().resize(200, 200).into(holder.iv);
+                Picasso.with(context).load("file://" + item.path).centerCrop().resize(100, 100).into(holder.iv);
 
                 boolean isSelected = selectedPicture.contains(item.path);
                 holder.checkBox.setOnClickListener(new OnClickListener() {
@@ -336,7 +336,7 @@ public class AlbumActivity extends Activity {
             }
             ImageFloder item = mDirPaths.get(position);
 //            loader.displayImage("file://" + item.getFirstImagePath(), holder.id_dir_item_image, options);
-            Picasso.with(context).load("file://" + item.getFirstImagePath()).centerCrop().resize(200, 200).into(holder.id_dir_item_image);
+            Picasso.with(context).load("file://" + item.getFirstImagePath()).centerCrop().resize(100, 100).into(holder.id_dir_item_image);
             holder.id_dir_item_count.setText(item.images.size() + "张");
             holder.id_dir_item_name.setText(item.getName());
             holder.choose.setVisibility(currentImageFolder == item ? View.VISIBLE : View.GONE);

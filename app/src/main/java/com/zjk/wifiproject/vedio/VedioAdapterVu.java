@@ -2,8 +2,9 @@ package com.zjk.wifiproject.vedio;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,8 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.util.L;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VedioAdapterVu implements Vu {
 
@@ -27,6 +28,7 @@ public class VedioAdapterVu implements Vu {
     private TextView mSelect;
     private TextView mVedioName;
     private Context context;
+    private Map<String, Bitmap> vedioThrmuils = new HashMap<>();
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -50,18 +52,49 @@ public class VedioAdapterVu implements Vu {
 
     /**
      * 设置视频缩略图
-     * 
-     * @version 1.0
+     *
      * @param path
+     * @version 1.0
      */
     public void setVedioThrmuil(String path) {
+
+        Bitmap bm = vedioThrmuils.get(path);
+        if (bm == null) {
+            bm = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MICRO_KIND);
+            L.d("缩略图：" + bm.getWidth() + "，" + bm.getHeight());
+            vedioThrmuils.put(path,bm);
+        }
+        mVedio.setImageBitmap(bm);
+
+        /*
         try {
+
             Bitmap bm = getVideoThumbnail(path);
             L.d("缩略图："+bm.getWidth() +"，"+bm.getHeight());
             ByteArrayOutputStream baos = null ;
             try{
                 baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 3, baos);
+                bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 85, out);
+                float zoom = (float)Math.sqrt(size * 1024 / (float)out.toByteArray().length);
+
+                Matrix matrix = new Matrix();
+                matrix.setScale(zoom, zoom);
+
+                Bitmap result = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+
+                out.reset();
+                result.compress(Bitmap.CompressFormat.JPEG, 85, out);
+                while(out.toByteArray().length > size * 1024){
+                    System.out.println(out.toByteArray().length);
+                    matrix.setScale(0.9f, 0.9f);
+                    result = Bitmap.createBitmap(result, 0, 0, result.getWidth(), result.getHeight(), matrix, true);
+                    out.reset();
+                    result.compress(Bitmap.CompressFormat.JPEG, 85, out);
+                }
+                mVedio.setImageBitmap(result);
 
             }finally{
                 try {
@@ -71,10 +104,9 @@ public class VedioAdapterVu implements Vu {
                     e.printStackTrace();
                 }
             }
-            mVedio.setImageBitmap(bm);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void setVedioName(String name) {
@@ -94,7 +126,7 @@ public class VedioAdapterVu implements Vu {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             retriever.setDataSource(filePath);
-            bitmap = retriever.getFrameAtTime(0,0);
+            bitmap = retriever.getFrameAtTime(0, 0);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {

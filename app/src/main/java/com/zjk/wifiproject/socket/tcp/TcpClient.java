@@ -8,8 +8,8 @@ import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
-import com.zjk.wifiproject.entity.FileStyle;
 import com.zjk.wifiproject.entity.Message;
+import com.zjk.wifiproject.socket.udp.IPMSGConst;
 import com.zjk.wifiproject.util.L;
 
 import java.io.DataOutputStream;
@@ -64,7 +64,7 @@ public class TcpClient implements Runnable {
         return instance;
     }
 
-    public void sendFile(ArrayList<FileStyle> fileStyles, ArrayList<FileState> fileStates,
+   /* public void sendFile(ArrayList<FileStyle> fileStyles, ArrayList<FileState> fileStates,
             String target_IP) {
         while (SEND_FLAG == true)
             ;
@@ -74,7 +74,7 @@ public class TcpClient implements Runnable {
             sendFileThreads.add(sendFileThread);
         }
         SEND_FLAG = true;
-    }
+    }*/
 
     private TcpClient(Context context) {
         this();
@@ -182,12 +182,11 @@ public class TcpClient implements Runnable {
 
                         case VOICE:
                             break;
-
                         case FILE:
                             android.os.Message msg = mHandler.obtainMessage();
+                            msg.what = IPMSGConst.WHAT_FILE_SENDING;
                             msg.obj = fs;
                             msg.sendToTarget();
-
                             break;
 
                         default:
@@ -195,14 +194,14 @@ public class TcpClient implements Runnable {
                     }
                     dataOutput.flush();
                 }
-                L.d(TAG, fs.fileName + "发送完毕");
+                L.d(TAG, fs.filePath + "发送完毕");
 
                 output.close();
                 dataOutput.close();
                 socket.close();
 
-               /* switch (type) {
-                    case IMAGE:
+                switch (type) {
+                   /* case IMAGE:
                         Message imageMsg = new Message("",
                                 DateUtils.getNowtime(), fs.fileName, type);
                         imageMsg.setMsgContent(FileUtils.getNameByPath(imageMsg.getMsgContent()));
@@ -216,10 +215,11 @@ public class TcpClient implements Runnable {
                         voiceMsg.setMsgContent(FileUtils.getNameByPath(voiceMsg.getMsgContent()));
                         UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, voiceMsg);
                         L.d(TAG, "语音发送完毕");
-                        break;
+                        break;*/
 
                     case FILE:
                         android.os.Message msg = mHandler.obtainMessage();
+                        msg.what = IPMSGConst.WHAT_FILE_SENDING;
                         fs.percent = 100;
                         msg.obj = fs;
                         msg.sendToTarget();
@@ -227,9 +227,9 @@ public class TcpClient implements Runnable {
 
                     default:
                         break;
-                }*/
+                }
 
-                BaseApplication.sendFileStates.remove(fs.fileName);
+                BaseApplication.sendFileStates.remove(fs.filePath);
             }
             catch (UnknownHostException e) {
                 // TODO Auto-generated catch block

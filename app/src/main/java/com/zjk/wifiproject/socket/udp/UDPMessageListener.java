@@ -4,6 +4,7 @@ package com.zjk.wifiproject.socket.udp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 
 import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
@@ -61,6 +62,7 @@ public class UDPMessageListener implements Runnable {
 
     private static Context mContext;
     private static UDPMessageListener instance;
+    private Handler mHanlder;
 
 
     private UDPMessageListener() {
@@ -162,8 +164,12 @@ public class UDPMessageListener implements Runnable {
         int commandNo = ipmsgRes.commandNo;
         Logger.i("处理来自：" + senderIp + "命令：" + commandNo);
 
-        TcpService tcpService;
-        TcpClient tcpClient;
+        TcpService tcpService = TcpService.getInstance(mContext);
+        tcpService.setHandler(mHanlder);
+
+        TcpClient tcpClient = TcpClient.getInstance(mContext);
+        tcpClient.setHandler(mHanlder);
+
         switch (commandNo) {
 
 
@@ -198,7 +204,7 @@ public class UDPMessageListener implements Runnable {
             case IPMSGConst.NO_SEND_IMAGE: { //客户端发来图片
                 Logger.i("客户端发来图片请求");
                 showToast("客户端发来图片请求");
-                tcpService = TcpService.getInstance(mContext);
+
                 tcpService.setSavePath(BaseApplication.IMAG_PATH);
                 tcpService.startReceive();
 
@@ -211,13 +217,30 @@ public class UDPMessageListener implements Runnable {
             case IPMSGConst.NO_SEND_VOICE: { //客户端发来语音
                 Logger.i("客户端发来语音请求");
                 showToast("客户端发来语音请求");
-                tcpService = TcpService.getInstance(mContext);
+
                 tcpService.setSavePath(BaseApplication.VOICE_PATH);
                 tcpService.startReceive();
 
                 IPMSGProtocol command = getConfirmCommand(IPMSGConst.AN_SEND_VOICE, ipmsgRes.targetIP, senderIp);
                 command.addObject = ipmsgRes.addObject;
                 sendUDPdata(command);
+            }
+            break;
+            case IPMSGConst.NO_SEND_FILE: { //发送文件
+                Logger.i("客户端发送文件请求");
+                showToast("客户端发送文件请求");
+
+                tcpService.setSavePath(BaseApplication.FILE_PATH);
+                tcpService.startReceive();
+
+                IPMSGProtocol command = getConfirmCommand(IPMSGConst.AN_SEND_FILE, ipmsgRes.targetIP, senderIp);
+                command.addObject = ipmsgRes.addObject;
+                sendUDPdata(command);
+
+                Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_FILE);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, ipmsgRes.addObject.getMsgContent());
+                mContext.sendBroadcast(intent);
             }
             break;
 
@@ -232,22 +255,30 @@ public class UDPMessageListener implements Runnable {
             break;
 
             case IPMSGConst.AN_SEND_IMAGE: { //服务器确认成功接收图片
-                Message textMsg =  ipmsgRes.addObject;
-                Logger.d( "接收方确认图片请求,发送的文件为" + textMsg.getMsgContent());
+                Message textMsg = ipmsgRes.addObject;
+                Logger.d("接收方确认图片请求,发送的文件为" + textMsg.getMsgContent());
                 showToast("开始发送图片");
-                tcpClient = TcpClient.getInstance(mContext);
+
                 tcpClient.startSend();
-                tcpClient.sendFile(textMsg.getMsgContent(), senderIp,Message.CONTENT_TYPE.IMAGE);
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp, Message.CONTENT_TYPE.IMAGE);
             }
             break;
 
             case IPMSGConst.AN_SEND_VOICE: { //服务器确认成功接收图片
-                Message textMsg =  ipmsgRes.addObject;
-                Logger.d( "接收方确认语音请求,发送的文件为" + textMsg.getMsgContent());
+                Message textMsg = ipmsgRes.addObject;
+                Logger.d("接收方确认语音请求,发送的文件为" + textMsg.getMsgContent());
                 showToast("开始发送语音");
-                tcpClient = TcpClient.getInstance(mContext);
                 tcpClient.startSend();
-                tcpClient.sendFile(textMsg.getMsgContent(), senderIp,Message.CONTENT_TYPE.VOICE);
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp, Message.CONTENT_TYPE.VOICE);
+            }
+            break;
+
+            case IPMSGConst.AN_SEND_FILE: { //服务器确认接收文件
+                Message textMsg = ipmsgRes.addObject;
+                Logger.d("接收方确认文件请求,发送的文件为" + textMsg.getMsgContent());
+                showToast("开始发送文件");
+                tcpClient.startSend();
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp, Message.CONTENT_TYPE.FILE);
             }
             break;
 
@@ -597,6 +628,10 @@ public class UDPMessageListener implements Runnable {
     public void removeUnReadPeople(Users people) {
         if (mUnReadPeopleList.contains(people))
             mUnReadPeopleList.remove(people);
+    }
+
+    public void setHandler(Handler mHandler) {
+        this.mHanlder = mHandler;
     }
 
     /**

@@ -39,4 +39,8 @@ public class ConfigIntent {
      */
     public static final int REQUEST_PICK_IMAGE = 0x000300;
 
+    /**
+     * 获取文件
+     */
+    public static final int REQUEST_PICK_FILE = 0x000301;
 }

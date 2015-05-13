@@ -168,23 +168,27 @@ ADDED from AndroidManifest.xml:47:9
 activity#com.zjk.wifiproject.connection.CreateConnectionActivity
 ADDED from AndroidManifest.xml:48:9
 	android:theme
-		ADDED from AndroidManifest.xml:48:90
+		ADDED from AndroidManifest.xml:50:13
 	android:name
-		ADDED from AndroidManifest.xml:48:19
+		ADDED from AndroidManifest.xml:49:13
 activity#com.zjk.wifiproject.connection.ConnectAcivity
-ADDED from AndroidManifest.xml:49:9
-	android:name
-		ADDED from AndroidManifest.xml:49:19
-activity#com.zjk.wifiproject.chat.ChatActivity
-ADDED from AndroidManifest.xml:50:9
-	android:name
-		ADDED from AndroidManifest.xml:50:19
-	android:launchMode
-		ADDED from AndroidManifest.xml:50:72
-activity#com.zjk.wifiproject.picture.AlbumActivity
 ADDED from AndroidManifest.xml:51:9
 	android:name
 		ADDED from AndroidManifest.xml:51:19
+activity#com.zjk.wifiproject.chat.ChatActivity
+ADDED from AndroidManifest.xml:52:9
+	android:name
+		ADDED from AndroidManifest.xml:53:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:54:13
+activity#com.zjk.wifiproject.picture.AlbumActivity
+ADDED from AndroidManifest.xml:55:9
+	android:name
+		ADDED from AndroidManifest.xml:55:19
+activity#com.zjk.wifiproject.file.FileSelectActivity
+ADDED from AndroidManifest.xml:56:9
+	android:name
+		ADDED from AndroidManifest.xml:56:19
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:22.1.1:23:9
 	android:label

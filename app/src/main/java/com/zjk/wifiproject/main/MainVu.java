@@ -30,6 +30,7 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.app.AppFragment;
 import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.connection.CreateConnectionActivity;
+import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.util.A;
@@ -69,7 +70,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
 
 
     private Context context;
-    private BaseApplication application;
     private boolean showAnim = false;
     private List<Fragment> list;
     private Bitmap background;
@@ -77,7 +77,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
         context = inflater.getContext();
-        application = BaseApplication.getInstance();
         view = inflater.inflate(R.layout.vu_main, container, false);
         bindViews();
         setListener();
@@ -317,8 +316,9 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     //------------------------ 隐藏在底部的布局---------------------------------------------
     @Override
     public void addSendFile(WFile sendFile) {
-        application.addSendFiles(sendFile);
-        if (application.getSendFiles().size() == 1) {
+        FileState fs = new FileState(sendFile.getAbsolutePath());
+        BaseApplication.sendFileStates.put(sendFile.getAbsolutePath(), fs);
+        if (BaseApplication.sendFileStates.keySet().size() == 1) {
             showAnim = true;
         } else {//如果已经出现了,就不用再展示出现动画了
             showAnim = false;
@@ -328,7 +328,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
 
     @Override
     public void removeSendFile(WFile sendFile) {
-        application.removeSendFiles(sendFile);
+        BaseApplication.sendFileStates.remove(sendFile.getAbsolutePath());
         handleAnim();
     }
 
@@ -336,7 +336,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
      * 判断当前动画是显示还是关闭
      */
     private void handleAnim() {
-        if (application.getSendFiles().size() > 0) {
+        if (BaseApplication.sendFileStates.keySet().size() > 0) {
             showBottomLayout();
         } else {
             hideBottomLayout();
@@ -358,7 +358,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             va.start();
             hideButtonAnimation();
         }
-        tv_select_size.setText("传输（" + BaseApplication.getInstance().getSendFiles().size() + "）");
+        tv_select_size.setText("传输（" + BaseApplication.sendFileStates.keySet().size() + "）");
         layout_bottom.setVisibility(View.VISIBLE);
     }
 
@@ -375,7 +375,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         });
         va.start();
         showButtonAnimation();
-        application.clearSendFiles();
+        BaseApplication.sendFileStates.clear();
         ((AppFragment) list.get(0)).vu.adapter.notifyDataSetChanged();
 
     }

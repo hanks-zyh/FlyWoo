@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -70,7 +71,6 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return getViewHolder(parent, viewType);
     }
 
-
     /**
      * 创建对应的ViewHolder
      *
@@ -82,6 +82,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         View v = null;
         BaseViewHolder vh = null;
         switch (viewType) {
+            //文本
             case TYPE_SEND_TXT:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_sent_message, parent, false);
@@ -93,7 +94,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         .inflate(R.layout.item_chat_received_message, parent, false);
                 vh = new TextViewHolder(v);
                 break;
-
+            //图片
             case TYPE_SEND_IMAGE:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_sent_image, parent, false);
@@ -105,6 +106,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 vh = new ImageViewHolder(v);
                 break;
 
+            //语音
             case TYPE_SEND_VOICE:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_sent_voice, parent, false);
@@ -114,6 +116,17 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_received_voice, parent, false);
                 vh = new VoiceViewHolder(v);
+                break;
+            //文件
+            case TYPE_SEND_FILE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_send_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+            case TYPE_RECEIVER_FILE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_file, parent, false);
+                vh = new FileViewHolder(v);
                 break;
         }
         return vh;
@@ -165,6 +178,10 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return list.size();
     }
 
+
+    /**
+     * 文本消息的ViewHolder
+     */
     public class TextViewHolder extends BaseViewHolder {
 
         public EmoticonsTextView tv_message;
@@ -187,7 +204,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
         }
     }
-
+    /**
+     * 图片的ViewHolder
+     */
     private class ImageViewHolder extends BaseViewHolder {
         private SimpleDraweeView iv_picture;
         private TextView tv_time;
@@ -209,7 +228,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
         }
     }
-
+    /**
+     * 语音消息的ViewHolder
+     */
     private class VoiceViewHolder extends BaseViewHolder {
         private TextView tv_time, tv_voice_length;
         private View view;
@@ -265,8 +286,6 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             try {
                 mMediaPlayer.setDataSource(filePath);
                 mMediaPlayer.prepare();
-
-//                imgView.setImageResource(R.drawable.voicerecord_stop);
                 startRecordAnimation(item, iv_voice);
                 isPlay = true;
                 mMediaPlayer.start();
@@ -276,7 +295,6 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         if (isPlay) {
-//                            imgView.setImageResource(R.drawable.voicerecord_right);
                             stopRecordAnimation(item, iv_voice);
                             isPlay = false;
                             mMediaPlayer.stop();
@@ -296,7 +314,6 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 isPlay = false;
                 mMediaPlayer.release();
             }
-//            imgView.setImageResource(R.drawable.voicerecord_right);
             stopRecordAnimation(item, iv_voice);
         }
 
@@ -337,6 +354,32 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
         if (anim != null) {
             anim.stop();
+        }
+    }
+
+
+    /**
+     * 文件ViewHolder
+     */
+    private class FileViewHolder extends BaseViewHolder {
+        private TextView tv_time;
+        private ProgressBar progress;
+
+        @Override
+        protected void bindViews(View itemView) {
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            progress = (ProgressBar) itemView.findViewById(R.id.progress);
+        }
+
+        @Override
+        public void update(final int position) {
+            ChatEntity item = list.get(position);
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            progress.setProgress(item.getPercent());
+        }
+
+        public FileViewHolder(View v) {
+            super(v);
         }
     }
 }

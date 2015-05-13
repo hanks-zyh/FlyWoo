@@ -12,6 +12,10 @@ public class ChatEntity {
     private long time;
     private WFile file;
 
+
+
+    private int percent;
+
     /**
      * 是否是自己发出的
      */
@@ -56,5 +60,13 @@ public class ChatEntity {
 
     public void setIsSend(boolean isSend) {
         this.isSend = isSend;
+    }
+
+    public int getPercent() {
+        return percent;
+    }
+
+    public void setPercent(int percent) {
+        this.percent = percent;
     }
 }

@@ -59,4 +59,13 @@ public class IPMSGConst {
 	public static final int AN_SEND_IMAGE            = 0x00000205;  //确认接收图片
 	public static final int NO_SEND_VOICE            = 0x00000206;  //发送语音;
 	public static final int AN_SEND_VOICE            = 0x00000207;  //确认接收语音;
+	public static final int NO_SEND_FILE             = 0x00000208;  //发送文件
+	public static final int AN_SEND_FILE             = 0x00000209;  //确认接收文件
+
+	/**
+	 * Message .what
+	 */
+	public static final int WHAT_FILE_SENDING        = 0x00000400;  //文件发送中;
+	public static final int WHAT_FILE_RECEIVING      = 0x00000401;  //文件接收中;
+
 }

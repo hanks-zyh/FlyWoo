@@ -34,13 +34,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.base.BaseActivity;
 import com.zjk.wifiproject.config.ConfigBroadcast;
 import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.entity.ChatEntity;
+import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.Users;
+import com.zjk.wifiproject.file.FileSelectActivity;
 import com.zjk.wifiproject.picture.AlbumActivity;
 import com.zjk.wifiproject.socket.tcp.TcpClient;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
@@ -63,6 +66,7 @@ import com.zjk.wifiproject.view.emoj.FaceTextUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2015/5/6.
@@ -116,8 +120,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
         bindViews();
         initView();
-        initListener();
         initHandler();
+        initListener();
     }
 
     private void initListener() {
@@ -130,6 +134,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         //初始化消息监听
         udpMessageListener = UDPMessageListener.getInstance(context);
         udpMessageListener.addMsgListener(this);
+        udpMessageListener.setHandler(mHandler);
 //        mID = SessionUtils.getLocalUserID();
 //        mNickName = SessionUtils.getNickname();
         mIMEI = "";
@@ -717,7 +722,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 selectImageFromLocal();
                 break;
             case R.id.tv_location:// 位置
-                selectLocationFromMap();
+//                selectLocationFromMap();
+                startActivityForResult(new Intent(context, FileSelectActivity.class),ConfigIntent.REQUEST_PICK_FILE);
                 break;
             default:
                 break;
@@ -734,6 +740,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         chatMsg.setContent(msg);
         chatMsg.setIsSend(true);
         chatMsg.setType(Message.CONTENT_TYPE.TEXT);
+        chatMsg.setTime(System.currentTimeMillis());
         refreshMessage(chatMsg);
 
         //发送UDP
@@ -757,9 +764,30 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
                     case IPMSGConst.AN_SEND_IMAGE: //
                         break;
+
+                    case IPMSGConst.WHAT_FILE_SENDING: //
+                    case IPMSGConst.WHAT_FILE_RECEIVING: //
+                        FileState fs = (FileState) msg.obj;
+                        updateFileStatus(fs);
+                        break;
                 }
             }
         };
+    }
+
+    /**
+     * 更新界面中文件传输状态
+     * @param fs
+     */
+    private void updateFileStatus(FileState fs) {
+        for(int i=list.size()-1;i>=0;i--){
+            ChatEntity item = list.get(i);
+            if(item.getContent().equals(fs.filePath)){
+                item.setPercent(fs.percent);
+                mAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     /**
@@ -796,6 +824,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //                Message fileMsg = msg.clone();
 //                fileMsg.setMsgContent(FileUtils.getNameByPath(msg.getMsgContent()));
 //                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), fileMsg);
+
+                command.commandNo = IPMSGConst.NO_SEND_FILE;
+                command.addObject = new Message("", nowtime, content, type);
                 break;
         }
 //        mDBOperate.addChattingInfo(mID, mSenderID, nowtime, content, type);
@@ -859,8 +890,27 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         sendImageMessage(s);
                     }
                     break;
+                case ConfigIntent.REQUEST_PICK_FILE:// 当取到值的时候才上传path路径下的图片到服务器
+                    Set<String> files = BaseApplication.sendFileStates.keySet();
+                    for (String filePath : files) {
+                        L.i("文件地址：" + filePath);
+                        sendFileMessage(filePath);
+                    }
+                    break;
             }
         }
+    }
+
+    private void sendFileMessage(String filePath) {
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(filePath);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.FILE);
+        chatMsg.setTime(System.currentTimeMillis());
+        refreshMessage(chatMsg);
+        //发送UDP
+        sendMessage(filePath, Message.CONTENT_TYPE.FILE);
+
     }
 
     /**
@@ -871,10 +921,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * @param @param longtitude
      * @return void
      * @throws
-     * @Title: sendLocationMessage
-     * @Description: TODO
      */
-    private void sendLocationMessage(String address, double latitude, double longtitude) {
+    private void sendLocationMessage(String path) {
 //        if (layout_more.getVisibility() == View.VISIBLE) {
 //            layout_more.setVisibility(View.GONE);
 //            layout_add.setVisibility(View.GONE);
@@ -886,6 +934,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        manager.sendTextMessage(targetUser, message);
 //        // 刷新界面
 //        refreshMessage(message);
+
     }
 
     /**
@@ -1121,9 +1170,15 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 case ConfigIntent.NEW_MSG_TYPE_VOICE:
                     chatMsg.setType(Message.CONTENT_TYPE.VOICE);
                     break;
+                case ConfigIntent.NEW_MSG_TYPE_FILE:
+                    chatMsg.setType(Message.CONTENT_TYPE.FILE);
+                    break;
             }
             refreshMessage(chatMsg);
         }
     }
+
+
+
 
 }

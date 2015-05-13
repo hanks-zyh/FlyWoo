@@ -6,15 +6,15 @@ package com.zjk.wifiproject.entity;
 public class FileState {
     public long fileSize = 0;
     public long currentSize = 0;
-    public String fileName = null;
     public int percent = 0;
     public Message.CONTENT_TYPE type = Message.CONTENT_TYPE.TEXT;
+    public String filePath;
 
     public FileState() {
     }
 
     public FileState(String fileFullPath) {
-        this.fileName = fileFullPath;
+        this.filePath = fileFullPath;
     }
 
     public FileState(String fileFullPath, Message.CONTENT_TYPE type) {
@@ -25,7 +25,7 @@ public class FileState {
     public FileState(long fileSize, long currentSize, String fileName) {
         this.fileSize = fileSize;
         this.currentSize = currentSize;
-        this.fileName = fileName;
+        this.filePath = fileName;
     }
 
     public FileState(long fileSize, long currentSize, String fileName, Message.CONTENT_TYPE type) {

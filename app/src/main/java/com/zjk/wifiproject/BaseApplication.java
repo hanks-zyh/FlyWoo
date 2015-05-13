@@ -9,7 +9,6 @@ import android.os.Vibrator;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.zjk.wifiproject.entity.FileState;
-import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
 
@@ -59,7 +58,6 @@ public class BaseApplication extends Application {
 
 
 
-    private   List<WFile> sendFiles;
     private static  boolean isClient = true;
 
     /**
@@ -83,7 +81,6 @@ public class BaseApplication extends Application {
         sendFileStates = new HashMap<String, FileState>();
         recieveFileStates = new HashMap<String, FileState>();
         mAvatarCache = new HashMap<String, SoftReference<Bitmap>>();
-        sendFiles = new ArrayList<WFile>();
         // ActivitiesManager.init(getApplicationContext()); // 初始化活动管理器
         // L.setLogStatus(isPrintLog); // 设置是否显示日志
 
@@ -93,23 +90,6 @@ public class BaseApplication extends Application {
         initEmoticons();
         initNotification();
         initFolder();
-    }
-
-
-
-    public List<WFile> getSendFiles() {
-        return sendFiles;
-    }
-
-    public void addSendFiles(WFile sendFile) {
-        this.sendFiles.add(sendFile);
-    }
-    public void removeSendFiles(WFile sendFile) {
-        this.sendFiles.remove(sendFile);
-    }
-
-    public void clearSendFiles() {
-        this.sendFiles.clear();
     }
 
     private void initEmoticons() {

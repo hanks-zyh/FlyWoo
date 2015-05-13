@@ -11,6 +11,7 @@ import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.entity.Constant;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
+import com.zjk.wifiproject.socket.udp.IPMSGConst;
 import com.zjk.wifiproject.util.L;
 
 import java.io.BufferedOutputStream;
@@ -223,6 +224,7 @@ public class TcpService implements Runnable {
 
                             case FILE:
                                 android.os.Message msg = mHandler.obtainMessage();
+                                msg.what = IPMSGConst.WHAT_FILE_RECEIVING;
                                 msg.obj = fs;
                                 msg.sendToTarget();
                                 break;
@@ -251,7 +253,9 @@ public class TcpService implements Runnable {
                         type = ConfigIntent.NEW_MSG_TYPE_VOICE;
                         break;
                     case FILE:
+                        type = ConfigIntent.NEW_MSG_TYPE_FILE;
                         android.os.Message msg = mHandler.obtainMessage();
+                        msg.what = IPMSGConst.WHAT_FILE_RECEIVING;
                         fs.percent = 100;
                         msg.obj = fs;
                         msg.sendToTarget();
@@ -260,12 +264,14 @@ public class TcpService implements Runnable {
                     default:
                         break;
                 }
-                BaseApplication.recieveFileStates.remove(fs.fileName);
+                BaseApplication.recieveFileStates.remove(fs.filePath);
 
                 Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
                 intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,type);
-                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT,fileSavePath);
-                mContext.sendBroadcast(intent);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, fileSavePath);
+                if(type !=  ConfigIntent.NEW_MSG_TYPE_FILE) {
+                    mContext.sendBroadcast(intent);
+                }
 
             }
             catch (IOException e) {

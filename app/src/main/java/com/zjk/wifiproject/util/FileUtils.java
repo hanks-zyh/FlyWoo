@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.orhanobut.logger.Logger;
+import com.zjk.wifiproject.entity.FileStyle;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.music.MusicEntity;
 import com.zjk.wifiproject.picture.PictureEntity;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -338,7 +340,7 @@ public class FileUtils {
         }
         List<WFile> list = new ArrayList<>();
         File file = new File(path);
-        if(file.isDirectory()){
+        if(file.exists() && file.isDirectory()){
             for(File f : file.listFiles()){
                 L.d("-----" + f.getAbsolutePath());
                 WFile wf = new WFile(f.getAbsolutePath());
@@ -347,6 +349,7 @@ public class FileUtils {
         }else{
             return  null;
         }
+        Collections.sort(list,new FileStyle());
         return list;
     }
 
