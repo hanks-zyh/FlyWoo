@@ -127,7 +127,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         filter.addAction(ConfigBroadcast.ACTION_NEW_MSG);
         registerReceiver(messageReveiver, filter);
 
-
         //初始化消息监听
         udpMessageListener = UDPMessageListener.getInstance(context);
         udpMessageListener.addMsgListener(this);
@@ -308,10 +307,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * 发送语音消息
      *
      * @param @param localPath
-     * @return void
-     * @throws
-     * @Title: sendImageMessage
-     * @Description: TODO
      */
     private void sendVoiceMessage(String local, int length) {
         ChatEntity chatMsg = new ChatEntity();
@@ -346,12 +341,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 初始化语音动画资源
-     *
      * @param
-     * @return void
-     * @throws
      * @Title: initVoiceAnimRes
-     * @Description: TODO
      */
     private void initVoiceAnimRes() {
         drawable_Anims = new Drawable[]{context.getResources().getDrawable(R.drawable.chat_icon_voice2),
@@ -755,20 +746,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
                     case IPMSGConst.NO_SEND_TXT: //接收到文本消息
-
                         break;
 
                     case IPMSGConst.AN_SEND_TXT:
                         //消除progress
-
                         break;
 
                     case IPMSGConst.NO_SEND_IMAGE: //客户端发送图片的请求
-
                         break;
 
                     case IPMSGConst.AN_SEND_IMAGE: //
-
                         break;
                 }
             }
@@ -961,7 +948,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         .showSoftInput(edit_user_comment, 0);
         }
     }
-//
+
+    //
 //    @Override
 //    protected void onResume() {
 //
@@ -975,23 +963,23 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        // 清空消息未读数-这个要在刷新之后
 //        MyMessageReceiver.mNewNum = 0;
 //    }
+/*
+    @Override
+    protected void onPause() {
 
-//    @Override
-//    protected void onPause() {
-//
-//        super.onPause();
-//        MyMessageReceiver.ehList.remove(this);// 监听推送的消息
-//        // 停止录音
-//        if (recordManager.isRecording()) {
-//            recordManager.cancelRecording();
-//            layout_record.setVisibility(View.GONE);
-//        }
-//        // 停止播放录音
-//        if (NewRecordPlayClickListener.isPlaying && NewRecordPlayClickListener.currentPlayListener != null) {
-//            NewRecordPlayClickListener.currentPlayListener.stopPlayRecord();
-//        }
+        super.onPause();
+        MyMessageReceiver.ehList.remove(this);// 监听推送的消息
+        // 停止录音
+        if (recordManager.isRecording()) {
+            recordManager.cancelRecording();
+            layout_record.setVisibility(View.GONE);
+        }
+        // 停止播放录音
+        if (NewRecordPlayClickListener.isPlaying && NewRecordPlayClickListener.currentPlayListener != null) {
+            NewRecordPlayClickListener.currentPlayListener.stopPlayRecord();
+        }
 
-    //    }
+        }*/
     public static final int NEW_MESSAGE = 0x001;// 收到消息
 
     NewBroadcastReceiver receiver;
@@ -1108,24 +1096,22 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 .getSystemService(Activity.INPUT_METHOD_SERVICE));
         if (((Activity) context).getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (((Activity) context).getCurrentFocus() != null)
-                manager.hideSoftInputFromWindow(((Activity) context).getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                manager.hideSoftInputFromWindow(((Activity) context).getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
-
 
     public class MessageReveiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            int type = intent.getIntExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,ConfigIntent.NEW_MSG_TYPE_TXT);//默认是TXT
+            int type = intent.getIntExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_TXT);//默认是TXT
             String content = intent.getExtras().getString(ConfigIntent.EXTRA_NEW_MSG_CONTENT);
 
             ChatEntity chatMsg = new ChatEntity();
             chatMsg.setIsSend(false);
             chatMsg.setContent(content);
             chatMsg.setTime(System.currentTimeMillis());
-            switch (type){
+            switch (type) {
                 case ConfigIntent.NEW_MSG_TYPE_TXT:
                     chatMsg.setType(Message.CONTENT_TYPE.TEXT);
                     break;

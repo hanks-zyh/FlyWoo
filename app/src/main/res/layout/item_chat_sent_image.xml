@@ -70,14 +70,7 @@
             android:textSize="12sp"
             android:visibility="invisible" />
 
-        <ProgressBar
-            android:id="@+id/progress_load"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_picture"
-            android:visibility="visible" />
+
     </RelativeLayout>
 
 </LinearLayout>

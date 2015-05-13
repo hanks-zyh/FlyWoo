@@ -2,7 +2,7 @@ package com.zjk.wifiproject.entity;
 
 /**
  * 消息实体类
- * 
+ *
  * @author _Hill3
  */
 public class Message extends Entity {
@@ -12,6 +12,16 @@ public class Message extends Entity {
     private String msgContent;
     private CONTENT_TYPE contentType;
     private int percent;
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    private int length;
 
 
     public Message(String paramSenderIMEI, String paramSendTime, String paramMsgContent,
@@ -32,7 +42,7 @@ public class Message extends Entity {
 
     /**
      * 获取消息发送方IMEI
-     * 
+     *
      * @return
      */
 
@@ -42,9 +52,9 @@ public class Message extends Entity {
 
     /**
      * 设置消息发送方IMEI
-     * 
+     *
      * @param paramSenderIMEI
-     * 
+     *
      */
     public void setSenderIMEI(String paramSenderIMEI) {
         this.senderIMEI = paramSenderIMEI;
@@ -52,7 +62,7 @@ public class Message extends Entity {
 
     /**
      * 获取消息内容类型
-     * 
+     *
      * @return
      * @see CONTENT_TYPE
      */
@@ -62,7 +72,7 @@ public class Message extends Entity {
 
     /**
      * 设置消息内容类型
-     * 
+     *
      * @param paramContentType
      * @see CONTENT_TYPE
      */
@@ -72,7 +82,7 @@ public class Message extends Entity {
 
     /**
      * 获取消息发送时间
-     * 
+     *
      * @return
      */
     public String getSendTime() {
@@ -81,7 +91,7 @@ public class Message extends Entity {
 
     /**
      * 设置消息发送时间
-     * 
+     *
      * @param paramSendTime
      *            发送时间,格式 xx年xx月xx日 xx:xx:xx
      */
@@ -91,7 +101,7 @@ public class Message extends Entity {
 
     /**
      * 获取消息内容
-     * 
+     *
      * @return
      */
     public String getMsgContent() {
@@ -100,7 +110,7 @@ public class Message extends Entity {
 
     /**
      * 设置消息内容
-     * 
+     *
      * @param paramMsgContent
      */
     public void setMsgContent(String paramMsgContent) {
@@ -109,7 +119,7 @@ public class Message extends Entity {
 
     /**
      * 克隆对象
-     * 
+     *
      * @param
      */
 

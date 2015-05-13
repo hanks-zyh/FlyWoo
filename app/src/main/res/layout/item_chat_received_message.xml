@@ -26,11 +26,12 @@
             android:background="@drawable/superman_1"
             android:scaleType="fitXY" />
 
-        <TextView
+        <com.zjk.wifiproject.view.emoj.EmoticonsTextView
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="@dimen/margin_chat_top"
             android:layout_toRightOf="@id/iv_avatar"
             android:background="@drawable/chat_left_qp"

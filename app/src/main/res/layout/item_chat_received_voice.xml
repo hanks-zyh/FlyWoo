@@ -60,14 +60,6 @@
             android:layout_toRightOf="@id/layout_voice"
             android:gravity="center" />
 
-        <ProgressBar
-            android:id="@+id/progress_load"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/layout_voice"
-            android:visibility="invisible" />
     </RelativeLayout>
 
 </LinearLayout>

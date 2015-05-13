@@ -278,11 +278,12 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
      * @param data
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK){
+        /*if(resultCode == Activity.RESULT_OK){
             if(requestCode == ConfigIntent.REQUEST_SHOW_CREATE){
                 shakeButtonAnimation();
             }
-        }
+        }*/
+        shakeButtonAnimation();
     }
 
 

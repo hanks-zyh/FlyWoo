@@ -11,6 +11,7 @@ public class ChatEntity {
     private String content;
     private long time;
     private WFile file;
+
     /**
      * 是否是自己发出的
      */
@@ -31,6 +32,7 @@ public class ChatEntity {
     public void setContent(String content) {
         this.content = content;
     }
+
 
     public long getTime() {
         return time;

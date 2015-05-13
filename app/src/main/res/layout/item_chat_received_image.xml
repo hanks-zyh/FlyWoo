@@ -42,14 +42,7 @@
             android:background="@drawable/chat_left_qp"
             android:scaleType="fitXY" />
         
-        <ProgressBar
-            android:id="@+id/progress_load"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/iv_picture"
-            android:visibility="visible" />
+
         
     </RelativeLayout>
 
