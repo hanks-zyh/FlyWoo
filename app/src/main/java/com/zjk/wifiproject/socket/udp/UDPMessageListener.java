@@ -226,6 +226,24 @@ public class UDPMessageListener implements Runnable {
                 sendUDPdata(command);
             }
             break;
+
+            case IPMSGConst.NO_SEND_VEDIO: { //发送视频
+                Logger.i("客户端发送视频请求");
+                showToast("客户端发送视频请求");
+
+                tcpService.setSavePath(BaseApplication.VEDIO_PATH);
+                tcpService.startReceive();
+
+                IPMSGProtocol command = getConfirmCommand(IPMSGConst.AN_SEND_VEDIO, ipmsgRes.targetIP, senderIp);
+                command.addObject = ipmsgRes.addObject;
+                sendUDPdata(command);
+
+                Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_VEDIO);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, ipmsgRes.addObject.getMsgContent());
+                mContext.sendBroadcast(intent);
+            }
+            break;
             case IPMSGConst.NO_SEND_FILE: { //发送文件
                 Logger.i("客户端发送文件请求");
                 showToast("客户端发送文件请求");
@@ -273,6 +291,14 @@ public class UDPMessageListener implements Runnable {
             }
             break;
 
+            case IPMSGConst.AN_SEND_VEDIO: { //服务器确认接收视频
+                Message textMsg = ipmsgRes.addObject;
+                Logger.d("接收方确认文件请求,发送的文件为" + textMsg.getMsgContent());
+                showToast("开始发送文件");
+                tcpClient.startSend();
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp, Message.CONTENT_TYPE.VEDIO);
+            }
+            break;
             case IPMSGConst.AN_SEND_FILE: { //服务器确认接收文件
                 Message textMsg = ipmsgRes.addObject;
                 Logger.d("接收方确认文件请求,发送的文件为" + textMsg.getMsgContent());

@@ -179,9 +179,11 @@ public class TcpClient implements Runnable {
                     switch (type) {
                         case IMAGE:
                             break;
-
                         case VOICE:
                             break;
+                        case VEDIO:
+                        case MUSIC:
+                        case APK:
                         case FILE:
                             android.os.Message msg = mHandler.obtainMessage();
                             msg.what = IPMSGConst.WHAT_FILE_SENDING;
@@ -216,7 +218,9 @@ public class TcpClient implements Runnable {
                         UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, target_IP, voiceMsg);
                         L.d(TAG, "语音发送完毕");
                         break;*/
-
+                    case VEDIO:
+                    case MUSIC:
+                    case APK:
                     case FILE:
                         android.os.Message msg = mHandler.obtainMessage();
                         msg.what = IPMSGConst.WHAT_FILE_SENDING;

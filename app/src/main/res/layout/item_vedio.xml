@@ -51,16 +51,6 @@
         android:textColor="@color/text_colot_2"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="选择"
-        android:textColor="@color/text_colot_2"
-        android:textSize="14sp"
-        android:visibility="gone" />
 
     <TextView
         android:id="@+id/vedioName"

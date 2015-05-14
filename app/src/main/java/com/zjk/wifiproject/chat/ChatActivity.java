@@ -57,6 +57,7 @@ import com.zjk.wifiproject.util.GsonUtils;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.T;
 import com.zjk.wifiproject.util.WifiUtils;
+import com.zjk.wifiproject.vedio.VedioSelectActivity;
 import com.zjk.wifiproject.view.emoj.EmoViewPagerAdapter;
 import com.zjk.wifiproject.view.emoj.EmoteAdapter;
 import com.zjk.wifiproject.view.emoj.EmoticonsEditText;
@@ -715,23 +716,46 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 sendTextMessage(msg);
                 break;
 
-
-
             case R.id.tv_apk:// apk
+                selectApkFromLocal();
                 break;
             case R.id.tv_picture:// 图片
                 selectImageFromLocal();
                 break;
             case R.id.tv_file:// 文件
-                startActivityForResult(new Intent(context, FileSelectActivity.class),ConfigIntent.REQUEST_PICK_FILE);
+                startActivityForResult(new Intent(context, FileSelectActivity.class), ConfigIntent.REQUEST_PICK_FILE);
                 break;
             case R.id.tv_music://音乐
+                selectMusicFromLocal();
                 break;
             case R.id.tv_vedio://视频
+                selectVedioFromLocal();
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 选择视频
+     */
+    private void selectVedioFromLocal() {
+
+        startActivityForResult(new Intent(context, VedioSelectActivity.class), ConfigIntent.REQUEST_PICK_VEDIO);
+    }
+
+    /**
+     * 选择音乐
+     */
+    private void selectMusicFromLocal() {
+        startActivityForResult(new Intent(context, FileSelectActivity.class), ConfigIntent.REQUEST_PICK_MUSIC);
+    }
+
+    /**
+     * 选择apk上传
+     */
+    private void selectApkFromLocal() {
+        startActivityForResult(new Intent(context, FileSelectActivity.class), ConfigIntent.REQUEST_PICK_APK);
     }
 
     /**
@@ -749,6 +773,20 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
         //发送UDP
         sendMessage(msg, Message.CONTENT_TYPE.TEXT);
+    }
+    /**
+     * 发送视频消息
+     */
+    private void sendVedioMessage(String path) {
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(path);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.VEDIO);
+        chatMsg.setTime(System.currentTimeMillis());
+        refreshMessage(chatMsg);
+
+        //发送UDP
+        sendMessage(path, Message.CONTENT_TYPE.VEDIO);
     }
 
     private void initHandler() {
@@ -791,11 +829,23 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             String fileName0 = item.getContent().substring(item.getContent().lastIndexOf("/") + 1);
             String fileName1 =fs.filePath.substring(fs.filePath.lastIndexOf("/") + 1);
 
-            if(item.getType().equals(Message.CONTENT_TYPE.FILE) && fileName0.equals(fileName1)) {
-                item.setPercent(fs.percent);
-                item.setContent(fs.filePath);
-                mAdapter.notifyDataSetChanged();
-                break;
+            switch (item.getType()){
+                case TEXT:
+                    break;
+                case IMAGE:
+                    break;
+                case VOICE:
+                    break;
+                case VEDIO:
+                case MUSIC:
+                case APK:
+                case FILE:
+                    if(fileName0.equals(fileName1)){
+                        item.setPercent(fs.percent);
+                        item.setContent(fs.filePath);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                    break;
             }
         }
     }
@@ -825,6 +875,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 command.commandNo = IPMSGConst.NO_SEND_IMAGE;
                 command.addObject = new Message("", nowtime, content, type);
                 break;
+            case VEDIO:
+//              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_IMAGE_DATA, mChatUser.getIpaddress());
+                command.commandNo = IPMSGConst.NO_SEND_VEDIO;
+                command.addObject = new Message("", nowtime, content, type);
+                break;
             case VOICE:
 //              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_VOICE_DATA, mChatUser.getIpaddress());
                 command.commandNo = IPMSGConst.NO_SEND_VOICE;
@@ -834,7 +889,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //                Message fileMsg = msg.clone();
 //                fileMsg.setMsgContent(FileUtils.getNameByPath(msg.getMsgContent()));
 //                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), fileMsg);
-
                 command.commandNo = IPMSGConst.NO_SEND_FILE;
                 command.addObject = new Message("", nowtime, content, type);
                 break;
@@ -893,14 +947,20 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ConfigIntent.REQUEST_PICK_IMAGE:// 当取到值的时候才上传path路径下的图片到服务器
-
                     List<String> images = data.getStringArrayListExtra(AlbumActivity.INTENT_SELECTED_PICTURE);
                     for (String s : images) {
                         L.i("本地图片的地址：" + s);
                         sendImageMessage(s);
                     }
                     break;
-                case ConfigIntent.REQUEST_PICK_FILE:// 当取到值的时候才上传path路径下的图片到服务器
+                case ConfigIntent.REQUEST_PICK_VEDIO:// 选取过视频回来
+                    Set<String> files0 = BaseApplication.sendFileStates.keySet();
+                    for (String filePath : files0) {
+                        L.i("文件地址：" + filePath);
+                        sendVedioMessage(filePath);
+                    }
+                    break;
+                case ConfigIntent.REQUEST_PICK_FILE:// 选取过文件回来
                     Set<String> files = BaseApplication.sendFileStates.keySet();
                     for (String filePath : files) {
                         L.i("文件地址：" + filePath);
@@ -1182,6 +1242,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     break;
                 case ConfigIntent.NEW_MSG_TYPE_FILE:
                     chatMsg.setType(Message.CONTENT_TYPE.FILE);
+                    break;
+                case ConfigIntent.NEW_MSG_TYPE_VEDIO:
+                    chatMsg.setType(Message.CONTENT_TYPE.VEDIO);
                     break;
             }
             refreshMessage(chatMsg);

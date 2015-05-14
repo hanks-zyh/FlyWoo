@@ -189,6 +189,10 @@ activity#com.zjk.wifiproject.file.FileSelectActivity
 ADDED from AndroidManifest.xml:56:9
 	android:name
 		ADDED from AndroidManifest.xml:56:19
+activity#com.zjk.wifiproject.vedio.VedioSelectActivity
+ADDED from AndroidManifest.xml:57:9
+	android:name
+		ADDED from AndroidManifest.xml:57:19
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:22.1.1:23:9
 	android:label

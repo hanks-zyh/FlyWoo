@@ -9,6 +9,8 @@ import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +31,8 @@ public class VedioAdapterVu implements Vu {
     private TextView mVedioName;
     private Context context;
     private Map<String, Bitmap> vedioThrmuils = new HashMap<>();
+    private CheckBox mIsSelect;
+
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -41,7 +45,7 @@ public class VedioAdapterVu implements Vu {
         mVedio = (ImageView) view.findViewById(R.id.vedio);
         mDuration = (TextView) view.findViewById(R.id.duration);
         mVedioSize = (TextView) view.findViewById(R.id.vedioSize);
-        mSelect = (TextView) view.findViewById(R.id.select);
+        mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
         mVedioName = (TextView) view.findViewById(R.id.vedioName);
     }
 
@@ -121,6 +125,13 @@ public class VedioAdapterVu implements Vu {
         mDuration.setText(formatTime((int) (duration / 1000)));
     }
 
+
+    public void setOnCheckedChangeListener (CompoundButton.OnCheckedChangeListener listener){
+        mIsSelect.setOnCheckedChangeListener(listener);
+    }
+
+
+
     public Bitmap getVideoThumbnail(String filePath) {
         Bitmap bitmap = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -152,4 +163,6 @@ public class VedioAdapterVu implements Vu {
         minute %= 60;
         return String.format("%02d:%02d", minute, second);
     }
+
+
 }

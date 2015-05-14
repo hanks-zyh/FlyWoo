@@ -43,6 +43,9 @@ public class BaseApplication extends Application {
     public static String IMAG_PATH;
     public static String THUMBNAIL_PATH;
     public static String VOICE_PATH;
+    public static String VEDIO_PATH;
+    public static String APK_PATH;
+    public static String MUSIC_PATH;
     public static String FILE_PATH;
     public static String SAVE_PATH;
     public static String CAMERA_IMAGE_PATH;
@@ -137,6 +140,9 @@ public class BaseApplication extends Application {
             THUMBNAIL_PATH = SAVE_PATH + File.separator + "thumbnail";
             VOICE_PATH = SAVE_PATH + File.separator + "voice";
             FILE_PATH = SAVE_PATH + File.separator + "file";
+            VEDIO_PATH = SAVE_PATH + File.separator + "vedio";
+            APK_PATH = SAVE_PATH + File.separator + "apk";
+            MUSIC_PATH = SAVE_PATH + File.separator + "music";
             CAMERA_IMAGE_PATH = IMAG_PATH + File.separator;
             if (!FileUtils.isFileExists(IMAG_PATH))
                 FileUtils.createDirFile(BaseApplication.IMAG_PATH);
@@ -144,6 +150,12 @@ public class BaseApplication extends Application {
                 FileUtils.createDirFile(BaseApplication.THUMBNAIL_PATH);
             if (!FileUtils.isFileExists(VOICE_PATH))
                 FileUtils.createDirFile(BaseApplication.VOICE_PATH);
+            if (!FileUtils.isFileExists(VEDIO_PATH))
+                FileUtils.createDirFile(BaseApplication.VEDIO_PATH);
+            if (!FileUtils.isFileExists(APK_PATH))
+                FileUtils.createDirFile(BaseApplication.APK_PATH);
+            if (!FileUtils.isFileExists(MUSIC_PATH))
+                FileUtils.createDirFile(BaseApplication.MUSIC_PATH);
             if (!FileUtils.isFileExists(FILE_PATH))
                 FileUtils.createDirFile(BaseApplication.FILE_PATH);
 

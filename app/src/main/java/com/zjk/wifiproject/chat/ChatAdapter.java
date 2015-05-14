@@ -120,6 +120,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         .inflate(R.layout.item_chat_received_voice, parent, false);
                 vh = new VoiceViewHolder(v);
                 break;
+
             //文件
             case TYPE_SEND_FILE:
                 v = LayoutInflater.from(parent.getContext())
@@ -127,6 +128,41 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 vh = new FileViewHolder(v);
                 break;
             case TYPE_RECEIVER_FILE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+
+            //视频
+            case TYPE_SEND_VEDIO:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_send_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+            case TYPE_RECEIVER_VEDIO:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+
+            //音乐
+            case TYPE_SEND_MUSIC:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_send_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+            case TYPE_RECEIVER_MUSIC:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_received_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+            //APK
+            case TYPE_SEND_APK:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_chat_send_file, parent, false);
+                vh = new FileViewHolder(v);
+                break;
+            case TYPE_RECEIVER_APK:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_chat_received_file, parent, false);
                 vh = new FileViewHolder(v);
@@ -160,15 +196,15 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             case VOICE:
                 type = msg.isSend() ? TYPE_SEND_VOICE : TYPE_RECEIVER_VOICE;
                 break;
-//            case MUSIC:
-//                type = msg.isSend() ? TYPE_SEND_MUSIC : TYPE_RECEIVER_MUSIC;
-//                break;
-//            case VEDIO:
-//                type = msg.isSend() ? TYPE_SEND_VEDIO : TYPE_RECEIVER_VEDIO;
-//                break;
-//            case APK:
-//                type = msg.isSend() ? TYPE_SEND_APK : TYPE_RECEIVER_APK;
-//                break;
+            case VEDIO:
+                type = msg.isSend() ? TYPE_SEND_VEDIO : TYPE_RECEIVER_VEDIO;
+                break;
+            case MUSIC:
+                type = msg.isSend() ? TYPE_SEND_MUSIC : TYPE_RECEIVER_MUSIC;
+                break;
+            case APK:
+                type = msg.isSend() ? TYPE_SEND_APK : TYPE_RECEIVER_APK;
+                break;
             case FILE:
                 type = msg.isSend() ? TYPE_SEND_FILE : TYPE_RECEIVER_FILE;
                 break;
@@ -367,6 +403,57 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private class FileViewHolder extends BaseViewHolder {
         private TextView tv_time,fileName,fileSize;
         private ProgressBar progress;
+        private ImageView fileTpye;
+
+        @Override
+        protected void bindViews(View itemView) {
+            fileTpye = (ImageView) itemView.findViewById(R.id.fileTpye);
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            progress = (ProgressBar) itemView.findViewById(R.id.progress);
+            fileSize = (TextView) itemView.findViewById(R.id.fileSize);
+            fileName = (TextView) itemView.findViewById(R.id.fileName);
+        }
+
+        @Override
+        public void update(final int position) {
+            ChatEntity item = list.get(position);
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            progress.setProgress(item.getPercent());
+            File f = new File(item.getContent());
+            if(f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+                fileName.setText(f.getName());
+            }else {
+                Logger.e("文件不存在:"+item.getContent());
+            }
+
+            switch (item.getType()){
+                case FILE:
+                    fileTpye.setImageResource(R.drawable.item_file);
+                    break;
+                case MUSIC:
+                    fileTpye.setImageResource(R.drawable.item_music);
+                    break;
+                case VEDIO:
+                    fileTpye.setImageResource(R.drawable.item_vedio);
+                    break;
+                case APK:
+                    fileTpye.setImageResource(R.drawable.item_apk);
+                    break;
+            }
+        }
+
+        public FileViewHolder(View v) {
+            super(v);
+        }
+    }
+
+    /**
+     * 文件ViewHolder
+     */
+    private class VedioViewHolder extends BaseViewHolder {
+        private TextView tv_time,fileName,fileSize;
+        private ProgressBar progress;
 
         @Override
         protected void bindViews(View itemView) {
@@ -389,8 +476,69 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 Logger.e("文件不存在:"+item.getContent());
             }
         }
+        public VedioViewHolder(View v) {
+            super(v);
+        }
+    }    /**
+     * 文件ViewHolder
+     */
+    private class MusicViewHolder extends BaseViewHolder {
+        private TextView tv_time,fileName,fileSize;
+        private ProgressBar progress;
 
-        public FileViewHolder(View v) {
+        @Override
+        protected void bindViews(View itemView) {
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            progress = (ProgressBar) itemView.findViewById(R.id.progress);
+            fileSize = (TextView) itemView.findViewById(R.id.fileSize);
+            fileName = (TextView) itemView.findViewById(R.id.fileName);
+        }
+
+        @Override
+        public void update(final int position) {
+            ChatEntity item = list.get(position);
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            progress.setProgress(item.getPercent());
+            File f = new File(item.getContent());
+            if(f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+                fileName.setText(f.getName());
+            }else {
+                Logger.e("文件不存在:"+item.getContent());
+            }
+        }
+        public MusicViewHolder(View v) {
+            super(v);
+        }
+    }    /**
+     * 文件ViewHolder
+     */
+    private class ApkViewHolder extends BaseViewHolder {
+        private TextView tv_time,fileName,fileSize;
+        private ProgressBar progress;
+
+        @Override
+        protected void bindViews(View itemView) {
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            progress = (ProgressBar) itemView.findViewById(R.id.progress);
+            fileSize = (TextView) itemView.findViewById(R.id.fileSize);
+            fileName = (TextView) itemView.findViewById(R.id.fileName);
+        }
+
+        @Override
+        public void update(final int position) {
+            ChatEntity item = list.get(position);
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            progress.setProgress(item.getPercent());
+            File f = new File(item.getContent());
+            if(f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+                fileName.setText(f.getName());
+            }else {
+                Logger.e("文件不存在:"+item.getContent());
+            }
+        }
+        public ApkViewHolder(View v) {
             super(v);
         }
     }

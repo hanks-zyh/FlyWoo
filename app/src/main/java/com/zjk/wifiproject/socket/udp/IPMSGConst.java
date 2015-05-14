@@ -61,6 +61,8 @@ public class IPMSGConst {
 	public static final int AN_SEND_VOICE            = 0x00000207;  //确认接收语音;
 	public static final int NO_SEND_FILE             = 0x00000208;  //发送文件
 	public static final int AN_SEND_FILE             = 0x00000209;  //确认接收文件
+	public static final int NO_SEND_VEDIO            = 0x0000020a;  //发送视频
+	public static final int AN_SEND_VEDIO            = 0x0000020b;  //确认接收发送视频
 
 	/**
 	 * Message .what

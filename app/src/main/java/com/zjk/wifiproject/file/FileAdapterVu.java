@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
-import com.zjk.wifiproject.entity.FileState;
+import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.presenters.Vu;
 
@@ -47,8 +46,6 @@ public class FileAdapterVu implements Vu {
         mTimeSize = (TextView) view.findViewById(R.id.timeSize);
         mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
 
-
-        mIsSelect.setOnCheckedChangeListener(new OnFileCheckListener());
     }
 
 
@@ -59,6 +56,7 @@ public class FileAdapterVu implements Vu {
 
     public void setFileIcon(WFile file) {
         this.file = file;
+        mIsSelect.setOnCheckedChangeListener(new OnFileCheckListener(file, Message.CONTENT_TYPE.FILE));
         if (file.isDirectory()) {
             mFileIcon.setImageResource(R.drawable.ic_folder);
         } else {
@@ -80,15 +78,4 @@ public class FileAdapterVu implements Vu {
         }
     }
 
-    private class OnFileCheckListener implements CompoundButton.OnCheckedChangeListener {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked) {
-                FileState fs = new FileState(file.getAbsolutePath());
-                BaseApplication.sendFileStates.put(file.getAbsolutePath(), fs);
-            } else {
-                BaseApplication.sendFileStates.remove(file.getAbsolutePath());
-            }
-        }
-    }
 }

@@ -32,6 +32,9 @@ public class ConfigIntent {
     public static final int NEW_MSG_TYPE_IMAGE = 0x402;
     public static final int NEW_MSG_TYPE_VOICE = 0x403;
     public static final int NEW_MSG_TYPE_FILE  = 0x404;
+    public static final int NEW_MSG_TYPE_VEDIO = 0x405;
+    public static final int NEW_MSG_TYPE_MUSIC = 0x406;
+    public static final int NEW_MSG_TYPE_APK   = 0x407;
 
 
     /**
@@ -42,5 +45,8 @@ public class ConfigIntent {
     /**
      * 获取文件
      */
-    public static final int REQUEST_PICK_FILE = 0x000301;
+    public static final int REQUEST_PICK_FILE   = 0x000301;
+    public static final int REQUEST_PICK_APK    = 0x000302;
+    public static final int REQUEST_PICK_MUSIC  = 0x000303;
+    public static final int REQUEST_PICK_VEDIO  = 0x000304;
 }

@@ -154,7 +154,7 @@ public class TcpService implements Runnable {
         private DataInputStream dataInput;
         private byte[] mBuffer = new byte[Constant.READ_BUFFER_SIZE];// 声明接收数组
         private String savePath;
-        private String type[] = { "TEXT", "IMAGE", "FILE", "VOICE" };
+        private String type[] = { "TEXT", "IMAGE", "FILE", "VOICE", "VEDIO", "MUSIC", "APK" };
 
         public SaveFileToDisk(Socket socket) {
             try {
@@ -223,6 +223,9 @@ public class TcpService implements Runnable {
                             case VOICE:
                                 break;
 
+                            case VEDIO:
+                            case MUSIC:
+                            case APK:
                             case FILE:
                                 Logger.i("receiveing:"+fs.percent);
                                 android.os.Message msg = mHandler.obtainMessage();
@@ -271,7 +274,11 @@ public class TcpService implements Runnable {
                 Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
                 intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,type);
                 intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, fileSavePath);
-                if(type !=  ConfigIntent.NEW_MSG_TYPE_FILE) {
+                if(type !=  ConfigIntent.NEW_MSG_TYPE_FILE
+                        && type != ConfigIntent.NEW_MSG_TYPE_VEDIO
+                        && type != ConfigIntent.NEW_MSG_TYPE_MUSIC
+                        && type != ConfigIntent.NEW_MSG_TYPE_APK)
+                {
                     mContext.sendBroadcast(intent);
                 }
 
@@ -292,6 +299,12 @@ public class TcpService implements Runnable {
                 return Message.CONTENT_TYPE.FILE;
             else if (string.equals(type[3]))
                 return Message.CONTENT_TYPE.VOICE;
+            else if (string.equals(type[4]))
+                return Message.CONTENT_TYPE.VEDIO;
+            else if (string.equals(type[5]))
+                return Message.CONTENT_TYPE.MUSIC;
+            else if (string.equals(type[6]))
+                return Message.CONTENT_TYPE.APK;
             return null;
 
         }

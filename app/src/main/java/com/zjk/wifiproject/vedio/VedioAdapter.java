@@ -1,10 +1,12 @@
 package com.zjk.wifiproject.vedio;
 
-import java.util.List;
-
 import android.content.Context;
 
+import com.zjk.wifiproject.entity.Message;
+import com.zjk.wifiproject.file.OnFileCheckListener;
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
+
+import java.util.List;
 
 public class VedioAdapter extends BasePresenterAdapter<VedioEntity, VedioAdapterVu> {
 
@@ -19,6 +21,7 @@ public class VedioAdapter extends BasePresenterAdapter<VedioEntity, VedioAdapter
         vu.setVedioName(item.getDisplayName());
         vu.setVedioSize(item.length());
         vu.setVedioDuration(item.getDuration());
+        vu.setOnCheckedChangeListener(new OnFileCheckListener(item, Message.CONTENT_TYPE.VEDIO));
     }
 
     @Override
@@ -26,4 +29,5 @@ public class VedioAdapter extends BasePresenterAdapter<VedioEntity, VedioAdapter
         return VedioAdapterVu.class;
     }
 
+ 
 }

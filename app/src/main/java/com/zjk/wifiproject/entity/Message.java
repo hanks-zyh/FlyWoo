@@ -37,7 +37,7 @@ public class Message extends Entity {
 
     /** 消息内容类型 **/
     public enum CONTENT_TYPE {
-        TEXT, IMAGE, FILE, VOICE;
+        TEXT, IMAGE, FILE, VOICE, VEDIO, MUSIC,APK;
     }
 
     /**

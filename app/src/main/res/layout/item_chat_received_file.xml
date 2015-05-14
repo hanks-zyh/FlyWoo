@@ -45,8 +45,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/margin_chat_top"
-                android:background="@drawable/ic_file"
-                android:scaleType="fitXY" />
+                android:src="@drawable/ic_file"
+                android:scaleType="centerInside" />
             <TextView
                 android:layout_toRightOf="@+id/fileTpye"
                 android:id="@+id/fileName"
