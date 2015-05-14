@@ -88,7 +88,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private static int MsgPagerNum;
     private LinearLayout layout_more, layout_emo, layout_add;
     private ViewPager pager_emo;
-    private TextView tv_picture, tv_camera, tv_location;
+    private TextView tv_picture, tv_apk, tv_music,tv_vedio,tv_file;
 
     // 语音有关
     private RelativeLayout layout_record;
@@ -143,7 +143,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        mSenderID = mDBOperate.getIDByIMEI(mChatUser.getIMEI());
 
 //        Logger.d(mChatUser.toString());
-        Logger.d(mChatUser.getIpaddress());
+//        Logger.d(mChatUser.getIpaddress());
 
     }
 
@@ -154,6 +154,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             unregisterReceiver(messageReveiver);
             messageReveiver = null;
         }
+        udpMessageListener.removeMsgListener(this);
     }
 
     private void initView() {
@@ -453,11 +454,15 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      */
     private void initAddView() {
         tv_picture = (TextView) findViewById(R.id.tv_picture);
-        tv_camera = (TextView) findViewById(R.id.tv_camera);
-        tv_location = (TextView) findViewById(R.id.tv_location);
+        tv_apk = (TextView) findViewById(R.id.tv_apk);
+        tv_music = (TextView) findViewById(R.id.tv_music);
+        tv_vedio = (TextView) findViewById(R.id.tv_vedio);
+        tv_file = (TextView) findViewById(R.id.tv_file);
         tv_picture.setOnClickListener(this);
-        tv_location.setOnClickListener(this);
-        tv_camera.setOnClickListener(this);
+        tv_apk.setOnClickListener(this);
+        tv_music.setOnClickListener(this);
+        tv_vedio.setOnClickListener(this);
+        tv_file.setOnClickListener(this);
     }
 
     private List<FaceText> emos;
@@ -708,22 +713,21 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     return;
                 }
                 sendTextMessage(msg);
-//                // 组装BmobMessage对象
-//                BmobMsg message = BmobMsg.createTextSendMsg(this, targetId, msg);
-//                // 默认发送完成，将数据保存到本地消息表和最近会话表中
-//                manager.sendTextMessage(targetUser, message);
-                // 刷新界面
-//                refreshMessage(message);
                 break;
-            case R.id.tv_camera:// 拍照
-                selectImageFromCamera();
+
+
+
+            case R.id.tv_apk:// apk
                 break;
             case R.id.tv_picture:// 图片
                 selectImageFromLocal();
                 break;
-            case R.id.tv_location:// 位置
-//                selectLocationFromMap();
+            case R.id.tv_file:// 文件
                 startActivityForResult(new Intent(context, FileSelectActivity.class),ConfigIntent.REQUEST_PICK_FILE);
+                break;
+            case R.id.tv_music://音乐
+                break;
+            case R.id.tv_vedio://视频
                 break;
             default:
                 break;
@@ -765,9 +769,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     case IPMSGConst.AN_SEND_IMAGE: //
                         break;
 
-                    case IPMSGConst.WHAT_FILE_SENDING: //
                     case IPMSGConst.WHAT_FILE_RECEIVING: //
+                    case IPMSGConst.WHAT_FILE_SENDING: //
                         FileState fs = (FileState) msg.obj;
+                        Logger.i("Handler___receiveing:"+fs.percent);
                         updateFileStatus(fs);
                         break;
                 }
@@ -782,8 +787,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private void updateFileStatus(FileState fs) {
         for(int i=list.size()-1;i>=0;i--){
             ChatEntity item = list.get(i);
-            if(item.getContent().equals(fs.filePath)){
+
+            String fileName0 = item.getContent().substring(item.getContent().lastIndexOf("/") + 1);
+            String fileName1 =fs.filePath.substring(fs.filePath.lastIndexOf("/") + 1);
+
+            if(item.getType().equals(Message.CONTENT_TYPE.FILE) && fileName0.equals(fileName1)) {
                 item.setPercent(fs.percent);
+                item.setContent(fs.filePath);
                 mAdapter.notifyDataSetChanged();
                 break;
             }

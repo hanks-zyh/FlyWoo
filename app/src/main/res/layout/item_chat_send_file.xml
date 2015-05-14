@@ -14,10 +14,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_marginTop="@dimen/margin_chat_top">
 
-        <ImageView
+        <com.zjk.wifiproject.view.CircularImageView
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/base_scrollview_top_height"
             android:layout_height="@dimen/base_scrollview_top_height"
@@ -28,7 +28,7 @@
             android:scaleType="fitXY" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:minWidth="80dp"
@@ -38,11 +38,49 @@
             android:layout_marginLeft="@dimen/margin_chat_top"
             android:layout_toLeftOf="@id/iv_avatar">
 
+            <ImageView
+                android:id="@+id/fileTpye"
+                android:layout_width="@dimen/base_scrollview_top_height"
+                android:layout_height="@dimen/base_scrollview_top_height"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/margin_chat_top"
+                android:background="@drawable/ic_file"
+                android:scaleType="fitXY" />
+            <TextView
+                android:layout_toRightOf="@+id/fileTpye"
+                android:id="@+id/fileName"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_chat_top"
+                android:gravity="left|center"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/text_colot_1"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_toRightOf="@+id/fileTpye"
+                android:id="@+id/fileSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fileName"
+                android:layout_marginLeft="@dimen/margin_chat_top"
+                android:gravity="left|center"
+                android:maxWidth="185.0dip"
+                android:minWidth="80dp"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_colot_2"
+                android:textSize="12sp" />
+
             <ProgressBar
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:max="100"
                 android:id="@+id/progress"
-                android:layout_width="150dp"
-
+                android:layout_width="match_parent"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:indeterminate="false"
                 android:layout_height="8dp" />

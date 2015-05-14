@@ -4,6 +4,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.entity.ChatEntity;
 import com.zjk.wifiproject.util.DateUtils;
 import com.zjk.wifiproject.view.emoj.EmoticonsTextView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -362,13 +365,15 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      * 文件ViewHolder
      */
     private class FileViewHolder extends BaseViewHolder {
-        private TextView tv_time;
+        private TextView tv_time,fileName,fileSize;
         private ProgressBar progress;
 
         @Override
         protected void bindViews(View itemView) {
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
             progress = (ProgressBar) itemView.findViewById(R.id.progress);
+            fileSize = (TextView) itemView.findViewById(R.id.fileSize);
+            fileName = (TextView) itemView.findViewById(R.id.fileName);
         }
 
         @Override
@@ -376,6 +381,13 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             ChatEntity item = list.get(position);
             tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
             progress.setProgress(item.getPercent());
+            File f = new File(item.getContent());
+            if(f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+                fileName.setText(f.getName());
+            }else {
+                Logger.e("文件不存在:"+item.getContent());
+            }
         }
 
         public FileViewHolder(View v) {

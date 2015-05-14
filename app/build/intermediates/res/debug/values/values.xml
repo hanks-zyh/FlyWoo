@@ -959,6 +959,7 @@ All Rights Reserved."</string>
     <string name="mtxx">美图秀秀</string>
     <string name="multi_no_friends">请先连接朋友</string>
     <string name="multi_transfer">传输</string>
+    <string name="music">音乐</string>
     <string name="myxj">美颜相机</string>
     <string name="nana_downloading">下载中</string>
     <string name="nana_experience">下载</string>
@@ -1169,6 +1170,7 @@ All Rights Reserved."</string>
     <string name="user_traffic_storage_status_more_size_hint">立即清理</string>
     <string name="user_traffic_storage_status_no_available_hint_text">空间紧张，建议清理</string>
     <string name="usercard_game_type">休闲对战类游戏</string>
+    <string name="vedio">视频</string>
     <string name="version_about">已经是最新版本</string>
     <string name="version_update">快牙升级</string>
     <string name="version_update_available_for_push_msg">快牙-检测到新版本</string>

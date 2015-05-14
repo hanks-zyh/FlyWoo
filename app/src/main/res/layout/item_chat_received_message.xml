@@ -17,14 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_chat_top" >
 
-        <ImageView
+        <com.zjk.wifiproject.view.CircularImageView
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/base_scrollview_top_height"
             android:layout_height="@dimen/base_scrollview_top_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_top"
-            android:background="@drawable/superman_1"
+            android:background="@drawable/sanpang_1"
             android:scaleType="fitXY" />
 
         <com.zjk.wifiproject.view.emoj.EmoticonsTextView
@@ -38,13 +38,12 @@
             android:background="@drawable/chat_left_qp"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="left|center"
+            android:gravity="left|center_vertical"
             android:lineSpacingExtra="2dp"
             android:maxWidth="225.0dip"
             android:minWidth="50dp"
             android:minHeight="50dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="5dp"
+            android:padding="8dp"
             android:textColor="#ff000000"
             android:textSize="15sp" />
 

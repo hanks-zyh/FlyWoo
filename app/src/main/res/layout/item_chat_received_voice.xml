@@ -17,14 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_chat_top" >
 
-        <ImageView
+        <com.zjk.wifiproject.view.CircularImageView
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/base_scrollview_top_height"
             android:layout_height="@dimen/base_scrollview_top_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_top"
-            android:background="@drawable/superman_1"
+            android:background="@drawable/sanpang_1"
             android:scaleType="fitXY" />
 
         <LinearLayout

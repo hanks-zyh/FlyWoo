@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.config.ConfigBroadcast;
 import com.zjk.wifiproject.config.ConfigIntent;
@@ -223,6 +224,7 @@ public class TcpService implements Runnable {
                                 break;
 
                             case FILE:
+                                Logger.i("receiveing:"+fs.percent);
                                 android.os.Message msg = mHandler.obtainMessage();
                                 msg.what = IPMSGConst.WHAT_FILE_RECEIVING;
                                 msg.obj = fs;

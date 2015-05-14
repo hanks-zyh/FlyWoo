@@ -56,6 +56,7 @@ public class FileSelectActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_select);
+        BaseApplication.sendFileStates.clear();
         bindViews();
         initListView();
         String currentPath  = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -113,6 +114,9 @@ public class FileSelectActivity extends BaseActivity{
         setResult(RESULT_OK);
         Logger.i("选中了"+BaseApplication.sendFileStates.keySet().size()+"个文件");
         T.show(context, "选中了" + BaseApplication.sendFileStates.keySet().size() + "个文件");
+        onBackPressed();
+    }
+    public void back(View view){
         onBackPressed();
     }
 

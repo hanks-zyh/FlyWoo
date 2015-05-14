@@ -2,40 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="4"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
     android:orientation="horizontal" >
-    
-    <TextView 
+
+    <TextView
         android:id="@+id/tv_picture"
         android:layout_width="0dp"
-        android:layout_weight="1.0"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
         android:gravity="center"
-        android:drawableTop="@drawable/btn_chat_add_picture_selector"
+        android:drawableTop="@drawable/ic_pic"
         android:text="@string/picture"
         />
-    <TextView 
-        android:id="@+id/tv_camera"
+    <TextView
+        android:id="@+id/tv_apk"
         android:layout_width="0dp"
         android:layout_weight="1.0"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/btn_chat_add_camera_selector"
-        android:text="@string/camera"
+        android:drawableTop="@drawable/ic_apk"
+        android:text="@string/file_apk"
         />
-    <TextView 
-        android:id="@+id/tv_location"
+    <TextView
+        android:id="@+id/tv_music"
         android:layout_width="0dp"
         android:layout_weight="1.0"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/btn_chat_add_location_selector"
-        android:text="@string/location"
+        android:drawableTop="@drawable/ic_music"
+        android:text="@string/music"
         />
-
+    <TextView
+        android:id="@+id/tv_vedio"
+        android:layout_width="0dp"
+        android:layout_weight="1.0"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_vedio"
+        android:text="@string/vedio"
+        />
+    <TextView
+        android:id="@+id/tv_file"
+        android:layout_width="0dp"
+        android:layout_weight="1.0"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_files"
+        android:text="@string/file"
+        />
 </LinearLayout>

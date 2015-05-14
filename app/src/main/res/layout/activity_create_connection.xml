@@ -21,12 +21,13 @@
             <com.zjk.wifiproject.view.CircularProgress
                 android:id="@+id/circleProgress"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.zjk.wifiproject.view.CircularProgress>
+                android:layout_height="match_parent">
+            </com.zjk.wifiproject.view.CircularProgress>
 
             <TextView
                 android:gravity="center"
                 android:id="@+id/status"
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:text="正在创建热点..."
                 android:layout_marginTop="50dp"
