@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.zjk.wifiproject.vedio;
-
+package com.zjk.wifiproject.app;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.base.BaseActivity;
-import com.zjk.wifiproject.util.FileUtils;
+import com.zjk.wifiproject.util.AppUtils;
 import com.zjk.wifiproject.util.T;
 
 import java.util.ArrayList;
@@ -40,8 +39,8 @@ public class ApkSelectActivity extends BaseActivity {
     private ListView mListView;
 
 
-    private VedioAdapter adapter;
-    private List<VedioEntity> list = new ArrayList<>();
+    private AppGridAdapter adapter;
+    private List<AppEntity> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,7 @@ public class ApkSelectActivity extends BaseActivity {
             public void run() {
                 getDatas();
             }
-        }, 500);
+        }, 100);
     }
 
     private void bindViews() {
@@ -63,13 +62,13 @@ public class ApkSelectActivity extends BaseActivity {
     }
 
     private void initListView() {
-        adapter = new VedioAdapter(context, list);
+        adapter = new AppGridAdapter(context, list);
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new FileItemClickListener());
     }
 
     private void getDatas() {
-        list.addAll(FileUtils.getVedioList(context));
+        list.addAll(AppUtils.getAppList(context));
         adapter.notifyDataSetChanged();
     }
 

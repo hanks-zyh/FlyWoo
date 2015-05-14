@@ -253,10 +253,12 @@ public class TcpService implements Runnable {
                     case IMAGE:
                         type = ConfigIntent.NEW_MSG_TYPE_IMAGE;
                         break;
-
                     case VOICE:
                         type = ConfigIntent.NEW_MSG_TYPE_VOICE;
                         break;
+                    case MUSIC:
+                    case VEDIO:
+                    case APK:
                     case FILE:
                         type = ConfigIntent.NEW_MSG_TYPE_FILE;
                         android.os.Message msg = mHandler.obtainMessage();

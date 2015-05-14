@@ -63,6 +63,10 @@ public class IPMSGConst {
 	public static final int AN_SEND_FILE             = 0x00000209;  //确认接收文件
 	public static final int NO_SEND_VEDIO            = 0x0000020a;  //发送视频
 	public static final int AN_SEND_VEDIO            = 0x0000020b;  //确认接收发送视频
+	public static final int NO_SEND_MUSIC 			 = 0x0000020c;  //发送音乐
+	public static final int AN_SEND_MUSIC 			 = 0x0000020d;  //确认接受音乐
+	public static final int NO_SEND_APK 			 = 0x0000020e;  //发送APK
+	public static final int AN_SEND_APK 			 = 0x0000020f;  //确认接APK
 
 	/**
 	 * Message .what

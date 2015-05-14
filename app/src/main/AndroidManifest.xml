@@ -55,6 +55,8 @@
         <activity android:name="com.zjk.wifiproject.picture.AlbumActivity" />
         <activity android:name="com.zjk.wifiproject.file.FileSelectActivity" />
         <activity android:name="com.zjk.wifiproject.vedio.VedioSelectActivity" />
+        <activity android:name="com.zjk.wifiproject.app.ApkSelectActivity" />
+        <activity android:name="com.zjk.wifiproject.music.MusicSelectActivity" />
     </application>
 
 </manifest>

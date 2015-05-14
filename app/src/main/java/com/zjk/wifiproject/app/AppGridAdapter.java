@@ -11,11 +11,8 @@ import java.util.List;
 
 public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
 
-    private AppVu appVu;
-
-    public AppGridAdapter(AppVu appVu, Context context, List<AppEntity> list) {
+    public AppGridAdapter( Context context, List<AppEntity> list) {
         super(context, list);
-        this.appVu = appVu;
     }
 
     @Override
@@ -30,5 +27,6 @@ public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
         vu.setAppName(item.getAppName());
         vu.setAppSize(Formatter.formatFileSize(context, item.length()));
         vu.setChecked(BaseApplication.sendFileStates.containsKey(item.getAbsolutePath()));
+
     }
 }

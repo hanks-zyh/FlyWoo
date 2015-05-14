@@ -44,6 +44,7 @@ import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.Users;
 import com.zjk.wifiproject.file.FileSelectActivity;
+import com.zjk.wifiproject.music.MusicSelectActivity;
 import com.zjk.wifiproject.picture.AlbumActivity;
 import com.zjk.wifiproject.socket.tcp.TcpClient;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
@@ -748,7 +749,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * 选择音乐
      */
     private void selectMusicFromLocal() {
-        startActivityForResult(new Intent(context, FileSelectActivity.class), ConfigIntent.REQUEST_PICK_MUSIC);
+        startActivityForResult(new Intent(context, MusicSelectActivity.class), ConfigIntent.REQUEST_PICK_MUSIC);
     }
 
     /**
@@ -758,36 +759,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         startActivityForResult(new Intent(context, FileSelectActivity.class), ConfigIntent.REQUEST_PICK_APK);
     }
 
-    /**
-     * 发送文本消息
-     *
-     * @param msg
-     */
-    private void sendTextMessage(String msg) {
-        ChatEntity chatMsg = new ChatEntity();
-        chatMsg.setContent(msg);
-        chatMsg.setIsSend(true);
-        chatMsg.setType(Message.CONTENT_TYPE.TEXT);
-        chatMsg.setTime(System.currentTimeMillis());
-        refreshMessage(chatMsg);
-
-        //发送UDP
-        sendMessage(msg, Message.CONTENT_TYPE.TEXT);
-    }
-    /**
-     * 发送视频消息
-     */
-    private void sendVedioMessage(String path) {
-        ChatEntity chatMsg = new ChatEntity();
-        chatMsg.setContent(path);
-        chatMsg.setIsSend(true);
-        chatMsg.setType(Message.CONTENT_TYPE.VEDIO);
-        chatMsg.setTime(System.currentTimeMillis());
-        refreshMessage(chatMsg);
-
-        //发送UDP
-        sendMessage(path, Message.CONTENT_TYPE.VEDIO);
-    }
 
     private void initHandler() {
         mHandler = new Handler() {
@@ -863,38 +834,29 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         command.targetIP = mChatUser.getIpaddress();
         command.senderIP = WifiUtils.getLocalIPAddress();
         command.packetNo = new Date().getTime() + "";
+        command.addObject = new Message("", nowtime, content, type);
 
         switch (type) {
             case TEXT:
-//                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), msg);
                 command.commandNo = IPMSGConst.NO_SEND_TXT;
-                command.addObject = new Message("", nowtime, content, type);
                 break;
             case IMAGE:
-//              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_IMAGE_DATA, mChatUser.getIpaddress());
                 command.commandNo = IPMSGConst.NO_SEND_IMAGE;
-                command.addObject = new Message("", nowtime, content, type);
                 break;
             case VEDIO:
-//              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_IMAGE_DATA, mChatUser.getIpaddress());
                 command.commandNo = IPMSGConst.NO_SEND_VEDIO;
-                command.addObject = new Message("", nowtime, content, type);
+                break;
+            case MUSIC:
+                command.commandNo = IPMSGConst.NO_SEND_MUSIC;
                 break;
             case VOICE:
-//              UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_REQUEST_VOICE_DATA, mChatUser.getIpaddress());
                 command.commandNo = IPMSGConst.NO_SEND_VOICE;
-                command.addObject = new Message("", nowtime, content, type);
                 break;
             case FILE:
-//                Message fileMsg = msg.clone();
-//                fileMsg.setMsgContent(FileUtils.getNameByPath(msg.getMsgContent()));
-//                UDPMessageListener.sendUDPdata(IPMSGConst.IPMSG_SENDMSG, mChatUser.getIpaddress(), fileMsg);
                 command.commandNo = IPMSGConst.NO_SEND_FILE;
-                command.addObject = new Message("", nowtime, content, type);
                 break;
         }
 //        mDBOperate.addChattingInfo(mID, mSenderID, nowtime, content, type);
-
         UDPMessageListener.sendUDPdata(command);
     }
 
@@ -960,6 +922,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         sendVedioMessage(filePath);
                     }
                     break;
+                case ConfigIntent.REQUEST_PICK_MUSIC:// 选取过音乐回来
+                    Set<String> files1 = BaseApplication.sendFileStates.keySet();
+                    for (String filePath : files1) {
+                        L.i("文件地址：" + filePath);
+                        sendMusicMessage(filePath);
+                    }
+                    break;
                 case ConfigIntent.REQUEST_PICK_FILE:// 选取过文件回来
                     Set<String> files = BaseApplication.sendFileStates.keySet();
                     for (String filePath : files) {
@@ -969,6 +938,75 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     break;
             }
         }
+    }
+
+    /**
+     * 发送文本消息
+     *
+     * @param msg
+     */
+    private void sendTextMessage(String msg) {
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(msg);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.TEXT);
+        chatMsg.setTime(System.currentTimeMillis());
+        refreshMessage(chatMsg);
+
+        //发送UDP
+        sendMessage(msg, Message.CONTENT_TYPE.TEXT);
+    }
+
+
+    /**
+     * 默认先上传本地图片，之后才显示出来 sendImageMessage
+     *
+     * @param @param localPath
+     * @return void
+     * @throws
+     * @Title: sendImageMessage
+     * @Description: TODO
+     */
+    private void sendImageMessage(String local) {
+        if (layout_more.getVisibility() == View.VISIBLE) {
+            layout_more.setVisibility(View.GONE);
+            layout_add.setVisibility(View.GONE);
+            layout_emo.setVisibility(View.GONE);
+        }
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(local);
+        chatMsg.setIsSend(true);
+        chatMsg.setTime(System.currentTimeMillis());
+        chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
+        refreshMessage(chatMsg);
+        //发送UDP
+        sendMessage(local, Message.CONTENT_TYPE.IMAGE);
+    }
+
+    /**
+     * 发送视频消息
+     */
+    private void sendVedioMessage(String path) {
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(path);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.VEDIO);
+        chatMsg.setTime(System.currentTimeMillis());
+        refreshMessage(chatMsg);
+
+        //发送UDP
+        sendMessage(path, Message.CONTENT_TYPE.VEDIO);
+    }
+
+    private void sendMusicMessage(String filePath) {
+        ChatEntity chatMsg = new ChatEntity();
+        chatMsg.setContent(filePath);
+        chatMsg.setIsSend(true);
+        chatMsg.setType(Message.CONTENT_TYPE.MUSIC);
+        chatMsg.setTime(System.currentTimeMillis());
+        refreshMessage(chatMsg);
+        //发送UDP
+        sendMessage(filePath, Message.CONTENT_TYPE.MUSIC);
     }
 
     private void sendFileMessage(String filePath) {
@@ -1007,30 +1045,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    /**
-     * 默认先上传本地图片，之后才显示出来 sendImageMessage
-     *
-     * @param @param localPath
-     * @return void
-     * @throws
-     * @Title: sendImageMessage
-     * @Description: TODO
-     */
-    private void sendImageMessage(String local) {
-        if (layout_more.getVisibility() == View.VISIBLE) {
-            layout_more.setVisibility(View.GONE);
-            layout_add.setVisibility(View.GONE);
-            layout_emo.setVisibility(View.GONE);
-        }
-        ChatEntity chatMsg = new ChatEntity();
-        chatMsg.setContent(local);
-        chatMsg.setIsSend(true);
-        chatMsg.setTime(System.currentTimeMillis());
-        chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
-        refreshMessage(chatMsg);
-        //发送UDP
-        sendMessage(local, Message.CONTENT_TYPE.IMAGE);
-    }
+
 
     /**
      * 根据是否点击笑脸来显示文本输入框的状态
@@ -1246,12 +1261,15 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 case ConfigIntent.NEW_MSG_TYPE_VEDIO:
                     chatMsg.setType(Message.CONTENT_TYPE.VEDIO);
                     break;
+                case ConfigIntent.NEW_MSG_TYPE_MUSIC:
+                    chatMsg.setType(Message.CONTENT_TYPE.MUSIC);
+                    break;
+                case ConfigIntent.NEW_MSG_TYPE_APK:
+                    chatMsg.setType(Message.CONTENT_TYPE.APK);
+                    break;
             }
             refreshMessage(chatMsg);
         }
     }
-
-
-
 
 }

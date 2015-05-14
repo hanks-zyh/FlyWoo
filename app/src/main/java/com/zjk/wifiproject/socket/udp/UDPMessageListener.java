@@ -244,6 +244,22 @@ public class UDPMessageListener implements Runnable {
                 mContext.sendBroadcast(intent);
             }
             break;
+            case IPMSGConst.NO_SEND_MUSIC: { //发送音乐
+                Logger.i("客户端发送音乐请求");
+                showToast("客户端发送音乐请求");
+                tcpService.setSavePath(BaseApplication.MUSIC_PATH);
+                tcpService.startReceive();
+
+                IPMSGProtocol command = getConfirmCommand(IPMSGConst.AN_SEND_MUSIC, ipmsgRes.targetIP, senderIp);
+                command.addObject = ipmsgRes.addObject;
+                sendUDPdata(command);
+
+                Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE, ConfigIntent.NEW_MSG_TYPE_MUSIC);
+                intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, ipmsgRes.addObject.getMsgContent());
+                mContext.sendBroadcast(intent);
+            }
+            break;
             case IPMSGConst.NO_SEND_FILE: { //发送文件
                 Logger.i("客户端发送文件请求");
                 showToast("客户端发送文件请求");
@@ -297,6 +313,14 @@ public class UDPMessageListener implements Runnable {
                 showToast("开始发送文件");
                 tcpClient.startSend();
                 tcpClient.sendFile(textMsg.getMsgContent(), senderIp, Message.CONTENT_TYPE.VEDIO);
+            }
+            break;
+            case IPMSGConst.AN_SEND_MUSIC: { //服务器确认接收音乐
+                Message textMsg = ipmsgRes.addObject;
+                Logger.d("接收方确认文件请求,发送的文件为" + textMsg.getMsgContent());
+                showToast("开始发送文件");
+                tcpClient.startSend();
+                tcpClient.sendFile(textMsg.getMsgContent(), senderIp, Message.CONTENT_TYPE.MUSIC);
             }
             break;
             case IPMSGConst.AN_SEND_FILE: { //服务器确认接收文件
