@@ -6,6 +6,7 @@ E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\class
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-320c854888fd9c8dadf54d3bdf491a94b4656179.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-b4127bfdec32b7a1eb29ffe894c8c951fdd80f4d.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-48a40e2d0631e8672ee2e36615314d1408f5885b.jar
+E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\otto-1.3.7-13d33a5ebc7c4c844e7cc37d6c7c8413da1de252.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-7841e6abb1115035db2414e520ce92bdd6008158.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rebound-0.3.7-bbaf98b3740fda7c10b238c394be126847fc61cb.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-a27a8f82ac0b46c0541b7fd779ecc0cc456b9053.jar

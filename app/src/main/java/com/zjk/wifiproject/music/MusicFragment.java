@@ -1,9 +1,9 @@
 package com.zjk.wifiproject.music;
 
-import java.util.List;
-
 import com.zjk.wifiproject.presenters.BasePresenterFragment;
 import com.zjk.wifiproject.util.FileUtils;
+
+import java.util.List;
 
 public class MusicFragment extends BasePresenterFragment<MusicVu> {
 
@@ -18,5 +18,6 @@ public class MusicFragment extends BasePresenterFragment<MusicVu> {
     protected Class<MusicVu> getVuClass() {
         return MusicVu.class;
     }
+
 
 }

@@ -1,9 +1,10 @@
 package com.zjk.wifiproject.picture;
 
-import java.util.List;
-
+import com.squareup.otto.Subscribe;
 import com.zjk.wifiproject.presenters.BasePresenterFragment;
 import com.zjk.wifiproject.util.FileUtils;
+
+import java.util.List;
 
 public class PictureFragment extends BasePresenterFragment<PictureFolderVu> {
 
@@ -20,4 +21,21 @@ public class PictureFragment extends BasePresenterFragment<PictureFolderVu> {
         return PictureFolderVu.class;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        vu.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        vu.onPause();
+    }
+
+
+    @Subscribe
+    public void showImages(ShowImageListEvent event){
+        vu.setListDate(event.list);
+    }
 }

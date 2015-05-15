@@ -49,6 +49,10 @@ public class VedioAdapterVu implements Vu {
         mVedioName = (TextView) view.findViewById(R.id.vedioName);
     }
 
+    public void setChecked(boolean isSelect) {
+        mIsSelect.setChecked(isSelect);
+    }
+
     @Override
     public View getView() {
         return view;

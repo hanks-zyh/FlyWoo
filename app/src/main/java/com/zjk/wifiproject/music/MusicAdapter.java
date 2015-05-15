@@ -3,6 +3,7 @@ package com.zjk.wifiproject.music;
 import android.content.Context;
 import android.text.format.Formatter;
 
+import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.file.OnFileCheckListener;
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
@@ -20,6 +21,7 @@ public class MusicAdapter extends BasePresenterAdapter<MusicEntity, MusicAdapter
         MusicEntity item = list.get(position);
         vu.setTitle(item.getTitle());
         vu.setSize(Formatter.formatFileSize(context, item.length()));
+        vu.setChecked(BaseApplication.sendFileStates.containsKey(item.getAbsolutePath()));
         vu.setOnCheckedChangeListener(new OnFileCheckListener(item, Message.CONTENT_TYPE.MUSIC));
     }
 

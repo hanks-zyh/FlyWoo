@@ -1,22 +1,24 @@
 package com.zjk.wifiproject.music;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.squareup.otto.Subscribe;
 import com.zjk.wifiproject.R;
+import com.zjk.wifiproject.bus.BusProvider;
 import com.zjk.wifiproject.presenters.Vu;
+
+import java.util.List;
 
 public class MusicVu implements Vu {
 
     private View view;
     private Context context;
     private ListView mListView;
-    private MusicAdapter adapter;
+    public MusicAdapter adapter;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -37,6 +39,10 @@ public class MusicVu implements Vu {
     public void setDate(List<MusicEntity> list) {
         adapter = new MusicAdapter(context, list);
         mListView.setAdapter(adapter);
+
+
     }
+
+
 
 }

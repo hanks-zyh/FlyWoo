@@ -1,22 +1,25 @@
 package com.zjk.wifiproject.picture;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.R;
+import com.zjk.wifiproject.bus.BusProvider;
 import com.zjk.wifiproject.presenters.Vu;
+
+import java.util.List;
 
 public class PictureFolderVu implements Vu {
 
     private View view;
     private Context context;
     private ListView mListView;
-    private PictureFolderAdapter adapter;
+    public PictureFolderAdapter adapter;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -34,9 +37,30 @@ public class PictureFolderVu implements Vu {
         return view;
     }
 
-    public void setDate(List<PictureFolderEntity> list) {
+    public void setDate(final List<PictureFolderEntity> list) {
         adapter = new PictureFolderAdapter(context, list);
         mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logger.i("setOnItemClickListener:"+position);
+                BusProvider.getInstance().post(new ShowImageListEvent(list.get(position).images));
+            }
+        });
     }
 
+    public void onResume() {
+        BusProvider.getInstance().register(this);
+    }
+
+
+    public void onPause() {
+        BusProvider.getInstance().unregister(this);
+    }
+
+
+    public void setListDate(List<PictureEntity> list) {
+        Logger.i("setListDate:");
+        mListView.setAdapter(new PictureAdapter(context, list));
+    }
 }

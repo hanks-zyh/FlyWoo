@@ -1,11 +1,11 @@
 package com.zjk.wifiproject.picture;
 
-import java.io.File;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,13 +13,15 @@ import com.squareup.picasso.Picasso;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
 
+import java.io.File;
+
 public class PictureFolderAdapterVu implements Vu {
 
     private View view;
 
     private ImageView mImage;
     private TextView mPictureCount;
-    private TextView mSelect;
+    private CheckBox mSelect;
     private TextView mFolderName;
 
     private Context context;
@@ -34,8 +36,12 @@ public class PictureFolderAdapterVu implements Vu {
     private void bindViews() {
         mImage = (ImageView) view.findViewById(R.id.image);
         mPictureCount = (TextView) view.findViewById(R.id.pictureCount);
-        mSelect = (TextView) view.findViewById(R.id.select);
+        mSelect = (CheckBox) view.findViewById(R.id.select);
         mFolderName = (TextView) view.findViewById(R.id.folderName);
+    }
+
+    public void setChecked(boolean isSelect) {
+        mSelect.setChecked(isSelect);
     }
 
     @Override
@@ -44,7 +50,11 @@ public class PictureFolderAdapterVu implements Vu {
     }
 
     public void setImage(String path) {
-        Picasso.with(context).load(new File(path)).resize(100, 100).centerCrop().into(mImage);
+        Picasso.with(context).load(new File(path)).centerCrop().resize(200, 200).into(mImage);
+    }
+
+    public void setOnCheckedChangeListener (CompoundButton.OnCheckedChangeListener listener){
+        mSelect.setOnCheckedChangeListener(listener);
     }
 
     public void setFolderName(String name) {

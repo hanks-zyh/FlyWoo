@@ -16,12 +16,15 @@
  */
 package com.zjk.wifiproject.file;
 
+import android.content.Intent;
 import android.widget.CompoundButton;
 
 import com.zjk.wifiproject.BaseApplication;
+import com.zjk.wifiproject.config.ConfigBroadcast;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.WFile;
+import com.zjk.wifiproject.main.MainActivity;
 
 /**
  * Created by Administrator on 2015/5/14.
@@ -44,6 +47,9 @@ public class OnFileCheckListener implements CompoundButton.OnCheckedChangeListen
             BaseApplication.sendFileStates.put(file.getAbsolutePath(), fs);
         } else {
             BaseApplication.sendFileStates.remove(file.getAbsolutePath());
+        }
+        if(buttonView.getContext() instanceof MainActivity){
+            buttonView.getContext().sendBroadcast(new Intent(ConfigBroadcast.ACTION_UPDATE_BOTTOM));
         }
     }
 }

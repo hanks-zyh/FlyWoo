@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,12 +32,16 @@ import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.connection.CreateConnectionActivity;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.WFile;
+import com.zjk.wifiproject.file.FileFragment;
+import com.zjk.wifiproject.music.MusicFragment;
+import com.zjk.wifiproject.picture.PictureFragment;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.BlurBuilder;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
+import com.zjk.wifiproject.vedio.VedioFragment;
 import com.zjk.wifiproject.view.tabs.SlidingTabLayout;
 
 import java.io.File;
@@ -73,6 +77,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private boolean showAnim = false;
     private List<Fragment> list;
     private Bitmap background;
+    private int lastCount = 0;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -161,8 +166,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
                 }
                 break;
             case R.id.createButton://进入创建热点的界面
-
-
 //                A.goOtherActivity(context, ChatActivity.class);
 
                 createButton.setVisibility(View.GONE);
@@ -242,7 +245,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private void showButtonAnimation() {
         final int dis = PixelUtil.dp2px(150);
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1).setDuration(200);
-        valueAnimator.setInterpolator(new OvershootInterpolator());
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -318,11 +321,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     public void addSendFile(WFile sendFile) {
         FileState fs = new FileState(sendFile.getAbsolutePath());
         BaseApplication.sendFileStates.put(sendFile.getAbsolutePath(), fs);
-        if (BaseApplication.sendFileStates.keySet().size() == 1) {
-            showAnim = true;
-        } else {//如果已经出现了,就不用再展示出现动画了
-            showAnim = false;
-        }
+
         handleAnim();
     }
 
@@ -335,7 +334,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     /**
      * 判断当前动画是显示还是关闭
      */
-    private void handleAnim() {
+    public void handleAnim() {
         if (BaseApplication.sendFileStates.keySet().size() > 0) {
             showBottomLayout();
         } else {
@@ -344,6 +343,11 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     }
 
     private void showBottomLayout() {
+        if (lastCount ==0 && BaseApplication.sendFileStates.keySet().size() >0) {
+            showAnim = true;
+        } else {//如果已经出现了,就不用再展示出现动画了
+            showAnim = false;
+        }
         if (showAnim) {
             // 防止出现缝隙
             final int height = layout_bottom.getHeight() - 2;
@@ -358,7 +362,9 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             va.start();
             hideButtonAnimation();
         }
-        tv_select_size.setText("传输（" + BaseApplication.sendFileStates.keySet().size() + "）");
+
+        lastCount =  BaseApplication.sendFileStates.keySet().size();
+        tv_select_size.setText("传输（" + lastCount + "）");
         layout_bottom.setVisibility(View.VISIBLE);
     }
 
@@ -377,7 +383,11 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         showButtonAnimation();
         BaseApplication.sendFileStates.clear();
         ((AppFragment) list.get(0)).vu.adapter.notifyDataSetChanged();
-
+        ((MusicFragment) list.get(1)).vu.adapter.notifyDataSetChanged();
+        ((PictureFragment) list.get(2)).vu.adapter.notifyDataSetChanged();
+        ((VedioFragment) list.get(3)).vu.adapter.notifyDataSetChanged();
+        ((FileFragment) list.get(4)).vu.adapter.notifyDataSetChanged();
+        lastCount = 0;
     }
 
 }

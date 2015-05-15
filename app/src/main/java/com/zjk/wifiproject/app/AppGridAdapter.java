@@ -27,6 +27,5 @@ public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
         vu.setAppName(item.getAppName());
         vu.setAppSize(Formatter.formatFileSize(context, item.length()));
         vu.setChecked(BaseApplication.sendFileStates.containsKey(item.getAbsolutePath()));
-
     }
 }

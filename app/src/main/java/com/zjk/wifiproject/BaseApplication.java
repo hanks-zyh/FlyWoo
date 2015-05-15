@@ -8,6 +8,7 @@ import android.media.SoundPool;
 import android.os.Vibrator;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.squareup.otto.Bus;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
@@ -58,6 +59,7 @@ public class BaseApplication extends Application {
 
     private static BaseApplication instance;
 
+    private Bus bus;
 
 
 
@@ -93,6 +95,16 @@ public class BaseApplication extends Application {
         initEmoticons();
         initNotification();
         initFolder();
+
+        bus = new Bus();
+    }
+
+    public Bus getBus() {
+        return bus;
+    }
+
+    public void setBus(Bus bus) {
+        this.bus = bus;
     }
 
     private void initEmoticons() {

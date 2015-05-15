@@ -28,6 +28,11 @@ public class MusicAdapterVu implements Vu {
         mTitle = (TextView) view.findViewById(R.id.title);
         mSize = (TextView) view.findViewById(R.id.size);
         mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
+
+    }
+
+    public void setChecked(boolean isSelect) {
+        mIsSelect.setChecked(isSelect);
     }
 
     public void setTitle(String title) {

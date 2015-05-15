@@ -1,15 +1,11 @@
 package com.zjk.wifiproject.file;
 
-import java.io.File;
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,10 +15,12 @@ import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.util.FileUtils;
 
+import java.util.List;
+
 public class FileVu implements Vu {
 
     private View view;
-    private FileAdapter adapter;
+    public FileAdapter adapter;
     private Context context;
     private List<WFile> list;
 

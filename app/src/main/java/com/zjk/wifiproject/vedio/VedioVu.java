@@ -1,7 +1,5 @@
 package com.zjk.wifiproject.vedio;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +9,13 @@ import android.widget.ListView;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
 
+import java.util.List;
+
 public class VedioVu implements Vu {
 
     private View view;
     private ListView mListView;
-    private VedioAdapter adapter;
+    public VedioAdapter adapter;
     private Context context;
 
     @Override
