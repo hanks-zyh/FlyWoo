@@ -24,7 +24,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.app.AppFragment;
@@ -56,12 +55,12 @@ import java.util.List;
  */
 public class MainVu implements Vu, SendFileListener, View.OnClickListener {
 
-    private View view;
-    private FragmentManager fm;
-    private ViewPager mViewPager;
+    private View             view;
+    private FragmentManager  fm;
+    private ViewPager        mViewPager;
     private SlidingTabLayout mTabs;
-    private ImageView createButton;
-    private DrawerLayout drawer;
+    private ImageView        createButton;
+    private DrawerLayout     drawer;
 
     //标题bar
     private ImageButton ib_menu;
@@ -69,15 +68,17 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
     private ImageButton ib_search;
 
 
-    private View layout_bottom;//底部隐藏布局
+    private View     layout_bottom;//底部隐藏布局
     private TextView tv_select_size;//选中的数目
-
 
     private Context context;
     private boolean showAnim = false;
     private List<Fragment> list;
-    private Bitmap background;
+    private Bitmap         background;
     private int lastCount = 0;
+
+    private boolean isShowing = false;  //底部布局是否正在显示
+    private boolean isAnim    = false;   //是否正在进行动画
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -86,7 +87,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         bindViews();
         setListener();
     }
-
 
     /**
      * findView操作
@@ -103,8 +103,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         ib_search = (ImageButton) view.findViewById(R.id.ib_search);
 
         layout_bottom = view.findViewById(R.id.layout_bottom);
-
-
     }
 
     @Override
@@ -159,21 +157,20 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.ib_menu://打开或关闭菜单
-                if(drawer.isDrawerOpen(Gravity.START)){
+                if (drawer.isDrawerOpen(Gravity.START)) {
                     drawer.closeDrawer(Gravity.START);
-                }else{
+                } else {
                     drawer.openDrawer(Gravity.START);
                 }
                 break;
             case R.id.createButton://进入创建热点的界面
 //                A.goOtherActivity(context, ChatActivity.class);
-
                 createButton.setVisibility(View.GONE);
-                String blurPath = takeScreenShot((Activity)context);
-                Intent intent = new Intent(context,CreateConnectionActivity.class);
-                Logger.d(blurPath);
-                intent.putExtra(ConfigIntent.EXTRA_BLUR_PATH,blurPath);
-                ((Activity)context).startActivityForResult(intent, ConfigIntent.REQUEST_SHOW_CREATE);
+//                String blurPath = takeScreenShot((Activity)context);
+                Intent intent = new Intent(context, CreateConnectionActivity.class);
+//                Logger.d(blurPath);
+//                intent.putExtra(ConfigIntent.EXTRA_BLUR_PATH,blurPath);
+                ((Activity) context).startActivityForResult(intent, ConfigIntent.REQUEST_SHOW_CREATE);
                 break;
             case R.id.ib_close:
                 hideBottomLayout();
@@ -184,7 +181,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         }
     }
 
-    public String takeScreenShot(Activity activity){
+    public String takeScreenShot(Activity activity) {
 
         String filePath = FileUtils.getProjectPictureDir();
 
@@ -207,7 +204,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         Bitmap bitmap = Bitmap.createBitmap(rootView.getDrawingCache(), 0,
                 statusBarHeights, widths, heights - statusBarHeights);
 
-        File imagePath = new File(filePath,System.currentTimeMillis()+".jpg");
+        File imagePath = new File(filePath, System.currentTimeMillis() + ".jpg");
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(imagePath);
@@ -215,12 +212,12 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
             fos.flush();
         } catch (Exception e) {
-        }finally {
-            try{
+        } finally {
+            try {
                 fos.close();
                 bitmap.recycle();
                 bitmap = null;
-            }catch(Exception e){
+            } catch (Exception e) {
             }
             rootView.destroyDrawingCache();
             rootView.setDrawingCacheEnabled(false);
@@ -228,6 +225,137 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         return imagePath.getAbsolutePath();
     }
 
+    /**
+     * 返回主界面
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*if(resultCode == Activity.RESULT_OK){
+            if(requestCode == ConfigIntent.REQUEST_SHOW_CREATE){
+                shakeButtonAnimation();
+            }
+        }*/
+        shakeButtonAnimation();
+    }
+
+    class MainPageAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> list;
+        private String tabs[] = new String[] { "应用", "音乐", "图片", "视频", "文件" };
+
+        public MainPageAdapter(FragmentManager fm, List<Fragment> list) {
+            super(fm);
+            this.list = list;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabs[position];
+        }
+    }
+
+    //------------------------ 隐藏在底部的布局---------------------------------------------
+    @Override
+    public void addSendFile(WFile sendFile) {
+        FileState fs = new FileState(sendFile.getAbsolutePath());
+        BaseApplication.sendFileStates.put(sendFile.getAbsolutePath(), fs);
+        handleAnim();
+    }
+
+    @Override
+    public void removeSendFile(WFile sendFile) {
+        BaseApplication.sendFileStates.remove(sendFile.getAbsolutePath());
+        handleAnim();
+    }
+
+    /**
+     * 判断当前动画是显示还是关闭
+     */
+    public void handleAnim() {
+        if (BaseApplication.sendFileStates.keySet().size() > 0) {
+            showBottomLayout();
+        } else {
+            hideBottomLayout();
+        }
+    }
+
+    /**
+     * 展示底部布局
+     */
+    private void showBottomLayout() {
+        if (lastCount == 0 && BaseApplication.sendFileStates.keySet().size() > 0) {
+            showAnim = true;
+        } else {//如果已经出现了,就不用再展示出现动画了
+            showAnim = false;
+        }
+
+        if (showAnim) {
+            isShowing = true;
+            // 防止出现缝隙
+            final int height = layout_bottom.getHeight() - 2;
+            ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(300);
+            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    layout_bottom.setTranslationY(-height * value);
+                }
+            });
+            va.start();
+            hideButtonAnimation();
+        }
+
+        lastCount = BaseApplication.sendFileStates.keySet().size();
+        tv_select_size.setText("传输（" + lastCount + "）");
+        layout_bottom.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏底部布局
+     */
+    private void hideBottomLayout() {
+        if (!isAnim && isShowing) { //没有动画 && 布局在上方
+
+            isAnim = true;
+            isShowing = false;
+
+            // 防止出现缝隙
+            final int height = layout_bottom.getHeight() - 2;
+            ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(300);
+            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    layout_bottom.setTranslationY(height * value - height);
+                    if (value >= 1) {
+                        isAnim = false;
+                    }
+                }
+            });
+            va.start();
+            showButtonAnimation();
+        }
+        BaseApplication.sendFileStates.clear();
+        ((AppFragment) list.get(0)).vu.adapter.notifyDataSetChanged();
+        ((MusicFragment) list.get(1)).vu.adapter.notifyDataSetChanged();
+        ((PictureFragment) list.get(2)).vu.adapter.notifyDataSetChanged();
+        ((VedioFragment) list.get(3)).vu.adapter.notifyDataSetChanged();
+        ((FileFragment) list.get(4)).vu.adapter.notifyDataSetChanged();
+        lastCount = 0;
+    }
 
     /**
      * 抖动按钮的动画
@@ -237,7 +365,6 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         createButton.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.shake));
     }
-
 
     /**
      * 从下面出现按钮的动画
@@ -272,122 +399,4 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         });
         valueAnimator.start();
     }
-
-    /**
-     * 返回主界面
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*if(resultCode == Activity.RESULT_OK){
-            if(requestCode == ConfigIntent.REQUEST_SHOW_CREATE){
-                shakeButtonAnimation();
-            }
-        }*/
-        shakeButtonAnimation();
-    }
-
-
-    class MainPageAdapter extends FragmentPagerAdapter {
-
-        private List<Fragment> list;
-        private String tabs[] = new String[]{"应用", "音乐", "图片", "视频", "文件"};
-
-        public MainPageAdapter(FragmentManager fm, List<Fragment> list) {
-            super(fm);
-            this.list = list;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return list.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabs[position];
-        }
-    }
-
-
-    //------------------------ 隐藏在底部的布局---------------------------------------------
-    @Override
-    public void addSendFile(WFile sendFile) {
-        FileState fs = new FileState(sendFile.getAbsolutePath());
-        BaseApplication.sendFileStates.put(sendFile.getAbsolutePath(), fs);
-
-        handleAnim();
-    }
-
-    @Override
-    public void removeSendFile(WFile sendFile) {
-        BaseApplication.sendFileStates.remove(sendFile.getAbsolutePath());
-        handleAnim();
-    }
-
-    /**
-     * 判断当前动画是显示还是关闭
-     */
-    public void handleAnim() {
-        if (BaseApplication.sendFileStates.keySet().size() > 0) {
-            showBottomLayout();
-        } else {
-            hideBottomLayout();
-        }
-    }
-
-    private void showBottomLayout() {
-        if (lastCount ==0 && BaseApplication.sendFileStates.keySet().size() >0) {
-            showAnim = true;
-        } else {//如果已经出现了,就不用再展示出现动画了
-            showAnim = false;
-        }
-        if (showAnim) {
-            // 防止出现缝隙
-            final int height = layout_bottom.getHeight() - 2;
-            ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(300);
-            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    float value = (float) animation.getAnimatedValue();
-                    layout_bottom.setTranslationY(-height * value);
-                }
-            });
-            va.start();
-            hideButtonAnimation();
-        }
-
-        lastCount =  BaseApplication.sendFileStates.keySet().size();
-        tv_select_size.setText("传输（" + lastCount + "）");
-        layout_bottom.setVisibility(View.VISIBLE);
-    }
-
-    private void hideBottomLayout() {
-        // 防止出现缝隙
-        final int height = layout_bottom.getHeight() - 2;
-        ValueAnimator va = ValueAnimator.ofFloat(0, 1).setDuration(300);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = (float) animation.getAnimatedValue();
-                layout_bottom.setTranslationY(height * value - height);
-            }
-        });
-        va.start();
-        showButtonAnimation();
-        BaseApplication.sendFileStates.clear();
-        ((AppFragment) list.get(0)).vu.adapter.notifyDataSetChanged();
-        ((MusicFragment) list.get(1)).vu.adapter.notifyDataSetChanged();
-        ((PictureFragment) list.get(2)).vu.adapter.notifyDataSetChanged();
-        ((VedioFragment) list.get(3)).vu.adapter.notifyDataSetChanged();
-        ((FileFragment) list.get(4)).vu.adapter.notifyDataSetChanged();
-        lastCount = 0;
-    }
-
 }

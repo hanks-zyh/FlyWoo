@@ -99,7 +99,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private Drawable[] drawable_Anims;// 话筒动画
     private ZRecordManager recordManager;
 
-
     //发送
     private String targetIp;
 
@@ -146,6 +145,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
 //        Logger.d(mChatUser.toString());
 //        Logger.d(mChatUser.getIpaddress());
+        Set<String> keys = BaseApplication.sendFileStates.keySet();
+        if(keys.size()>0){
+            for(String s : keys) {
+                sendFileMessage(s);
+            }
+        }
 
     }
 

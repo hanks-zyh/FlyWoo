@@ -4,9 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Environment;
@@ -29,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.activity.wifiap.WifiConst;
 import com.zjk.wifiproject.chat.ChatActivity;
@@ -96,7 +95,17 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         context = inflater.getContext();
         bindViews();
         setListener();
-        showTwoButtonAnimation();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (BaseApplication.sendFileStates.keySet().size() > 0) {
+                    onCreateButtonClick();
+                } else {
+                    showTwoButtonAnimation();
+                }
+            }
+        }, 500);
     }
 
     @Override
@@ -129,7 +138,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         mRightImage = (ImageView) view.findViewById(R.id.rightImage);
 
         String path = ((Activity) context).getIntent().getStringExtra(ConfigIntent.EXTRA_BLUR_PATH);
-        view.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeFile(path)));
+//        view.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeFile(path)));
     }
 
     private void setListener() {
@@ -579,7 +588,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
                         command.senderIP = localIPaddress;
                         command.targetIP = serverIPaddres;
                         command.commandNo = IPMSGConst.NO_CONNECT_SUCCESS; //连接成功指令发送给服务器，服务器确认后再跳展
-                        command.packetNo =  new Date().getTime()+"";
+                        command.packetNo = new Date().getTime() + "";
 
                         mUDPListener.sendUDPdata(command); //通知服务器已连接
 
@@ -619,7 +628,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     };
 
 
-    private void goChatActivity( Users user) {
+    private void goChatActivity(Users user) {
         Intent i = new Intent(context, ChatActivity.class);
         i.putExtra(ConfigIntent.EXTRA_CHAT_USER, user);
         A.goOtherActivityFinish(context, i);
@@ -695,13 +704,14 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
 
     /**
      * 接收到指令的回调处理
+     *
      * @param pMsg
      */
     @Override
     public void processMessage(IPMSGProtocol pMsg) {
         Message msg = Message.obtain();
         msg.what = pMsg.commandNo;
-        msg.obj  = pMsg;
+        msg.obj = pMsg;
         mHandler.sendMessage(msg);
     }
 
