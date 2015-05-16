@@ -216,7 +216,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
                 showTwoImageAnimation();
                 break;
             case R.id.hideButton:
-                closeAP();
+//                closeAP();
                 onBackPressed();
                 break;
             case R.id.create:

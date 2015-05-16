@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_title" />
+    <include layout="@layout/layout_connect_tip" />
 
     <com.zjk.wifiproject.view.tabs.SlidingTabLayout
         android:id="@+id/tabs"

@@ -17,6 +17,8 @@ import com.zjk.wifiproject.wifi.TimerCheck;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,6 +26,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -64,7 +67,7 @@ public class WifiUtils {
 
             @Override
             public void doTimeOutWork() {
-                // TODO Auto-generated method stub
+                
                 this.exit();
             }
         };
@@ -341,6 +344,10 @@ public class WifiUtils {
         return mWifiInfo.getBSSID();
     }
 
+    /**
+     * 注意这里返回的字符串头和尾多了引号""
+     * @return
+     */
     public static String getSSID() {
         WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
         return mWifiInfo.getSSID();
@@ -433,5 +440,29 @@ public class WifiUtils {
 
     private static String intToIp(int i) {
         return (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + ((i >> 16) & 0xFF) + "." + ((i >> 24) & 0xFF);
+    }
+
+    /**
+     * 获取链接到当前热点的设备IP
+     * @return
+     */
+    public static ArrayList<String> getConnectedHotIP() {
+        ArrayList<String> connectedIP = new ArrayList<String>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(
+                    "/proc/net/arp"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] splitted = line.split(" +");
+                if (splitted != null && splitted.length >= 4) {
+                    String ip = splitted[0];
+                    connectedIP.add(ip);
+                }
+            }
+            connectedIP.remove("IP");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return connectedIP;
     }
 }

@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
-import com.zjk.wifiproject.util.L;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,13 +65,17 @@ public class VedioAdapterVu implements Vu {
      */
     public void setVedioThrmuil(String path) {
 
-        Bitmap bm = vedioThrmuils.get(path);
-        if (bm == null) {
-            bm = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MICRO_KIND);
-            L.d("缩略图：" + bm.getWidth() + "，" + bm.getHeight());
-            vedioThrmuils.put(path,bm);
+        try {
+            Bitmap bm = vedioThrmuils.get(path);
+            if (bm == null) {
+                bm = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MICRO_KIND);
+    //            L.d("缩略图：" + bm.getWidth() + "，" + bm.getHeight());
+                vedioThrmuils.put(path,bm);
+            }
+            mVedio.setImageBitmap(bm);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        mVedio.setImageBitmap(bm);
 
         /*
         try {

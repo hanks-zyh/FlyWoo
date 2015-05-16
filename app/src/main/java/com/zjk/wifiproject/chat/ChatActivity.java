@@ -151,7 +151,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 sendFileMessage(s);
             }
         }
-
     }
 
     @Override
