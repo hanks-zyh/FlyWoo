@@ -36,12 +36,14 @@
         android:textColor="@color/text_colot_2"
         android:layout_toRightOf="@+id/fileIcon"/>
 
-    <CheckBox
+    <com.zjk.wifiproject.view.TouchCheckBox
         android:id="@+id/isSelect"
         android:gravity="center"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="10dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:checked="false"/>
 
 </RelativeLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/item_file.xml -->

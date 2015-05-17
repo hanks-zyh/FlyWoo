@@ -9,28 +9,27 @@ import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class VedioAdapterVu implements Vu {
 
-    private View view;
+    private View      view;
     private ImageView mVedio;
-    private TextView mDuration;
-    private TextView mVedioSize;
-    private TextView mSelect;
-    private TextView mVedioName;
-    private Context context;
+    private TextView  mDuration;
+    private TextView  mVedioSize;
+    private TextView  mSelect;
+    private TextView  mVedioName;
+    private Context   context;
     private Map<String, Bitmap> vedioThrmuils = new HashMap<>();
-    private CheckBox mIsSelect;
+    private TouchCheckBox mIsSelect;
 
 
     @Override
@@ -44,7 +43,7 @@ public class VedioAdapterVu implements Vu {
         mVedio = (ImageView) view.findViewById(R.id.vedio);
         mDuration = (TextView) view.findViewById(R.id.duration);
         mVedioSize = (TextView) view.findViewById(R.id.vedioSize);
-        mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
+        mIsSelect = (TouchCheckBox) view.findViewById(R.id.isSelect);
         mVedioName = (TextView) view.findViewById(R.id.vedioName);
     }
 
@@ -133,7 +132,7 @@ public class VedioAdapterVu implements Vu {
     }
 
 
-    public void setOnCheckedChangeListener (CompoundButton.OnCheckedChangeListener listener){
+    public void setOnCheckedChangeListener (TouchCheckBox.OnCheckedChangeListener listener){
         mIsSelect.setOnCheckedChangeListener(listener);
     }
 

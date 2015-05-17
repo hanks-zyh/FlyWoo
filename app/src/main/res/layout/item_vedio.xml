@@ -67,10 +67,11 @@
         android:textColor="@color/text_colot_1"
         android:textSize="16sp" />
 
-    <CheckBox
+    <com.zjk.wifiproject.view.TouchCheckBox
         android:id="@+id/isSelect"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_width="32dp"
-        android:layout_height="32dp" />
+        android:layout_width="48dp"
+        android:padding="10dp"
+        android:layout_height="48dp" />
 </RelativeLayout>

@@ -5,7 +5,6 @@ import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +13,7 @@ import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 /**
  * Created by Administrator on 2015/4/23.
@@ -32,10 +32,10 @@ public class FileAdapterVu implements Vu {
     }
     // Content View Elements
 
-    private ImageView mFileIcon;
-    private TextView mFileName;
-    private TextView mTimeSize;
-    private CheckBox mIsSelect;
+    private ImageView     mFileIcon;
+    private TextView      mFileName;
+    private TextView      mTimeSize;
+    private TouchCheckBox mIsSelect;
 
     // End Of Content View Elements
 
@@ -44,7 +44,7 @@ public class FileAdapterVu implements Vu {
         mFileIcon = (ImageView) view.findViewById(R.id.fileIcon);
         mFileName = (TextView) view.findViewById(R.id.fileName);
         mTimeSize = (TextView) view.findViewById(R.id.timeSize);
-        mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
+        mIsSelect = (TouchCheckBox) view.findViewById(R.id.isSelect);
 
     }
 

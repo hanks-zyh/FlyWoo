@@ -3,17 +3,16 @@ package com.zjk.wifiproject.music;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 public class MusicAdapterVu implements Vu {
 
     private View view;
-    private CheckBox mIsSelect;
+    private TouchCheckBox mIsSelect;
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
@@ -27,7 +26,7 @@ public class MusicAdapterVu implements Vu {
     private void bindViews() {
         mTitle = (TextView) view.findViewById(R.id.title);
         mSize = (TextView) view.findViewById(R.id.size);
-        mIsSelect = (CheckBox) view.findViewById(R.id.isSelect);
+        mIsSelect = (TouchCheckBox) view.findViewById(R.id.isSelect);
     }
 
     public void setChecked(boolean isSelect) {
@@ -42,7 +41,7 @@ public class MusicAdapterVu implements Vu {
         mSize.setText(size);
     }
 
-    public void setOnCheckedChangeListener (CompoundButton.OnCheckedChangeListener listener){
+    public void setOnCheckedChangeListener (TouchCheckBox.OnCheckedChangeListener listener){
         mIsSelect.setOnCheckedChangeListener(listener);
     }
 

@@ -4,14 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 import java.io.File;
 
@@ -19,10 +18,10 @@ public class PictureFolderAdapterVu implements Vu {
 
     private View view;
 
-    private ImageView mImage;
-    private TextView mPictureCount;
-    private CheckBox mSelect;
-    private TextView mFolderName;
+    private ImageView     mImage;
+    private TextView      mPictureCount;
+    private TouchCheckBox mSelect;
+    private TextView      mFolderName;
 
     private Context context;
 
@@ -36,7 +35,7 @@ public class PictureFolderAdapterVu implements Vu {
     private void bindViews() {
         mImage = (ImageView) view.findViewById(R.id.image);
         mPictureCount = (TextView) view.findViewById(R.id.pictureCount);
-        mSelect = (CheckBox) view.findViewById(R.id.select);
+        mSelect = (TouchCheckBox) view.findViewById(R.id.select);
         mFolderName = (TextView) view.findViewById(R.id.folderName);
     }
 
@@ -53,7 +52,7 @@ public class PictureFolderAdapterVu implements Vu {
         Picasso.with(context).load(new File(path)).centerCrop().resize(200, 200).into(mImage);
     }
 
-    public void setOnCheckedChangeListener (CompoundButton.OnCheckedChangeListener listener){
+    public void setOnCheckedChangeListener (TouchCheckBox.OnCheckedChangeListener listener){
         mSelect.setOnCheckedChangeListener(listener);
     }
 

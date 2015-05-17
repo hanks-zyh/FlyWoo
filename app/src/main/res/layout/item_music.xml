@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="74dp"
+    android:layout_height="92dp"
+                android:minHeight="92dp"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="16dp">
@@ -33,11 +34,13 @@
         tools:text="TextView"
         android:textColor="@color/text_colot_2" />
 
-    <CheckBox
+    <com.zjk.wifiproject.view.TouchCheckBox
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:id="@+id/isSelect"
-        android:layout_width="32dp"
-        android:layout_height="32dp" />
+        android:layout_width="48dp"
+        android:padding="10dp"
+        android:layout_height="48dp"
+        android:checked="false"/>
 
 </RelativeLayout>

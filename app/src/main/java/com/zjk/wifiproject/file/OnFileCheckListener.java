@@ -17,7 +17,7 @@
 package com.zjk.wifiproject.file;
 
 import android.content.Intent;
-import android.widget.CompoundButton;
+import android.view.View;
 
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.config.ConfigBroadcast;
@@ -25,11 +25,12 @@ import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.entity.WFile;
 import com.zjk.wifiproject.main.MainActivity;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 /**
  * Created by Administrator on 2015/5/14.
  */
-public class OnFileCheckListener implements CompoundButton.OnCheckedChangeListener {
+public class OnFileCheckListener implements TouchCheckBox.OnCheckedChangeListener {
 
     private final WFile file;
     private Message.CONTENT_TYPE type;
@@ -38,9 +39,8 @@ public class OnFileCheckListener implements CompoundButton.OnCheckedChangeListen
         this.file = file;
         this.type = type;
     }
-
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onCheckedChanged(View buttonView, boolean isChecked) {
         if (isChecked) {
             FileState fs = new FileState(file.getAbsolutePath());
             fs.type = type;

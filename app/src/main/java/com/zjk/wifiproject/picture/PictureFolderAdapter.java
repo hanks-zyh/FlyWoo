@@ -2,7 +2,7 @@ package com.zjk.wifiproject.picture;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.CompoundButton;
+import android.view.View;
 
 import com.zjk.wifiproject.BaseApplication;
 import com.zjk.wifiproject.config.ConfigBroadcast;
@@ -10,6 +10,7 @@ import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.Message;
 import com.zjk.wifiproject.main.MainActivity;
 import com.zjk.wifiproject.presenters.BasePresenterAdapter;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 import java.util.List;
 
@@ -28,9 +29,9 @@ public class PictureFolderAdapter extends BasePresenterAdapter<PictureFolderEnti
         if(item.images.size()>0){
             vu.setImage(item.images.get(0).getAbsolutePath());
         }
-        vu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        vu.setOnCheckedChangeListener(new TouchCheckBox.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(View buttonView, boolean isChecked) {
                 if (isChecked) {
 
                     for(PictureEntity picture : item.images){

@@ -228,10 +228,12 @@ public class TcpService implements Runnable {
                             case APK:
                             case FILE:
                                 Logger.i("receiveing:"+fs.percent);
-                                android.os.Message msg = mHandler.obtainMessage();
-                                msg.what = IPMSGConst.WHAT_FILE_RECEIVING;
-                                msg.obj = fs;
-                                msg.sendToTarget();
+                                if(mHandler!=null) {
+                                    android.os.Message msg = mHandler.obtainMessage();
+                                    msg.what = IPMSGConst.WHAT_FILE_RECEIVING;
+                                    msg.obj = fs;
+                                    msg.sendToTarget();
+                                }
                                 break;
 
                             default:

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
 <LinearLayout
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -58,7 +59,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="传输"
-            android:textColor="@color/text_black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <ImageButton
@@ -68,7 +69,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/btn_seletor"
-            android:src="@drawable/ic_x" />
+            android:src="@drawable/ic_x_white" />
     </RelativeLayout>
 
 </LinearLayout>
