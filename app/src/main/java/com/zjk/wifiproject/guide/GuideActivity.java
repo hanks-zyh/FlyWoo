@@ -1,7 +1,5 @@
 package com.zjk.wifiproject.guide;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,9 +9,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,14 +23,18 @@ import com.zjk.wifiproject.main.MainActivity;
 import com.zjk.wifiproject.util.A;
 import com.zjk.wifiproject.util.SP;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GuideActivity extends BaseActivity {
 
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_guide);
@@ -81,7 +81,7 @@ public class GuideActivity extends BaseActivity {
     }
 
     int[][] images = new int[][] { //
-    { R.drawable.guide_1, R.drawable.guide_1_text }, //
+            { R.drawable.guide_1, R.drawable.guide_1_text }, //
             { R.drawable.guide_2, R.drawable.guide_2_text },//
             { R.drawable.guide_3, R.drawable.guide_3_text },//
     };
@@ -92,7 +92,6 @@ public class GuideActivity extends BaseActivity {
     int[] texts = new int[] { R.string.guide_text_1, R.string.guide_text_2, R.string.guide_text_3 };
 
     class GuideFragment extends BaseFragment {
-
         private int index;
 
         public GuideFragment(int index) {
@@ -111,19 +110,19 @@ public class GuideActivity extends BaseActivity {
                 v.findViewById(R.id.top).setBackgroundColor(colors[index]);
                 ((ImageView) v.findViewById(R.id.guide)).setImageResource(images[index][0]);
                 ((ImageView) v.findViewById(R.id.image_m)).setImageResource(images[index][1]);
-                Logger.d(index+"");
+                Logger.d(index + "");
                 int str = texts[index];
-                Logger.d(str+","+getString(R.string.guide_text_1));
+                Logger.d(str + "," + getString(R.string.guide_text_1));
 
-                        ((TextView) v.findViewById(R.id.text)).setText(str);
+                ((TextView) v.findViewById(R.id.text)).setText(str);
             } else {
                 v.findViewById(R.id.top).setBackgroundColor(Color.parseColor("#DDE865"));
                 ((ImageView) v.findViewById(R.id.guide)).setImageResource(R.drawable.guide_3_text_bg);
-                v.findViewById(R.id.image_m).setVisibility(8);
+                v.findViewById(R.id.image_m).setVisibility(View.GONE);
                 TextView tv = ((TextView) v.findViewById(R.id.text));
                 tv.setTextSize(20);
                 tv.setText(R.string.guide_text1);
-                tv.setOnClickListener(new OnClickListener() {
+                tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         SP.put(context, SharedKey.isfirst, false);
