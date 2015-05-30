@@ -100,7 +100,7 @@
     <eat-comment/>
     <color name="mainBg">#ffbeb7c5</color>
     <color name="main_blue">#289CCF</color>
-    <color name="main_red">#F44336</color>
+    <color name="main_red">#35908B</color>
     <!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
