@@ -4,6 +4,7 @@ import com.zjk.wifiproject.presenters.BasePresenterActivity;
 
 public class CreateConnectionActivity extends BasePresenterActivity<CreateConnectionVu> {
 
+
     @Override
     protected void onBindVu() {
 //        vu.createAP(context);

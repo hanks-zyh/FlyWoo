@@ -6,14 +6,11 @@ package com.zjk.wifiproject.entity;
  */
 public class ChatEntity {
 
-
+    private int id;
     private Message.CONTENT_TYPE type;
     private String content;
     private long time;
     private WFile file;
-
-
-
     private int percent;
 
     /**
@@ -68,5 +65,13 @@ public class ChatEntity {
 
     public void setPercent(int percent) {
         this.percent = percent;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

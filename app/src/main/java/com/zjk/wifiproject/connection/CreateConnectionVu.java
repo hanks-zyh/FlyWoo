@@ -719,5 +719,6 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         if (mUDPListener != null) {
             mUDPListener.removeMsgListener(this);
         }
+
     }
 }

@@ -50,6 +50,7 @@ import com.zjk.wifiproject.socket.tcp.TcpClient;
 import com.zjk.wifiproject.socket.udp.IPMSGConst;
 import com.zjk.wifiproject.socket.udp.IPMSGProtocol;
 import com.zjk.wifiproject.socket.udp.UDPMessageListener;
+import com.zjk.wifiproject.sql.ChatDao;
 import com.zjk.wifiproject.sql.SqlDBOperate;
 import com.zjk.wifiproject.util.AlertDialogUtils;
 import com.zjk.wifiproject.util.DateUtils;
@@ -75,49 +76,50 @@ import java.util.Set;
  */
 public class ChatActivity extends BaseActivity implements View.OnClickListener, UDPMessageListener.OnNewMsgListener {
 
+    public static final int NEW_MESSAGE = 0x001;// 收到消息
+    //    BmobChatUser targetUser;
+    private static int MsgPagerNum;
+    NewBroadcastReceiver receiver;
     //消息列表
     private List<ChatEntity> list = new ArrayList<>();
-
     private RecyclerView        mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private ChatAdapter         mAdapter;
-
     //聊天底部按钮
-    private Button btn_chat_emo, btn_chat_send, btn_chat_add, btn_chat_keyboard, btn_speak, btn_chat_voice;
+    private Button              btn_chat_emo, btn_chat_send, btn_chat_add, btn_chat_keyboard, btn_speak, btn_chat_voice;
     private EmoticonsEditText edit_user_comment;
     private String targetId = "";
-    //    BmobChatUser targetUser;
-    private static int          MsgPagerNum;
-    private        LinearLayout layout_more, layout_emo, layout_add;
+    private LinearLayout layout_more, layout_emo, layout_add;
     private ViewPager pager_emo;
     private TextView  tv_picture, tv_apk, tv_music, tv_vedio, tv_file;
-
     // 语音有关
-    private RelativeLayout layout_record;
-    private TextView       tv_voice_tips;
-    private ImageView      iv_record;
-    private Drawable[]     drawable_Anims;// 话筒动画
-    private ZRecordManager recordManager;
-
+    private RelativeLayout     layout_record;
+    private TextView           tv_voice_tips;
+    private ImageView          iv_record;
+    private Drawable[]         drawable_Anims;// 话筒动画
+    private ZRecordManager     recordManager;
     //发送
-    private String targetIp;
-
+    private String             targetIp;
     //Handler
     private Handler            mHandler;
     private MessageReveiver    messageReveiver;
     private UDPMessageListener udpMessageListener;
-
-
-    private String       mIMEI;
-    private Users        mChatUser;
-    private SqlDBOperate mDBOperate;
-    private int          mSenderID;
-    private TcpClient    tcpClient;
+    private String             mIMEI;
+    private Users              mChatUser;
+    private SqlDBOperate       mDBOperate;
+    private int                mSenderID;
+    private TcpClient          tcpClient;
+    private Toast              toast;
+    private List<FaceText>     emos;
+    private String localCameraPath = "";// 拍照后得到的图片地址
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vu_chat);
+
+        //加载历史记录
+        initMsgData();
 
         bindViews();
         initView();
@@ -145,6 +147,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
 //        Logger.d(mChatUser.toString());
 //        Logger.d(mChatUser.getIpaddress());
+
+        //如果有未发送的文件先发送文件
         Set<String> keys = BaseApplication.sendFileStates.keySet();
         if (keys.size() > 0) {
             for (String s : keys) {
@@ -187,14 +191,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         mRecyclerView = (RecyclerView) findViewById(R.id.recylerView);
     }
 
-
     /**
      * 初始化语音布局
-     *
-     * @param
-     * @return void
-     * @throws
-     * @Title: initVoiceView
      */
     private void initVoiceView() {
         layout_record = (RelativeLayout) findViewById(R.id.layout_record);
@@ -251,67 +249,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         mHandler.sendMessage(msg);
     }
 
-
     /**
-     * 长按说话
-     *
-     * @author smile
-     * @ClassName: VoiceTouchListen
-     * @Description: TODO
-     * @date 2014-7-1 下午6:10:16
+     * 加载消息历史，从数据库中读出
      */
-    class VoiceTouchListen implements View.OnTouchListener {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (!FileUtils.isSdcardExist()) {
-                        T.show(context, "发送语音需要sdcard支持！");
-                        return false;
-                    }
-                    try {
-                        v.setPressed(true);
-                        layout_record.setVisibility(android.view.View.VISIBLE);
-                        tv_voice_tips.setText(context.getString(R.string.voice_cancel_tips));
-                        // 开始录音
-                        recordManager.startRecording(targetId);
-                    } catch (Exception e) {
-                    }
-                    return true;
-                case MotionEvent.ACTION_MOVE: {
-                    if (event.getY() < 0) {
-                        tv_voice_tips.setText(context.getString(R.string.voice_cancel_tips));
-                        tv_voice_tips.setTextColor(Color.RED);
-                    } else {
-                        tv_voice_tips.setText(context.getString(R.string.voice_up_tips));
-                        tv_voice_tips.setTextColor(Color.WHITE);
-                    }
-                    return true;
-                }
-                case MotionEvent.ACTION_UP:
-                    v.setPressed(false);
-                    layout_record.setVisibility(android.view.View.INVISIBLE);
-                    try {
-                        if (event.getY() < 0) {// 放弃录音
-                            recordManager.cancelRecording();
-                            L.i("voice", "放弃发送语音");
-                        } else {
-                            int recordTime = recordManager.stopRecording();
-                            if (recordTime > 1) {
-                                // 发送语音文件
-                                L.i("voice", "发送语音");
-                                sendVoiceMessage(recordManager.getRecordFilePath(targetId), recordTime);
-                            } else {// 录音时间过短，则提示录音过短的提示
-                                layout_record.setVisibility(android.view.View.GONE);
-                                showShortToast().show();
-                            }
-                        }
-                    } catch (Exception e) {
-                    }
-                    return true;
-                default:
-                    return false;
-            }
+    private void initMsgData() {
+        List<ChatEntity> tmp = new ChatDao(context).getAllChat();
+        if (tmp != null && tmp.size() > 0) {
+            list.addAll(tmp);
         }
     }
 
@@ -330,8 +274,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         //发送UDP
         sendMessage(local, Message.CONTENT_TYPE.VOICE);
     }
-
-    private Toast toast;
 
     /**
      * 显示录音时间过短的Toast
@@ -362,14 +304,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 context.getResources().getDrawable(R.drawable.chat_icon_voice3), context.getResources().getDrawable(R.drawable.chat_icon_voice4),
                 context.getResources().getDrawable(R.drawable.chat_icon_voice5), context.getResources().getDrawable(R.drawable.chat_icon_voice6) };
     }
-
-    /**
-     * 加载消息历史，从数据库中读出
-     */
-//    private List<ChatEntity> initMsgData() {
-//        List<ChatEntity> list = BmobDB.create(this).queryMessages(targetId, MsgPagerNum);
-//        return list;
-//    }
 
     /**
      * 界面刷新
@@ -471,8 +405,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         tv_vedio.setOnClickListener(this);
         tv_file.setOnClickListener(this);
     }
-
-    private List<FaceText> emos;
 
     /**
      * 初始化表情布局
@@ -764,7 +696,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         startActivityForResult(new Intent(context, FileSelectActivity.class), ConfigIntent.REQUEST_PICK_APK);
     }
 
-
     private void initHandler() {
         mHandler = new Handler() {
             @Override
@@ -863,9 +794,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 break;
         }
 //        mDBOperate.addChattingInfo(mID, mSenderID, nowtime, content, type);
+
         UDPMessageListener.sendUDPdata(command);
     }
-
 
     /**
      * 启动地图
@@ -875,8 +806,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        intent.putExtra("type", "select");
 //        startActivityForResult(intent, Constants.REQUESTCODE_TAKE_LOCATION);
     }
-
-    private String localCameraPath = "";// 拍照后得到的图片地址
 
     /**
      * 启动相机拍照 startCamera
@@ -908,7 +837,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         startActivityForResult(new Intent(context, AlbumActivity.class), ConfigIntent.REQUEST_PICK_IMAGE);
 
     }
-
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -962,7 +890,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         //发送UDP
         sendMessage(msg, Message.CONTENT_TYPE.TEXT);
     }
-
 
     /**
      * 默认先上传本地图片，之后才显示出来 sendImageMessage
@@ -1060,7 +987,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-
     /**
      * 根据是否点击笑脸来显示文本输入框的状态
      *
@@ -1097,41 +1023,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    //
-//    @Override
-//    protected void onResume() {
-//
-//        super.onResume();
-//        // 新消息到达，重新刷新界面
-//        initOrRefresh();
-//        MyMessageReceiver.ehList.add(this);// 监听推送的消息
-//        // 有可能锁屏期间，在聊天界面出现通知栏，这时候需要清除通知和清空未读消息数
-//        BmobNotifyManager.getInstance(this).cancelNotify();
-//        BmobDB.create(this).resetUnread(targetId);
-//        // 清空消息未读数-这个要在刷新之后
-//        MyMessageReceiver.mNewNum = 0;
-//    }
-/*
-    @Override
-    protected void onPause() {
-
-        super.onPause();
-        MyMessageReceiver.ehList.remove(this);// 监听推送的消息
-        // 停止录音
-        if (recordManager.isRecording()) {
-            recordManager.cancelRecording();
-            layout_record.setVisibility(View.GONE);
-        }
-        // 停止播放录音
-        if (NewRecordPlayClickListener.isPlaying && NewRecordPlayClickListener.currentPlayListener != null) {
-            NewRecordPlayClickListener.currentPlayListener.stopPlayRecord();
-        }
-
-        }*/
-    public static final int NEW_MESSAGE = 0x001;// 收到消息
-
-    NewBroadcastReceiver receiver;
-
     private void initNewMessageBroadCast() {
 //        // 注册接收消息广播
 //        receiver = new NewBroadcastReceiver();
@@ -1139,30 +1030,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        // 设置广播的优先级别大于Mainacitivity,这样如果消息来的时候正好在chat页面，直接显示消息，而不是提示消息未读
 //        intentFilter.setPriority(5);
 //        registerReceiver(receiver, intentFilter);
-    }
-
-    /**
-     * 新消息广播接收者
-     */
-    private class NewBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            String from = intent.getStringExtra("fromId");
-//            String msgId = intent.getStringExtra("msgId");
-//            String msgTime = intent.getStringExtra("msgTime");
-//            // 收到这个广播的时候，message已经在消息表中，可直接获取
-//            BmobMsg msg = BmobChatManager.getInstance(ChatActivity.this).getMessage(msgId, msgTime);
-//            if (!from.equals(targetId)) // 如果不是当前正在聊天对象的消息，不处理
-//                return;
-//            // 添加到当前页面
-//            mAdapter.add(msg);
-//            // 定位
-//            mRecyclerView.setSelection(mAdapter.getCount() - 1);
-//            // 取消当前聊天对象的未读标示
-//            BmobDB.create(ChatActivity.this).resetUnread(targetId);
-//            // 记得把广播给终结掉
-//            abortBroadcast();
-        }
     }
 
     /**
@@ -1175,11 +1042,96 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      * @Description: TODO
      */
     private void refreshMessage(ChatEntity msg) {
+
+        //保存本地数据库
+        new ChatDao(context).create(msg);
+
         // 更新界面
         list.add(msg);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
         edit_user_comment.setText("");
+    }
+
+    /**
+     * 隐藏软键盘 hideSoftInputView
+     *
+     * @param
+     * @return void
+     * @throws
+     * @Title: hideSoftInputView
+     * @Description: TODO
+     */
+    public void hideSoftInputView() {
+        InputMethodManager manager = ((InputMethodManager) context
+                .getSystemService(Activity.INPUT_METHOD_SERVICE));
+        if (((Activity) context).getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (((Activity) context).getCurrentFocus() != null)
+                manager.hideSoftInputFromWindow(((Activity) context).getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /**
+     * 长按说话
+     *
+     * @author smile
+     * @ClassName: VoiceTouchListen
+     * @Description: TODO
+     * @date 2014-7-1 下午6:10:16
+     */
+    class VoiceTouchListen implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if (!FileUtils.isSdcardExist()) {
+                        T.show(context, "发送语音需要sdcard支持！");
+                        return false;
+                    }
+                    try {
+                        v.setPressed(true);
+                        layout_record.setVisibility(android.view.View.VISIBLE);
+                        tv_voice_tips.setText(context.getString(R.string.voice_cancel_tips));
+                        // 开始录音
+                        recordManager.startRecording(targetId);
+                    } catch (Exception e) {
+                    }
+                    return true;
+                case MotionEvent.ACTION_MOVE: {
+                    if (event.getY() < 0) {
+                        tv_voice_tips.setText(context.getString(R.string.voice_cancel_tips));
+                        tv_voice_tips.setTextColor(Color.RED);
+                    } else {
+                        tv_voice_tips.setText(context.getString(R.string.voice_up_tips));
+                        tv_voice_tips.setTextColor(Color.WHITE);
+                    }
+                    return true;
+                }
+                case MotionEvent.ACTION_UP:
+                    v.setPressed(false);
+                    layout_record.setVisibility(android.view.View.INVISIBLE);
+                    try {
+                        if (event.getY() < 0) {// 放弃录音
+                            recordManager.cancelRecording();
+                            L.i("voice", "放弃发送语音");
+                        } else {
+                            int recordTime = recordManager.stopRecording();
+                            if (recordTime > 1) {
+                                // 发送语音文件
+                                L.i("voice", "发送语音");
+                                sendVoiceMessage(recordManager.getRecordFilePath(targetId), recordTime);
+                            } else {// 录音时间过短，则提示录音过短的提示
+                                layout_record.setVisibility(android.view.View.GONE);
+                                showShortToast().show();
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
 //
@@ -1231,20 +1183,26 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //    }
 
     /**
-     * 隐藏软键盘 hideSoftInputView
-     *
-     * @param
-     * @return void
-     * @throws
-     * @Title: hideSoftInputView
-     * @Description: TODO
+     * 新消息广播接收者
      */
-    public void hideSoftInputView() {
-        InputMethodManager manager = ((InputMethodManager) context
-                .getSystemService(Activity.INPUT_METHOD_SERVICE));
-        if (((Activity) context).getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-            if (((Activity) context).getCurrentFocus() != null)
-                manager.hideSoftInputFromWindow(((Activity) context).getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    private class NewBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            String from = intent.getStringExtra("fromId");
+//            String msgId = intent.getStringExtra("msgId");
+//            String msgTime = intent.getStringExtra("msgTime");
+//            // 收到这个广播的时候，message已经在消息表中，可直接获取
+//            BmobMsg msg = BmobChatManager.getInstance(ChatActivity.this).getMessage(msgId, msgTime);
+//            if (!from.equals(targetId)) // 如果不是当前正在聊天对象的消息，不处理
+//                return;
+//            // 添加到当前页面
+//            mAdapter.add(msg);
+//            // 定位
+//            mRecyclerView.setSelection(mAdapter.getCount() - 1);
+//            // 取消当前聊天对象的未读标示
+//            BmobDB.create(ChatActivity.this).resetUnread(targetId);
+//            // 记得把广播给终结掉
+//            abortBroadcast();
         }
     }
 
