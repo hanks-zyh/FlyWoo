@@ -17,11 +17,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.zjk.wifiproject.BaseApplication;
@@ -31,6 +33,7 @@ import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.connection.CreateConnectionActivity;
 import com.zjk.wifiproject.entity.FileState;
 import com.zjk.wifiproject.entity.WFile;
+import com.zjk.wifiproject.event.RefreshTipEvent;
 import com.zjk.wifiproject.file.FileFragment;
 import com.zjk.wifiproject.music.MusicFragment;
 import com.zjk.wifiproject.picture.PictureFragment;
@@ -40,12 +43,15 @@ import com.zjk.wifiproject.util.BlurBuilder;
 import com.zjk.wifiproject.util.FileUtils;
 import com.zjk.wifiproject.util.L;
 import com.zjk.wifiproject.util.PixelUtil;
+import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.vedio.VedioFragment;
 import com.zjk.wifiproject.view.tabs.SlidingTabLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * 主界面的框架
@@ -86,6 +92,8 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         view = inflater.inflate(R.layout.vu_main, container, false);
         bindViews();
         setListener();
+
+
     }
 
     /**
@@ -103,6 +111,7 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
         ib_search = (ImageButton) view.findViewById(R.id.ib_search);
 
         layout_bottom = view.findViewById(R.id.layout_bottom);
+        ib_more.setOnClickListener(this);
     }
 
     @Override
@@ -178,7 +187,42 @@ public class MainVu implements Vu, SendFileListener, View.OnClickListener {
             case R.id.tv_select_size:
                 A.goOtherActivity(context, CreateConnectionActivity.class);
                 break;
+            case R.id.ib_more:
+                closeWifiOrAp();
+                break;
         }
+    }
+
+    private void closeWifiOrAp() {
+
+        View v = View.inflate(context, R.layout.pop_closewifi, null);
+
+
+
+        final PopupWindow popWin = new PopupWindow(v, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        popWin.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.card_bg));
+        // popWin.setFocusable(true);
+        popWin.setOutsideTouchable(true); // 点击popWin
+        // 以处的区域，自动关闭
+        // popWin.showAtLocation(iv_sort, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置在屏幕中的显示位置
+        popWin.showAsDropDown(ib_more, 0, 0);
+
+        v.findViewById(R.id.tv_close_ap).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WifiUtils.closeWifiAp();
+                popWin.dismiss();
+                EventBus.getDefault().post(new RefreshTipEvent());
+            }
+        });
+        v.findViewById(R.id.tv_close_wifi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WifiUtils.closeWifi();
+                popWin.dismiss();
+                EventBus.getDefault().post(new RefreshTipEvent());
+            }
+        });
     }
 
     public String takeScreenShot(Activity activity) {

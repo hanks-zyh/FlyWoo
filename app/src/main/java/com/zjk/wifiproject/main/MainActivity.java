@@ -18,6 +18,7 @@ import com.zjk.wifiproject.config.ConfigBroadcast;
 import com.zjk.wifiproject.config.ConfigIntent;
 import com.zjk.wifiproject.drawer.DrawerFragment;
 import com.zjk.wifiproject.entity.Users;
+import com.zjk.wifiproject.event.RefreshTipEvent;
 import com.zjk.wifiproject.file.FileFragment;
 import com.zjk.wifiproject.music.MusicFragment;
 import com.zjk.wifiproject.picture.PictureFragment;
@@ -29,6 +30,8 @@ import com.zjk.wifiproject.vedio.VedioFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends BasePresenterActivity<MainVu> {
 
@@ -48,10 +51,20 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
         list.add(new FileFragment());
         vu.setViewPager(list);
 
+        //注册更新底部布局的广播接收器
         receiver = new UpdataBottomLayoutReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConfigBroadcast.ACTION_UPDATE_BOTTOM);
         registerReceiver(receiver, filter);
+
+        //EventBus
+        EventBus.getDefault().register(this);
+
+    }
+
+    public void onEvent(RefreshTipEvent event) {
+        /* Do something */
+        checkConnectStatus();
     }
 
     @Override
@@ -60,6 +73,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
         if(receiver!=null){
             unregisterReceiver(receiver);
         }
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

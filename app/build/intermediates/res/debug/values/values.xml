@@ -325,7 +325,7 @@ All Rights Reserved."</string>
     <string name="alertdialog_message_input_username">请输入用户名</string>
     <string name="alertdialog_message_isfriend">此用户已是你的好友</string>
     <string name="alertdialog_message_logout_notify">下线通知</string>
-    <string name="app_name">飞牙</string>
+    <string name="app_name">飞呀</string>
     <string name="audio_head_artist">歌手</string>
     <string name="audio_head_letter">字母</string>
     <string name="bind_no_web">网络不可用，请检查网络后重试</string>

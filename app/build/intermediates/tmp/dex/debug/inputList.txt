@@ -9,6 +9,7 @@ E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\class
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\otto-1.3.7-13d33a5ebc7c4c844e7cc37d6c7c8413da1de252.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-7841e6abb1115035db2414e520ce92bdd6008158.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rebound-0.3.7-bbaf98b3740fda7c10b238c394be126847fc61cb.jar
+E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\eventbus-2.4.0-03e25c6b3178abc8ecb48b05be1f281aa0724b29.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-a27a8f82ac0b46c0541b7fd779ecc0cc456b9053.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\butterknife-5.1.2-954dea677dee50ca0e7c6d647135ce6c40ea9b76.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rxandroid-0.24.0-54a70d496759fa4a9b2a85d2c40170ac51412347.jar

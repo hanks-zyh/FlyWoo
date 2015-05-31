@@ -36,6 +36,7 @@ dependencies {
     compile 'com.jakewharton.timber:timber:2.5.0'
     compile 'com.facebook.rebound:rebound:0.3.7'
     compile 'com.facebook.fresco:fresco:0.3.0+'
+    compile 'de.greenrobot:eventbus:2.4.0'
 }
 
 

@@ -1,80 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android" >
-<LinearLayout
-    android:fitsSystemWindows="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include layout="@layout/layout_title" />
-    <include layout="@layout/layout_connect_tip" />
-
-    <com.zjk.wifiproject.view.tabs.SlidingTabLayout
-        android:id="@+id/tabs"
+    <LinearLayout
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/main_red"></com.zjk.wifiproject.view.tabs.SlidingTabLayout>
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_title"/>
+
+        <include layout="@layout/layout_connect_tip"/>
+
+        <com.zjk.wifiproject.view.tabs.SlidingTabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_red"></com.zjk.wifiproject.view.tabs.SlidingTabLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            layout="@layout/shadow"
+            android:background="@drawable/bt_bg_shadow_2dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:id="@+id/createButton"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp"
+                android:layout_width="64dp"
+                android:src="@drawable/ic_main_create"
+                android:layout_height="64dp"/>
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="-54dp"
+            android:background="@color/main_red">
+
+            <TextView
+                android:id="@+id/tv_select_size"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="传输"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ImageButton
+                android:id="@+id/ib_close"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_seletor"
+                android:src="@drawable/ic_x_white"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <include
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        layout="@layout/shadow"
-        android:background="@drawable/bt_bg_shadow_2dp" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v4.view.ViewPager>
-
-        <ImageView
-            android:scaleType="centerInside"
-            android:id="@+id/createButton"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:layout_width="64dp"
-            android:src="@drawable/ic_main_create"
-            android:layout_height="64dp" />
-
-    </FrameLayout>
-    <RelativeLayout
-        android:id="@+id/layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-54dp"
-        android:background="@color/main_red" >
-
-        <TextView
-            android:id="@+id/tv_select_size"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="传输"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <ImageButton
-            android:id="@+id/ib_close"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/btn_seletor"
-            android:src="@drawable/ic_x_white" />
-    </RelativeLayout>
-
-</LinearLayout>
-<include
-
-android:id="@+id/layout_create_or_join"
-layout="@layout/layout_create_or_connect"/>
+        android:id="@+id/layout_create_or_join"
+        layout="@layout/layout_create_or_connect"/>
 </merge>

@@ -28,12 +28,14 @@
         android:background="@drawable/btn_seletor"
         android:src="@drawable/ic_search_white" />
 
-    <ImageView
-        android:layout_width="34dp"
+    <TextView
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_width="54dp"
         android:layout_height="match_parent"
         android:layout_margin="4dp"
         android:layout_toRightOf="@+id/ib_menu"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_main_logo" />
+        android:text="@string/app_name"/>
 
 </RelativeLayout>
