@@ -78,41 +78,41 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     //消息列表
     private List<ChatEntity> list = new ArrayList<>();
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView        mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private ChatAdapter mAdapter;
+    private ChatAdapter         mAdapter;
 
     //聊天底部按钮
     private Button btn_chat_emo, btn_chat_send, btn_chat_add, btn_chat_keyboard, btn_speak, btn_chat_voice;
     private EmoticonsEditText edit_user_comment;
     private String targetId = "";
     //    BmobChatUser targetUser;
-    private static int MsgPagerNum;
-    private LinearLayout layout_more, layout_emo, layout_add;
+    private static int          MsgPagerNum;
+    private        LinearLayout layout_more, layout_emo, layout_add;
     private ViewPager pager_emo;
-    private TextView tv_picture, tv_apk, tv_music,tv_vedio,tv_file;
+    private TextView  tv_picture, tv_apk, tv_music, tv_vedio, tv_file;
 
     // 语音有关
     private RelativeLayout layout_record;
-    private TextView tv_voice_tips;
-    private ImageView iv_record;
-    private Drawable[] drawable_Anims;// 话筒动画
+    private TextView       tv_voice_tips;
+    private ImageView      iv_record;
+    private Drawable[]     drawable_Anims;// 话筒动画
     private ZRecordManager recordManager;
 
     //发送
     private String targetIp;
 
     //Handler
-    private Handler mHandler;
-    private MessageReveiver messageReveiver;
+    private Handler            mHandler;
+    private MessageReveiver    messageReveiver;
     private UDPMessageListener udpMessageListener;
 
 
-    private String mIMEI;
-    private Users mChatUser;
+    private String       mIMEI;
+    private Users        mChatUser;
     private SqlDBOperate mDBOperate;
-    private int mSenderID;
-    private TcpClient tcpClient;
+    private int          mSenderID;
+    private TcpClient    tcpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,8 +146,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        Logger.d(mChatUser.toString());
 //        Logger.d(mChatUser.getIpaddress());
         Set<String> keys = BaseApplication.sendFileStates.keySet();
-        if(keys.size()>0){
-            for(String s : keys) {
+        if (keys.size() > 0) {
+            for (String s : keys) {
                 sendFileMessage(s);
             }
         }
@@ -353,13 +353,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 初始化语音动画资源
+     *
      * @param
      * @Title: initVoiceAnimRes
      */
     private void initVoiceAnimRes() {
-        drawable_Anims = new Drawable[]{context.getResources().getDrawable(R.drawable.chat_icon_voice2),
+        drawable_Anims = new Drawable[] { context.getResources().getDrawable(R.drawable.chat_icon_voice2),
                 context.getResources().getDrawable(R.drawable.chat_icon_voice3), context.getResources().getDrawable(R.drawable.chat_icon_voice4),
-                context.getResources().getDrawable(R.drawable.chat_icon_voice5), context.getResources().getDrawable(R.drawable.chat_icon_voice6)};
+                context.getResources().getDrawable(R.drawable.chat_icon_voice5), context.getResources().getDrawable(R.drawable.chat_icon_voice6) };
     }
 
     /**
@@ -785,7 +786,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     case IPMSGConst.WHAT_FILE_RECEIVING: //
                     case IPMSGConst.WHAT_FILE_SENDING: //
                         FileState fs = (FileState) msg.obj;
-                        Logger.i("Handler___receiveing:"+fs.percent);
+                        Logger.i("Handler___receiveing:" + fs.percent);
                         updateFileStatus(fs);
                         break;
                 }
@@ -795,16 +796,17 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 更新界面中文件传输状态
+     *
      * @param fs
      */
     private void updateFileStatus(FileState fs) {
-        for(int i=list.size()-1;i>=0;i--){
+        for (int i = list.size() - 1; i >= 0; i--) {
             ChatEntity item = list.get(i);
 
             String fileName0 = item.getContent().substring(item.getContent().lastIndexOf("/") + 1);
-            String fileName1 =fs.filePath.substring(fs.filePath.lastIndexOf("/") + 1);
+            String fileName1 = fs.filePath.substring(fs.filePath.lastIndexOf("/") + 1);
 
-            switch (item.getType()){
+            switch (item.getType()) {
                 case TEXT:
                     break;
                 case IMAGE:
@@ -815,7 +817,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 case MUSIC:
                 case APK:
                 case FILE:
-                    if(fileName0.equals(fileName1)){
+                    if (fileName0.equals(fileName1)) {
                         item.setPercent(fs.percent);
                         item.setContent(fs.filePath);
                         mAdapter.notifyDataSetChanged();
@@ -1019,10 +1021,19 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         chatMsg.setIsSend(true);
         chatMsg.setType(Message.CONTENT_TYPE.FILE);
         chatMsg.setTime(System.currentTimeMillis());
-        refreshMessage(chatMsg);
-        //发送UDP
-        sendMessage(filePath, Message.CONTENT_TYPE.FILE);
 
+        //发送UDP
+        String tmp = filePath.trim();
+        String fileEnd = tmp.substring(tmp.lastIndexOf(".") + 1).toLowerCase();
+        Logger.d("文件后缀名：" + fileEnd);
+        if (fileEnd.contains("jpg") || fileEnd.contains("png")) {
+            chatMsg.setType(Message.CONTENT_TYPE.IMAGE);
+            sendMessage(filePath, Message.CONTENT_TYPE.IMAGE);
+        } else {
+            sendMessage(filePath, Message.CONTENT_TYPE.FILE);
+        }
+//        /刷新界面
+        refreshMessage(chatMsg);
     }
 
     /**
@@ -1048,7 +1059,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        refreshMessage(message);
 
     }
-
 
 
     /**

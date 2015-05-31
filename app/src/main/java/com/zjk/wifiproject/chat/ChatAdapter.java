@@ -1,5 +1,6 @@
 package com.zjk.wifiproject.chat;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -31,30 +32,30 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     // 8种Item的类型
     // 文本
-    private final int TYPE_RECEIVER_TXT = 0;
-    private final int TYPE_SEND_TXT = 1;
+    private final int TYPE_RECEIVER_TXT   = 0;
+    private final int TYPE_SEND_TXT       = 1;
     // 图片
-    private final int TYPE_SEND_IMAGE = 2;
+    private final int TYPE_SEND_IMAGE     = 2;
     private final int TYPE_RECEIVER_IMAGE = 3;
     // 音乐
-    private final int TYPE_SEND_MUSIC = 4;
+    private final int TYPE_SEND_MUSIC     = 4;
     private final int TYPE_RECEIVER_MUSIC = 5;
     // 语音
-    private final int TYPE_SEND_VOICE = 6;
+    private final int TYPE_SEND_VOICE     = 6;
     private final int TYPE_RECEIVER_VOICE = 7;
     //视频
-    private final int TYPE_SEND_VEDIO = 8;
+    private final int TYPE_SEND_VEDIO     = 8;
     private final int TYPE_RECEIVER_VEDIO = 9;
     //APK
-    private final int TYPE_SEND_APK = 10;
-    private final int TYPE_RECEIVER_APK = 11;
+    private final int TYPE_SEND_APK       = 10;
+    private final int TYPE_RECEIVER_APK   = 11;
     //文件
-    private final int TYPE_SEND_FILE = 12;
-    private final int TYPE_RECEIVER_FILE = 13;
+    private final int TYPE_SEND_FILE      = 12;
+    private final int TYPE_RECEIVER_FILE  = 13;
 
 
     private List<ChatEntity> list;
-    private MediaPlayer mMediaPlayer;
+    private MediaPlayer      mMediaPlayer;
     private boolean isPlay = false;
     private AnimationDrawable anim;
 
@@ -223,8 +224,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      */
     public class TextViewHolder extends BaseViewHolder {
 
-        public EmoticonsTextView tv_message;
-        private TextView tv_time;
+        public  EmoticonsTextView tv_message;
+        private TextView          tv_time;
 
         public TextViewHolder(View itemView) {
             super(itemView);
@@ -240,15 +241,16 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         public void update(int position) {
             ChatEntity item = list.get(position);
             tv_message.setText(item.getContent());
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
         }
     }
+
     /**
      * 图片的ViewHolder
      */
     private class ImageViewHolder extends BaseViewHolder {
         private SimpleDraweeView iv_picture;
-        private TextView tv_time;
+        private TextView         tv_time;
 
         public ImageViewHolder(View v) {
             super(v);
@@ -264,9 +266,10 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         public void update(int position) {
             ChatEntity item = list.get(position);
             iv_picture.setImageURI(Uri.parse("file://" + item.getContent()));
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
         }
     }
+
     /**
      * 语音消息的ViewHolder
      */
@@ -288,7 +291,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void update(final int position) {
             ChatEntity item = list.get(position);
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
             tv_voice_length.setText(getVoiceLength(view, item.getContent()) + "s");
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -300,9 +303,9 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
-    private int getVoiceLength(View view,String path){
-        MediaPlayer mp = MediaPlayer.create(view.getContext(), Uri.parse("file://"+path));
-        int duration = mp.getDuration()/1000;
+    private int getVoiceLength(View view, String path) {
+        MediaPlayer mp = MediaPlayer.create(view.getContext(), Uri.parse("file://" + path));
+        int duration = mp.getDuration() / 1000;
         mp.release();
         return duration;
     }
@@ -398,12 +401,21 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
 
     /**
+     * 安装APK
+     */
+    private void installApk(View v, File file) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        v.getContext().startActivity(intent);
+    }
+
+    /**
      * 文件ViewHolder
      */
     private class FileViewHolder extends BaseViewHolder {
-        private TextView tv_time,fileName,fileSize;
+        private TextView tv_time, fileName, fileSize;
         private ProgressBar progress;
-        private ImageView fileTpye;
+        private ImageView   fileTpye;
 
         @Override
         protected void bindViews(View itemView) {
@@ -417,17 +429,59 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void update(final int position) {
             ChatEntity item = list.get(position);
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
             progress.setProgress(item.getPercent());
-            File f = new File(item.getContent());
-            if(f.exists()) {
-                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+            final File f = new File(item.getContent());
+            if (f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(), f.length()));
                 fileName.setText(f.getName());
-            }else {
-                Logger.e("文件不存在:"+item.getContent());
+            } else {
+                Logger.e("文件不存在:" + item.getContent());
             }
 
-            switch (item.getType()){
+            String tmp = fileName.getText().toString().trim();
+            String fileEnd = tmp.substring(tmp.lastIndexOf(".") + 1).toLowerCase();
+            fileTpye.setImageResource(R.drawable.item_file);
+            if (fileEnd.contains("apk")) {
+                fileTpye.setImageResource(R.drawable.item_apk);
+                //点击事件
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        installApk(v, f);
+                    }
+                });
+            } else if (fileEnd.contains("mp3") || fileEnd.contains("amr")) {
+                fileTpye.setImageResource(R.drawable.item_music);
+                //点击事件
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        playVedio(v,f);
+                    }
+                });
+            } else if (fileEnd.contains("mp4") || fileEnd.contains("3gp") || fileEnd.contains("rmvb") || fileEnd.contains("mtk") || fileEnd.contains("avi")) {
+                fileTpye.setImageResource(R.drawable.item_vedio);
+                //点击事件
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        playVedio(v, f);
+                    }
+                });
+            }else {
+                fileTpye.setImageResource(R.drawable.item_file);
+                //点击事件
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openFile(v, f);
+                    }
+                });
+            }
+
+/*
+            switch (item.getType()) {
                 case FILE:
                     fileTpye.setImageResource(R.drawable.item_file);
                     break;
@@ -440,7 +494,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 case APK:
                     fileTpye.setImageResource(R.drawable.item_apk);
                     break;
-            }
+            }*/
         }
 
         public FileViewHolder(View v) {
@@ -448,11 +502,32 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
+    private void openFile(View v, File f) {
+        Intent it = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(f);
+        it.setDataAndType(uri, "*/*");
+        v.getContext().startActivity(it);
+    }
+
+    private void playVedio(View v, File f) {
+        Intent it = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(f);
+        it.setDataAndType(uri, "video/*");
+        v.getContext().startActivity(it);
+    }
+    private void playAudio(View v, File f){
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(f), "audio/*");
+        v.getContext().startActivity(intent);
+
+    }
+
     /**
      * 文件ViewHolder
      */
     private class VedioViewHolder extends BaseViewHolder {
-        private TextView tv_time,fileName,fileSize;
+        private TextView tv_time, fileName, fileSize;
         private ProgressBar progress;
 
         @Override
@@ -466,24 +541,27 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void update(final int position) {
             ChatEntity item = list.get(position);
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
             progress.setProgress(item.getPercent());
             File f = new File(item.getContent());
-            if(f.exists()) {
-                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+            if (f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(), f.length()));
                 fileName.setText(f.getName());
-            }else {
-                Logger.e("文件不存在:"+item.getContent());
+            } else {
+                Logger.e("文件不存在:" + item.getContent());
             }
         }
+
         public VedioViewHolder(View v) {
             super(v);
         }
-    }    /**
+    }
+
+    /**
      * 文件ViewHolder
      */
     private class MusicViewHolder extends BaseViewHolder {
-        private TextView tv_time,fileName,fileSize;
+        private TextView tv_time, fileName, fileSize;
         private ProgressBar progress;
 
         @Override
@@ -497,24 +575,27 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void update(final int position) {
             ChatEntity item = list.get(position);
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
             progress.setProgress(item.getPercent());
             File f = new File(item.getContent());
-            if(f.exists()) {
-                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+            if (f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(), f.length()));
                 fileName.setText(f.getName());
-            }else {
-                Logger.e("文件不存在:"+item.getContent());
+            } else {
+                Logger.e("文件不存在:" + item.getContent());
             }
         }
+
         public MusicViewHolder(View v) {
             super(v);
         }
-    }    /**
+    }
+
+    /**
      * 文件ViewHolder
      */
     private class ApkViewHolder extends BaseViewHolder {
-        private TextView tv_time,fileName,fileSize;
+        private TextView tv_time, fileName, fileSize;
         private ProgressBar progress;
 
         @Override
@@ -528,16 +609,17 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void update(final int position) {
             ChatEntity item = list.get(position);
-            tv_time.setText(DateUtils.formatDate(tv_time.getContext(),item.getTime()));
+            tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
             progress.setProgress(item.getPercent());
             File f = new File(item.getContent());
-            if(f.exists()) {
-                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(),f.length()));
+            if (f.exists()) {
+                fileSize.setText(Formatter.formatFileSize(fileSize.getContext(), f.length()));
                 fileName.setText(f.getName());
-            }else {
-                Logger.e("文件不存在:"+item.getContent());
+            } else {
+                Logger.e("文件不存在:" + item.getContent());
             }
         }
+
         public ApkViewHolder(View v) {
             super(v);
         }
