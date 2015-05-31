@@ -33,7 +33,7 @@ public class ChatDao {
     private static final String COLUME_ISSEND  = "isSend";        //接收或者发送的
 
     private String[] columns = new String[] {
-            COLUME_ID, COLUME_CONTENT, COLUME_TIME, COLUME_TYPE,COLUME_ISSEND
+            COLUME_ID, COLUME_CONTENT, COLUME_TIME, COLUME_TYPE, COLUME_ISSEND
     };
 
     // Database fields
@@ -130,7 +130,7 @@ public class ChatDao {
     public boolean deleteChat(ChatEntity chatEntity) {
         open();
         long id = chatEntity.getId();
-        int affectedRows = database.delete(T_NAME, COLUME_ID + " = " + id, null);
+        int affectedRows = database.delete(T_NAME, COLUME_ID + " = ?", new String[] { id + "" });
         close();
         return affectedRows > 0;
     }

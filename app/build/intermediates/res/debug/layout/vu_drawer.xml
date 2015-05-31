@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F1F1F1"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#F1F1F1"
+              android:orientation="vertical">
 
     <RelativeLayout
+        android:paddingTop="30dp"
         android:layout_width="match_parent"
         android:background="@color/blue_black"
-        android:padding="16dp"
-        android:layout_height="240dp">
+        android:paddingLeft="16dp"
+        android:layout_height="120dp">
+
         <ImageView
             android:id="@+id/avatar"
             android:layout_marginRight="8dp"
-            android:layout_width="100dp"
+            android:layout_width="60dp"
             android:src="@drawable/superman_1"
-            android:layout_height="100dp" />
+            android:layout_height="60dp"/>
 
         <TextView
             android:text="Nuex4"
@@ -25,17 +27,13 @@
             android:textColor="@color/white"
             android:layout_toRightOf="@+id/avatar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:gravity="center_vertical"
-            android:layout_below="@+id/deviceName"
-            android:drawableLeft="@drawable/connect"
-            android:layout_marginTop="4dp"
-            android:text="传输好友0人"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:layout_toRightOf="@+id/avatar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/vu_drawer.xml -->

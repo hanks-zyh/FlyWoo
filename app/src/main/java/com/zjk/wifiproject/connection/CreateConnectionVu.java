@@ -57,13 +57,13 @@ import java.util.TimerTask;
 
 public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListener.OnNewMsgListener {
 
-    private View view;
-    private Context context;
+    private View     view;
+    private Context  context;
     private EditText edit;
 
     //创建或者加入的布局
-    private View layout_hide;
-    private CheckBox mHelpCheckBox; //顶部帮助按钮
+    private View      layout_hide;
+    private CheckBox  mHelpCheckBox; //顶部帮助按钮
     private ImageView mHideButton;  //底部关闭按钮
     private ImageView mCreate;      //创建
     private ImageView mJoin;        //加入
@@ -71,19 +71,18 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     private ImageView mLeftImage;   //左边小人
 
 
-    private View mCenterCircle;     //中间布局
+    private View             mCenterCircle;     //中间布局
     private CircularProgress mCircleProgress;
-    private TextView mStatus; //当前热点状态
+    private TextView         mStatus; //当前热点状态
 
-    private View mCenterSearch;
+    private View       mCenterSearch;
     private SearchView mSearchView;
-    private Timer timer, cennectTimer;
+    private Timer      timer, cennectTimer;
     private String localHostName;  //创建的热点的名字
-    private File file;
+    private File   file;
 
-
-    private String localIPaddress; // 本地WifiIP
-    private String serverIPaddres; // 热点IP
+    private String             localIPaddress; // 本地WifiIP
+    private String             serverIPaddres; // 热点IP
     private UDPMessageListener mUDPListener;
 
     private List<String> mList = new ArrayList<>();//扫描到的WiFi列表
@@ -96,16 +95,16 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
         bindViews();
         setListener();
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (BaseApplication.sendFileStates.keySet().size() > 0) {
+        if (BaseApplication.sendFileStates.keySet().size() > 0) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     onCreateButtonClick();
-                } else {
-                    showTwoButtonAnimation();
                 }
-            }
-        }, 500);
+            }, 600);
+        } else {
+            showTwoButtonAnimation();
+        }
     }
 
     @Override

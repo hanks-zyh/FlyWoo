@@ -13,4 +13,9 @@ public class DrawerFragment extends BasePresenterFragment<DrawerVu> {
     protected void onBindVu() {
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        vu.onResume(context);
+    }
 }

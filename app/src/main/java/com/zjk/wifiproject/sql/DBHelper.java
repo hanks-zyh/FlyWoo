@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String sql = "create table " + T_NAME +
                 "(" +
-                COLUME_ID + TEXT_TYPE + "integer primary key," +
+                COLUME_ID  + " INTEGER PRIMARY KEY," +
                 COLUME_CONTENT + TEXT_TYPE + COMMA_SEP +
                 COLUME_TIME + INTEGER_TYPE + COMMA_SEP +
                 COLUME_TYPE + INTEGER_TYPE + COMMA_SEP +
