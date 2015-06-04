@@ -48,7 +48,6 @@ public class TcpService implements Runnable {
             L.d(TAG, "建立监听服务器ServerSocket成功");
         }
         catch (IOException e) {
-            // TODO Auto-generated catch block
             L.d(TAG, "建立监听服务器ServerSocket失败");
             e.printStackTrace();
         }
@@ -103,12 +102,10 @@ public class TcpService implements Runnable {
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         L.d(TAG, "TCP_Service线程开启");
         while (!IS_THREAD_STOP) {
             if (SCAN_FLAG) {
                 scan_recv();
-
             }
         }
     }
@@ -223,10 +220,11 @@ public class TcpService implements Runnable {
                             case VOICE:
                                 break;
 
-                            case VEDIO:
+                            case VEDIO:  //发送定时消息通知更新传输进度
                             case MUSIC:
                             case APK:
                             case FILE:
+                                //发送定时消息通知更新传输进度
                                 Logger.i("receiveing:"+fs.percent);
                                 if(mHandler!=null) {
                                     android.os.Message msg = mHandler.obtainMessage();
@@ -273,8 +271,10 @@ public class TcpService implements Runnable {
                     default:
                         break;
                 }
+                //文件传输完毕，把文件从传输list中移除
                 BaseApplication.recieveFileStates.remove(fs.filePath);
 
+                //发送广播通知刷新界面
                 Intent intent = new Intent(ConfigBroadcast.ACTION_NEW_MSG);
                 intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_TYPE,type);
                 intent.putExtra(ConfigIntent.EXTRA_NEW_MSG_CONTENT, fileSavePath);
@@ -288,7 +288,7 @@ public class TcpService implements Runnable {
 
             }
             catch (IOException e) {
-                // TODO Auto-generated catch block
+
                 L.d(TAG, "写入文件失败");
                 e.printStackTrace();
             }

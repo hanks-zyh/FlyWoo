@@ -172,7 +172,6 @@ public class UDPMessageListener implements Runnable {
 
         switch (commandNo) {
 
-
             /*-------------------服务器------------------------------*/
             case IPMSGConst.NO_CONNECT_SUCCESS: { //接收到客户端连接成功
 

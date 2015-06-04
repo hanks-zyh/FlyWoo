@@ -271,6 +271,11 @@ public class FileUtils {
         return list;
     }
 
+    /**
+     * 获取音乐列表
+     * @param context
+     * @return
+     */
     public static List<MusicEntity> getMusicList(Context context) {
         List<MusicEntity> list = new ArrayList<MusicEntity>();
 
@@ -303,6 +308,11 @@ public class FileUtils {
 
     }
 
+    /**
+     * 获取视频列表
+     * @param context
+     * @return
+     */
     public static List<VedioEntity> getVedioList(Context context) {
         List<VedioEntity> list = new ArrayList<VedioEntity>();
         ContentResolver resolver = context.getContentResolver();

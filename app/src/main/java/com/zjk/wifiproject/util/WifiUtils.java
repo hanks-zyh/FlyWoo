@@ -38,14 +38,17 @@ import java.util.List;
 
 public class WifiUtils {
 
-    private static final String TAG = "SZU_WifiUtils";
-    private static Context mContext = BaseApplication.getInstance();
-    private static WifiManager mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+    private static final String      TAG          = "SZU_WifiUtils";
+    private static       Context     mContext     = BaseApplication.getInstance();
+    private static       WifiManager mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 
     public static enum WifiCipherType {
         WIFICIPHER_WEP, WIFICIPHER_WPA, WIFICIPHER_NOPASS, WIFICIPHER_INVALID
     }
 
+    /**
+     * 开启热点
+     */
     public static void startWifiAp(String ssid, String passwd, final Handler handler) {
         if (mWifiManager.isWifiEnabled()) {
             mWifiManager.setWifiEnabled(false);
@@ -67,7 +70,7 @@ public class WifiUtils {
 
             @Override
             public void doTimeOutWork() {
-                
+
                 this.exit();
             }
         };
@@ -75,6 +78,12 @@ public class WifiUtils {
 
     }
 
+    /**
+     * 开启热点
+     *
+     * @param ssid
+     * @param passwd
+     */
     private static void startAp(String ssid, String passwd) {
         Method method1 = null;
         try {
@@ -114,6 +123,9 @@ public class WifiUtils {
         }
     }
 
+    /**
+     * 关闭热点
+     */
     public static void closeWifiAp() {
         if (isWifiApEnabled()) {
             try {
@@ -141,6 +153,11 @@ public class WifiUtils {
         }
     }
 
+    /**
+     * 热点是否可用
+     *
+     * @return
+     */
     public static boolean isWifiApEnabled() {
         try {
             Method method = mWifiManager.getClass().getMethod("isWifiApEnabled");
@@ -178,15 +195,26 @@ public class WifiUtils {
         return mNetworkInfo.isConnected();
     }
 
+    /**
+     * wifi是否打开
+     *
+     * @return
+     */
     public static boolean isWifiEnabled() {
         return mWifiManager.isWifiEnabled();
     }
 
+    /**
+     * 打开wifi
+     */
     public static void OpenWifi() {
         if (!mWifiManager.isWifiEnabled())
             mWifiManager.setWifiEnabled(true);
     }
 
+    /**
+     * 关闭wifi
+     */
     public static void closeWifi() {
         mWifiManager.setWifiEnabled(false);
     }
@@ -213,9 +241,6 @@ public class WifiUtils {
      *                 WEP加密: {@linkplain WifiCipherType#WIFICIPHER_WEP}<br>
      *                 WPA加密： {@linkplain WifiCipherType#WIFICIPHER_WPA}<br>
      * @return true:连接成功；false:连接失败
-     * @date 2015年2月14日 上午11:17
-     * @change hillfly
-     * @version 1.0
      */
     public static boolean connectWifi(String SSID, String Password, WifiCipherType Type) {
         if (!isWifiEnabled()) {
@@ -346,6 +371,7 @@ public class WifiUtils {
 
     /**
      * 注意这里返回的字符串头和尾多了引号""
+     *
      * @return
      */
     public static String getSSID() {
@@ -423,6 +449,11 @@ public class WifiUtils {
         return mWifiManager.getConnectionInfo();
     }
 
+    /**
+     * 获取扫描的列表
+     *
+     * @return
+     */
     public static List<ScanResult> getScanResults() {
         return mWifiManager.getScanResults();
     }
@@ -444,6 +475,7 @@ public class WifiUtils {
 
     /**
      * 获取链接到当前热点的设备IP
+     *
      * @return
      */
     public static ArrayList<String> getConnectedHotIP() {

@@ -57,9 +57,6 @@
         <activity android:name="com.zjk.wifiproject.vedio.VedioSelectActivity" />
         <activity android:name="com.zjk.wifiproject.app.ApkSelectActivity" />
         <activity android:name="com.zjk.wifiproject.music.MusicSelectActivity" />
-        <activity
-            android:name="android.support.v7.widget.TestActivity"
-            android:label="RecyclerViewTestActivity" />
     </application>
 
 </manifest>

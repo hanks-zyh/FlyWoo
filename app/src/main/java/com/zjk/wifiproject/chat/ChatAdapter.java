@@ -457,7 +457,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        playVedio(v,f);
+                        playAudio(v,f);
                     }
                 });
             } else if (fileEnd.contains("mp4") || fileEnd.contains("3gp") || fileEnd.contains("rmvb") || fileEnd.contains("mtk") || fileEnd.contains("avi")) {
