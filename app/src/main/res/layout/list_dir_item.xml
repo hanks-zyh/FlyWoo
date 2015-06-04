@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:padding="5dp">
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/id_dir_item_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/pic_dir"
         android:paddingBottom="17dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingTop="9dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_launcher" />
+        android:background="@drawable/pic_dir"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:placeholderImage="@drawable/pic_loading" />
 
     <LinearLayout
         android:layout_width="wrap_content"

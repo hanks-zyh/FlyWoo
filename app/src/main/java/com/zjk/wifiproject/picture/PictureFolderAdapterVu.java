@@ -1,24 +1,22 @@
 package com.zjk.wifiproject.picture;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zjk.wifiproject.R;
 import com.zjk.wifiproject.presenters.Vu;
 import com.zjk.wifiproject.view.TouchCheckBox;
-
-import java.io.File;
 
 public class PictureFolderAdapterVu implements Vu {
 
     private View view;
 
-    private ImageView     mImage;
+    private SimpleDraweeView     mImage;
     private TextView      mPictureCount;
     private TouchCheckBox mSelect;
     private TextView      mFolderName;
@@ -33,7 +31,7 @@ public class PictureFolderAdapterVu implements Vu {
     }
 
     private void bindViews() {
-        mImage = (ImageView) view.findViewById(R.id.image);
+        mImage = (SimpleDraweeView) view.findViewById(R.id.image);
         mPictureCount = (TextView) view.findViewById(R.id.pictureCount);
         mSelect = (TouchCheckBox) view.findViewById(R.id.select);
         mFolderName = (TextView) view.findViewById(R.id.folderName);
@@ -49,7 +47,8 @@ public class PictureFolderAdapterVu implements Vu {
     }
 
     public void setImage(String path) {
-        Picasso.with(context).load(new File(path)).centerCrop().resize(200, 200).into(mImage);
+//        Picasso.with(context).load(new File(path)).centerCrop().resize(200, 200).into(mImage);
+        mImage.setImageURI(Uri.parse("file://"+path));
     }
 
     public void setOnCheckedChangeListener (TouchCheckBox.OnCheckedChangeListener listener){

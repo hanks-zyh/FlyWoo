@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.balysv.materialripple.MaterialRippleLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="92dp"
-    android:minHeight="92dp"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:minHeight="92dp">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/guide_2" />
+    <RelativeLayout
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:minHeight="92dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-    <TextView
-        android:id="@+id/pictureCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/folderName"
-        android:layout_marginTop="4dp"
-        android:layout_toRightOf="@+id/image"
-        android:text="(0)"
-        android:textColor="@color/text_colot_2"
-        android:textSize="12sp" />
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/image"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:placeholderImage="@drawable/pic_loading"
+            fresco:placeholderImageScaleType="centerCrop"/>
 
-    <com.zjk.wifiproject.view.TouchCheckBox
-        android:id="@+id/select"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:padding="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/pictureCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/folderName"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@+id/image"
+            android:text="(0)"
+            android:textColor="@color/text_colot_2"
+            android:textSize="12sp"/>
 
-    <TextView
-        android:id="@+id/folderName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/image"
-        android:maxEms="20"
-        android:singleLine="true"
-        android:text="DownLoad"
-        android:textColor="@color/text_colot_1"
-        android:textSize="16sp" />
+        <com.zjk.wifiproject.view.TouchCheckBox
+            android:id="@+id/select"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"/>
 
-</RelativeLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/item_picture_folder.xml -->
+        <TextView
+            android:id="@+id/folderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="24dp"
+            android:layout_toRightOf="@+id/image"
+            android:maxEms="20"
+            android:singleLine="true"
+            android:text="DownLoad"
+            android:textColor="@color/text_colot_1"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+</com.balysv.materialripple.MaterialRippleLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/item_picture_folder.xml -->

@@ -27,7 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zjk.wifiproject.R;
 
 import java.io.File;
@@ -50,33 +50,33 @@ public class AlbumActivity extends Activity {
     /**
      * 最多选择图片的个数
      */
-    private static int MAX_NUM = 6;
+    private static       int MAX_NUM      = 6;
     private static final int TAKE_PICTURE = 520;
 
-    public static final String INTENT_MAX_NUM = "intent_max_num";
+    public static final String INTENT_MAX_NUM          = "intent_max_num";
     public static final String INTENT_SELECTED_PICTURE = "intent_selected_picture";
 
-    private Context context;
-    private GridView gridview;
+    private Context        context;
+    private GridView       gridview;
     private PictureAdapter adapter;
     /**
      * 临时的辅助类，用于防止同一个文件夹的多次扫描
      */
-    private HashMap<String, Integer> tmpDir = new HashMap<String, Integer>();
-    private ArrayList<ImageFloder> mDirPaths = new ArrayList<ImageFloder>();
+    private HashMap<String, Integer> tmpDir    = new HashMap<String, Integer>();
+    private ArrayList<ImageFloder>   mDirPaths = new ArrayList<ImageFloder>();
 
 
     private ContentResolver mContentResolver;
-    private Button btn_select, btn_ok;
-    private ListView listview;
+    private Button          btn_select, btn_ok;
+    private ListView      listview;
     private FolderAdapter folderAdapter;
-    private ImageFloder imageAll, currentImageFolder;
+    private ImageFloder   imageAll, currentImageFolder;
 
     /**
      * 已选择的图片
      */
     private ArrayList<String> selectedPicture = new ArrayList<String>();
-    private String cameraPath = null;
+    private String            cameraPath      = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,7 +258,7 @@ public class AlbumActivity extends Activity {
             if (convertView == null) {
                 convertView = View.inflate(context, R.layout.grid_item_picture, null);
                 holder = new ViewHolder();
-                holder.iv = (ImageView) convertView.findViewById(R.id.iv);
+                holder.iv = (SimpleDraweeView) convertView.findViewById(R.id.iv);
                 holder.checkBox = (Button) convertView.findViewById(R.id.check);
                 convertView.setTag(holder);
             } else {
@@ -272,8 +272,8 @@ public class AlbumActivity extends Activity {
                 holder.checkBox.setVisibility(View.VISIBLE);
                 final ImageItem item = currentImageFolder.images.get(position);
 
-                Picasso.with(context).load("file://" + item.path).centerCrop().resize(100, 100).into(holder.iv);
-
+//                Picasso.with(context).load("file://" + item.path).centerCrop().resize(100, 100).into(holder.iv);
+                holder.iv.setImageURI(Uri.parse("file://" + item.path));
                 boolean isSelected = selectedPicture.contains(item.path);
                 holder.checkBox.setOnClickListener(new OnClickListener() {
                     @Override
@@ -299,8 +299,8 @@ public class AlbumActivity extends Activity {
     }
 
     class ViewHolder {
-        ImageView iv;
-        Button checkBox;
+        SimpleDraweeView iv;
+        Button           checkBox;
     }
 
     class FolderAdapter extends BaseAdapter {
@@ -326,7 +326,7 @@ public class AlbumActivity extends Activity {
             if (convertView == null) {
                 convertView = View.inflate(context, R.layout.list_dir_item, null);
                 holder = new FolderViewHolder();
-                holder.id_dir_item_image = (ImageView) convertView.findViewById(R.id.id_dir_item_image);
+                holder.id_dir_item_image = (SimpleDraweeView) convertView.findViewById(R.id.id_dir_item_image);
                 holder.id_dir_item_name = (TextView) convertView.findViewById(R.id.id_dir_item_name);
                 holder.id_dir_item_count = (TextView) convertView.findViewById(R.id.id_dir_item_count);
                 holder.choose = (ImageView) convertView.findViewById(R.id.choose);
@@ -336,7 +336,8 @@ public class AlbumActivity extends Activity {
             }
             ImageFloder item = mDirPaths.get(position);
 //            loader.displayImage("file://" + item.getFirstImagePath(), holder.id_dir_item_image, options);
-            Picasso.with(context).load("file://" + item.getFirstImagePath()).centerCrop().resize(100, 100).into(holder.id_dir_item_image);
+//            Picasso.with(context).load("file://" + item.getFirstImagePath()).centerCrop().resize(100, 100).into(holder.id_dir_item_image);
+            holder.id_dir_item_image.setImageURI(Uri.parse("file://" + item.getFirstImagePath()));
             holder.id_dir_item_count.setText(item.images.size() + "张");
             holder.id_dir_item_name.setText(item.getName());
             holder.choose.setVisibility(currentImageFolder == item ? View.VISIBLE : View.GONE);
@@ -345,10 +346,10 @@ public class AlbumActivity extends Activity {
     }
 
     class FolderViewHolder {
-        ImageView id_dir_item_image;
-        ImageView choose;
-        TextView id_dir_item_name;
-        TextView id_dir_item_count;
+        SimpleDraweeView id_dir_item_image;
+        ImageView        choose;
+        TextView         id_dir_item_name;
+        TextView         id_dir_item_count;
     }
 
     /**
@@ -356,7 +357,7 @@ public class AlbumActivity extends Activity {
      */
     private void getThumbnail() {
         Cursor mCursor = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.ImageColumns.DATA}, "", null,
+                new String[] { MediaStore.Images.ImageColumns.DATA }, "", null,
                 MediaStore.MediaColumns.DATE_ADDED + " DESC");
 //        Log.e("TAG", mCursor.getCount() + "");
         if (mCursor.moveToFirst()) {

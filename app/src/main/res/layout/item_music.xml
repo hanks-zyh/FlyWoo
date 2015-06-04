@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.balysv.materialripple.MaterialRippleLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="92dp"
-                android:minHeight="92dp"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:padding="16dp">
-    <TextView
-        android:id="@+id/title"
+    android:layout_height="match_parent"
+    android:minHeight="92dp">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="TextView"
-        android:layout_alignParentLeft="true"
-        android:singleLine="true"
-        android:ellipsize="middle"
-        android:layout_toLeftOf="@+id/isSelect"
-        android:textColor="@color/text_colot_1"
-        android:textSize="16sp" />
+        android:layout_height="92dp"
+        android:gravity="center_vertical"
+        android:minHeight="92dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/isSelect"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/text_colot_1"
+            android:textSize="16sp"
+            tools:text="TextView"/>
 
 
-    <TextView
-        android:layout_alignParentLeft="true"
-        android:singleLine="true"
-        android:ellipsize="middle"
-        android:layout_toLeftOf="@+id/isSelect"
-        android:textSize="14sp"
-        android:layout_below="@+id/title"
-        android:id="@+id/size"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        tools:text="TextView"
-        android:textColor="@color/text_colot_2" />
+        <TextView
+            android:id="@+id/size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="2dp"
+            android:layout_toLeftOf="@+id/isSelect"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/text_colot_2"
+            android:textSize="14sp"
+            tools:text="TextView"/>
 
-    <com.zjk.wifiproject.view.TouchCheckBox
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/isSelect"
-        android:layout_width="48dp"
-        android:padding="10dp"
-        android:layout_height="48dp"
-        android:checked="false"/>
+        <com.zjk.wifiproject.view.TouchCheckBox
+            android:id="@+id/isSelect"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:padding="10dp"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+</com.balysv.materialripple.MaterialRippleLayout>
