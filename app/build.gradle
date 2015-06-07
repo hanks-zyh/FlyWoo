@@ -24,19 +24,27 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    //打印日志
     compile 'com.orhanobut:logger:1.8'
-    compile 'io.reactivex:rxandroid:0.24.0'
+    //函数响应式编程
+  //  compile 'io.reactivex:rxandroid:0.24.0'
+    //android系统兼容包
     compile "com.android.support:appcompat-v7:22.+"
     compile 'com.android.support:support-v13:22.+'
     compile 'com.android.support:support-v4:22.+'
     compile 'com.android.support:palette-v7:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:cardview-v7:22.+'
-    compile 'com.jakewharton:butterknife:5.1.2'
-    compile 'com.jakewharton.timber:timber:2.5.0'
+
+   // compile 'com.jakewharton:butterknife:5.1.2'
+   // compile 'com.jakewharton.timber:timber:2.5.0'
+    //弹性动画
     compile 'com.facebook.rebound:rebound:0.3.7'
+    //图片加载显示
     compile 'com.facebook.fresco:fresco:0.3.0+'
+    //订阅者/发布者模式
     compile 'de.greenrobot:eventbus:2.4.0'
+    //涟漪动画
     compile 'com.balysv:material-ripple:1.0.2'
 }
 

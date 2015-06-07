@@ -1,7 +1,6 @@
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\classes\debug
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-2e70226b3c9d39c56b5501b7e24266ed4aef0072.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-347714e8d628f60cba21c59e8dd82f624d2b053e.jar
-E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\timber-2.5.0-8e225ad47038038b2f336a20349452f84e77e824.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-26fb97815aaa7deee18978d72acb4759a05df904.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-320c854888fd9c8dadf54d3bdf491a94b4656179.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-da6e37d7ba5df9e22476b3bda8724d73d0d98fcd.jar
@@ -12,8 +11,6 @@ E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\class
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rebound-0.3.7-bbaf98b3740fda7c10b238c394be126847fc61cb.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\eventbus-2.4.0-03e25c6b3178abc8ecb48b05be1f281aa0724b29.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-a27a8f82ac0b46c0541b7fd779ecc0cc456b9053.jar
-E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\butterknife-5.1.2-954dea677dee50ca0e7c6d647135ce6c40ea9b76.jar
-E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rxandroid-0.24.0-54a70d496759fa4a9b2a85d2c40170ac51412347.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-b97f7f376732bf50f598e2159ae7f0fa9e9937e6.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\library-2.4.0-dd460f45d27a359687729c3c169358b1eda3100b.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-503ec053dd02160440c7d10844982898901e61f6.jar
@@ -23,6 +20,5 @@ E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\gson-
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-b4ecfa8be9011e07f51435228fca1aaa3a5a6964.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-846b31b2312a114d3a0daeae2a29dd999ff08c5c.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-4e381743c7cba7307340967c0c631bd93e3f1571.jar
-E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\rxjava-1.0.4-6f6b0829324e0a75c464c64ca6c398f3c8dc1bf8.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-ddea844ab6984d08322446048c612bba23138d63.jar
 E:\bysj\WifiProject-AS\WifiProject\app\build\intermediates\pre-dexed\debug\classes-c9dc4fc3c11c266bab9200e99349a6df53fc93b2.jar

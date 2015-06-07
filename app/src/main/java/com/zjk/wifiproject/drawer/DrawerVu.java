@@ -29,9 +29,11 @@ public class DrawerVu implements Vu {
 
     @Override
     public void init(LayoutInflater inflater, ViewGroup container) {
+        //填充布局
         view = inflater.inflate(R.layout.vu_drawer, container, false);
         TextView deviceName = (TextView) view.findViewById(R.id.deviceName);
         deviceName.setText(getPhoneModel());
+        //历史记录的list
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         adapter = new HistoryAdapter(list);
@@ -44,6 +46,7 @@ public class DrawerVu implements Vu {
     }
 
 
+    //得到手机型号
     public String getPhoneModel() {
         String str1 = Build.BRAND;
         String str2 = Build.MODEL;

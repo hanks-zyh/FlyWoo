@@ -35,10 +35,14 @@ import de.greenrobot.event.EventBus;
 
 public class MainActivity extends BasePresenterActivity<MainVu> {
 
+    //存放文件各个分类（应用、音乐、视频、文件、图片）的Fragment
     private List<Fragment> list = new ArrayList<Fragment>();
 
     UpdataBottomLayoutReceiver receiver;
     @Override
+    /**
+     * 在vu实例化和view被填充之后被调用，可以操作vu添加一些别的控件
+     */
     protected void onBindVu() {
         // 侧滑菜单
         DrawerFragment drawerMenu = new DrawerFragment();
@@ -89,7 +93,9 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
     }
 
 
-
+    /**
+     * 广播接收器，更新底部“传输”布局
+     */
     class UpdataBottomLayoutReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {

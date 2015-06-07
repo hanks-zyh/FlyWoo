@@ -96,16 +96,16 @@ public class BaseApplication extends Application {
         initNotification();
         initFolder();
 
-        bus = new Bus();
+      //  bus = new Bus();
     }
 
-    public Bus getBus() {
+   /* public Bus getBus() {
         return bus;
     }
 
     public void setBus(Bus bus) {
         this.bus = bus;
-    }
+    }*/
 
     private void initEmoticons() {
         mEmoticonsId = new HashMap<String, Integer>();

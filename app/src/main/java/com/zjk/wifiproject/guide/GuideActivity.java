@@ -67,9 +67,10 @@ public class GuideActivity extends BaseActivity {
         GuidePageAdapter adapter = new GuidePageAdapter(getFragmentManager());
         mViewPager.setAdapter(adapter);
 
-        mViewPager.setPageTransformer(true, new GuidePageTranformer(mViewPager));
+     //   mViewPager.setPageTransformer(true, new GuidePageTranformer(mViewPager));
     }
 
+    //viewpager的适配器，数据是fragmentlist
     class GuidePageAdapter extends FragmentPagerAdapter {
 
         public GuidePageAdapter(FragmentManager fragmentManager) {
@@ -98,6 +99,7 @@ public class GuideActivity extends BaseActivity {
 
     int[] texts = new int[] { R.string.guide_text_1, R.string.guide_text_2, R.string.guide_text_3 };
 
+    //fragment
     class GuideFragment extends BaseFragment {
         private int index;
 
@@ -112,6 +114,7 @@ public class GuideActivity extends BaseActivity {
             return v;
         }
 
+        //根据index改变四个Fragment的内容
         private void init(View v) {
             if (index < 3) {
                 v.findViewById(R.id.top).setBackgroundColor(colors[index]);

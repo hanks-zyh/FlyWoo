@@ -6,13 +6,20 @@ import android.content.Intent;
 
 import com.zjk.wifiproject.R;
 
+//统一管理界面跳转及动画
 public class A {
 
+	/**
+	 * 跳转到cls
+	 */
 	public static void goOtherActivity(Context context, Class<?> cls) {
 		context.startActivity(new Intent(context, cls));
 		((Activity) context).overridePendingTransition(R.anim.activity_right_enter, R.anim.activity_left_exit);
 	}
 
+	/**
+	 * 跳转到cls并把自己结束
+	 */
 	public static void goOtherActivityFinish(Context context, Class<?> cls) {
 		context.startActivity(new Intent(context, cls));
 		((Activity) context).finish();

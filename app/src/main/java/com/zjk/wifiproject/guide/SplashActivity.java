@@ -23,9 +23,12 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = this;
 
+        //隐藏系统小标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //隐藏导航栏navigation bar
         View decorView = getWindow().getDecorView();
         // Hide both the navigation bar and the status bar.
         // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
@@ -39,6 +42,7 @@ public class SplashActivity extends Activity {
     }
 
     private void goMainActivity() {
+        //延迟1秒
         new Handler() {
         }.postDelayed(new Runnable() {
             public void run() {

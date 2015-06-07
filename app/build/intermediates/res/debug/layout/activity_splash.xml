@@ -12,12 +12,6 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/logo"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:src="@drawable/loading_people"/>
+
 
 </RelativeLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/activity_splash.xml -->
