@@ -120,7 +120,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
 //        view2.findViewById(R.id.connect_wifi).setOnClickListener(this);
 //        view2.findViewById(R.id.send).setOnClickListener(this);
 //        edit = (EditText)view2.findViewById(R.id.editText);
-        layout_hide = view.findViewById(R.id.layout_create_or_join);
+      //  layout_hide = view.findViewById(R.id.layout_create_or_join);
 
         mCenterCircle = view.findViewById(R.id.centerCircle);
         mCircleProgress = (CircularProgress) view.findViewById(R.id.circleProgress);

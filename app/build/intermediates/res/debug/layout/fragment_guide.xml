@@ -1,7 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/top"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<RelativeLayout android:id="@+id/top"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/guide"
@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/guide_1" />
+        android:src="@drawable/guide_1"/>
 
     <ImageView
         android:id="@+id/image_m"
@@ -20,20 +20,26 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30.0dip"
         android:scaleType="fitCenter"
-        android:src="@drawable/guide_1_text" />
+        android:src="@drawable/guide_1_text"
+        android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:layout_width="180dp"
+        android:layout_height="64dp"
         android:layout_below="@id/image_m"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15.0dip"
-        android:gravity="center_horizontal"
-        android:lineSpacingExtra="4.0dip"
-        android:text="@string/guide_text_1"
-        android:textColor="#AA000000"
-        android:textSize="16sp"
-        android:typeface="sans" />
+        android:layout_marginTop="15.0dip">
 
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4.0dip"
+            android:textColor="#AA000000"
+
+            android:textSize="16sp"
+            android:typeface="sans"/>
+    </com.balysv.materialripple.MaterialRippleLayout>
 </RelativeLayout><!-- From: file:/E:/bysj/WifiProject-AS/WifiProject/app/src/main/res/layout/fragment_guide.xml -->

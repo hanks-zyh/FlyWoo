@@ -37,7 +37,8 @@ public class PictureFolderVu implements Vu {
         return view;
     }
 
-    public void setDate(final List<PictureFolderEntity> list) {
+    //为listview填充数据
+    public void setData(final List<PictureFolderEntity> list) {
         adapter = new PictureFolderAdapter(context, list);
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,8 +60,8 @@ public class PictureFolderVu implements Vu {
     }
 
 
-    public void setListDate(List<PictureEntity> list) {
-        Logger.i("setListDate:");
+    public void setListData(List<PictureEntity> list) {
+        Logger.i("setListData:");
         mListView.setAdapter(new PictureAdapter(context, list));
     }
 }

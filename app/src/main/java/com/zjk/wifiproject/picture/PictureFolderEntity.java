@@ -3,8 +3,9 @@ package com.zjk.wifiproject.picture;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zjk.wifiproject.entity.WFile;
-
+/**
+ * 图片文件夹，和他的图片
+ */
 public class PictureFolderEntity  {
     /**
      * 图片的文件夹路径

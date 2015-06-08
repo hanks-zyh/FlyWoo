@@ -77,8 +77,5 @@
 
     </LinearLayout>
 
-    <include
 
-        android:id="@+id/layout_create_or_join"
-        layout="@layout/layout_create_or_connect"/>
 </merge>

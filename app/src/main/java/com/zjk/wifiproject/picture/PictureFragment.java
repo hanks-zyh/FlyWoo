@@ -12,8 +12,9 @@ public class PictureFragment extends BasePresenterFragment<PictureFolderVu> {
 
     @Override
     protected void onBindVu() {
+        //得到图片文件夹列表
         list = FileUtils.getPictureFolderList(context);
-        vu.setDate(list);
+        vu.setData(list);
     }
 
     @Override
@@ -36,6 +37,6 @@ public class PictureFragment extends BasePresenterFragment<PictureFolderVu> {
 
     @Subscribe
     public void showImages(ShowImageListEvent event){
-        vu.setListDate(event.list);
+        vu.setListData(event.list);
     }
 }

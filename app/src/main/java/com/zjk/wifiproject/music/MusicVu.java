@@ -1,16 +1,18 @@
 package com.zjk.wifiproject.music;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.squareup.otto.Subscribe;
 import com.zjk.wifiproject.R;
-import com.zjk.wifiproject.bus.BusProvider;
 import com.zjk.wifiproject.presenters.Vu;
 
+import java.io.File;
 import java.util.List;
 
 public class MusicVu implements Vu {
@@ -36,10 +38,19 @@ public class MusicVu implements Vu {
         return view;
     }
 
-    public void setDate(List<MusicEntity> list) {
-        adapter = new MusicAdapter(context, list);
+    public void setData(final List<MusicEntity> newlist) {
+        adapter = new MusicAdapter(context, newlist);
         mListView.setAdapter(adapter);
-
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File file = new File(newlist.get(position).getAbsolutePath());
+                Intent intent = new Intent();
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), "audio/*");
+                view.getContext().startActivity(intent);
+            }
+        });
 
     }
 

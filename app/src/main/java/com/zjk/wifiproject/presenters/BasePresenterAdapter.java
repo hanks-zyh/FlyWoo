@@ -1,13 +1,19 @@
 package com.zjk.wifiproject.presenters;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.List;
+
+/**
+ * 这里有控件单位
+ * adapter调用顺序：getcount - getview
+ * @param <E>
+ * @param <V>
+ */
 public abstract class BasePresenterAdapter<E, V extends Vu> extends BaseAdapter {
     protected List<E> list;
     protected Context context;
@@ -29,6 +35,13 @@ public abstract class BasePresenterAdapter<E, V extends Vu> extends BaseAdapter 
         return position;
     }
 
+    /**
+     * 返回网格的单个item的视图
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

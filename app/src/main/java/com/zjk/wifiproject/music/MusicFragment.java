@@ -11,7 +11,7 @@ public class MusicFragment extends BasePresenterFragment<MusicVu> {
     protected void onBindVu() {
 
         List<MusicEntity> list = FileUtils.getMusicList(context);
-        vu.setDate(list);
+        vu.setData(list);
     }
 
     @Override

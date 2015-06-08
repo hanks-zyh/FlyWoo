@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * fragment的生命周期：onCreate - onCreateView
+ * @param <V>
+ */
 public abstract class BasePresenterFragment<V extends Vu> extends Fragment {
 
     public V vu;

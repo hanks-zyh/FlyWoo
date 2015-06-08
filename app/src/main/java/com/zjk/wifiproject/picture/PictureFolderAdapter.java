@@ -14,6 +14,10 @@ import com.zjk.wifiproject.view.TouchCheckBox;
 
 import java.util.List;
 
+/**
+ * adapter继承自BasePresenterAdapter
+ * onBindItemVu由基类调用
+ */
 public class PictureFolderAdapter extends BasePresenterAdapter<PictureFolderEntity, PictureFolderAdapterVu> {
 
     public PictureFolderAdapter(Context context, List<PictureFolderEntity> list) {
@@ -29,6 +33,7 @@ public class PictureFolderAdapter extends BasePresenterAdapter<PictureFolderEnti
         if(item.images.size()>0){
             vu.setImage(item.images.get(0).getAbsolutePath());
         }
+        //先进去setOnCheckedChangeListener全部调用之后才调用onCheckedChanged
         vu.setOnCheckedChangeListener(new TouchCheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(View buttonView, boolean isChecked) {
@@ -45,6 +50,7 @@ public class PictureFolderAdapter extends BasePresenterAdapter<PictureFolderEnti
                     }
                 }
                 if(buttonView.getContext() instanceof MainActivity){
+                    //更新底部状态栏广播
                     buttonView.getContext().sendBroadcast(new Intent(ConfigBroadcast.ACTION_UPDATE_BOTTOM));
                 }
             }

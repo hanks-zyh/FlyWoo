@@ -117,16 +117,16 @@ public class GuideActivity extends BaseActivity {
         //根据index改变四个Fragment的内容
         private void init(View v) {
             if (index < 3) {
-                v.findViewById(R.id.top).setBackgroundColor(colors[index]);
+                v.findViewById(R.id.top).setBackgroundColor(getResources().getColor(R.color.main_red));
                 ((ImageView) v.findViewById(R.id.guide)).setImageResource(images[index][0]);
                 ((ImageView) v.findViewById(R.id.image_m)).setImageResource(images[index][1]);
                 Logger.d(index + "");
-                int str = texts[index];
-                Logger.d(str + "," + getString(R.string.guide_text_1));
+            //    int str = texts[index];
+            //    Logger.d(str + "," + getString(R.string.guide_text_1));
 
-                ((TextView) v.findViewById(R.id.text)).setText(str);
+            //    ((TextView) v.findViewById(R.id.text)).setText(str);
             } else {
-                v.findViewById(R.id.top).setBackgroundColor(Color.parseColor("#DDE865"));
+                v.findViewById(R.id.top).setBackgroundColor(getResources().getColor(R.color.main_red));
                 ((ImageView) v.findViewById(R.id.guide)).setImageResource(R.drawable.guide_3_text_bg);
                 v.findViewById(R.id.image_m).setVisibility(View.GONE);
                 TextView tv = ((TextView) v.findViewById(R.id.text));

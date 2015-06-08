@@ -20,6 +20,10 @@ public class AppGridAdapter extends BasePresenterAdapter<AppEntity, AppItemVu> {
         return AppItemVu.class;
     }
 
+    /**
+     * 网格的单个item的视图填充数据
+     * @param position
+     */
     @Override
     protected void onBindItemVu(int position) {
         AppEntity item = list.get(position);

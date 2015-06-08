@@ -231,6 +231,7 @@ public class FileUtils {
 
         /**
          * 临时的辅助类，用于防止同一个文件夹的多次扫描
+         * string：文件夹路径，integer：list里文件夹的序号
          */
         HashMap<String, Integer> tmpDir = new HashMap<String, Integer>();
 
@@ -250,7 +251,7 @@ public class FileUtils {
                 }
                 PictureFolderEntity pictureFoldery = null;
                 String dirPath = parentFile.getAbsolutePath();
-                if (!tmpDir.containsKey(dirPath)) {
+                if (!tmpDir.containsKey(dirPath)) { //文件夹不在列表里就创建一个文件夹
                     // 初始化PictureFolderEntity
                     pictureFoldery = new PictureFolderEntity();
                     pictureFoldery.setDir(dirPath);
@@ -259,9 +260,9 @@ public class FileUtils {
                     // Log.d("zyh", dirPath + "," + path);
                     tmpDir.put(dirPath, list.indexOf(pictureFoldery));
                 } else {
-                    pictureFoldery = list.get(tmpDir.get(dirPath));
+                    pictureFoldery = list.get(tmpDir.get(dirPath)); //从list得到图片文件夹
                 }
-                pictureFoldery.images.add(new PictureEntity(path));
+                pictureFoldery.images.add(new PictureEntity(path));//将图片添加到应该在的文件夹里
             } while (mCursor.moveToNext());
         }
         if (mCursor != null) {
@@ -299,6 +300,8 @@ public class FileUtils {
             music.setId(cursor.getInt(3));
             music.setDisplayName(cursor.getString(4));
             // L.i(music.toString());
+            if(music.getDuration() < 60*1000)
+                continue;
             list.add(music);
         }
         if (cursor != null) {
