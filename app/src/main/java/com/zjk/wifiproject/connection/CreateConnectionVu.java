@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.SpannableString;
@@ -44,9 +43,6 @@ import com.zjk.wifiproject.util.TextUtils;
 import com.zjk.wifiproject.util.WifiUtils;
 import com.zjk.wifiproject.view.CircularProgress;
 import com.zjk.wifiproject.view.SearchView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -120,7 +116,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
 //        view2.findViewById(R.id.connect_wifi).setOnClickListener(this);
 //        view2.findViewById(R.id.send).setOnClickListener(this);
 //        edit = (EditText)view2.findViewById(R.id.editText);
-      //  layout_hide = view.findViewById(R.id.layout_create_or_join);
+        //  layout_hide = view.findViewById(R.id.layout_create_or_join);
 
         mCenterCircle = view.findViewById(R.id.centerCircle);
         mCircleProgress = (CircularProgress) view.findViewById(R.id.circleProgress);
@@ -141,9 +137,13 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     }
 
     private void setListener() {
+        //返回按钮
         mHideButton.setOnClickListener(this);
+        //创建按钮
         mCreate.setOnClickListener(this);
+        //加入按钮
         mJoin.setOnClickListener(this);
+        //提示按钮
         mHelpCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -211,7 +211,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.helpCheckBox:
-                layout_hide.setVisibility(View.VISIBLE);
+                //     layout_hide.setVisibility(View.VISIBLE);
                 showTwoImageAnimation();
                 break;
             case R.id.hideButton:
@@ -249,22 +249,24 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
             WifiUtils.OpenWifi();
         }
 
-        JSONObject json = new JSONObject();
+      /*  JSONObject json = new JSONObject();
         file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/.z");
         try {
             json.put("", file);
             Logger.d("" + json.toString());
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         //定时器,延迟2秒开启
         timer = new Timer();
+        //定时任务：任务，开始时间，间隔时间
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 //扫描
                 WifiUtils.startScan();
+                //给mHandler发送消息，消息在mHandler中处理
                 mHandler.sendEmptyMessage(WifiConst.ApScanResult);
             }
         }, new Date(System.currentTimeMillis() + 2000), 2000);
@@ -277,8 +279,12 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
             }
         },4000);*/
 
+        //
         mSearchView.setOnAvatarClickListener(new SearchView.OnAvatarClickListener() {
             @Override
+            /**
+             * 点击热点头像，在addview里头像biew的点击事件触发时返回调用
+             */
             public void onClick(View v) {
                 onAvatarClick(v);
             }
@@ -543,19 +549,27 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
     private void connectAp(final String hostName) {
         if (hostName.startsWith(WifiConst.WIFI_AP_HEADER)) {
             // 连接网络
-            boolean connFlag = WifiUtils.connectWifi(hostName, WifiConst.WIFI_AP_PASSWORD,
+            final boolean connFlag = WifiUtils.connectWifi(hostName, WifiConst.WIFI_AP_PASSWORD,
                     WifiUtils.WifiCipherType.WIFICIPHER_WPA);
+
+
             if (connFlag) {
+                //扫描动画背景结束
                 mCircleProgress.finishAnim();
+                //这个定时器是为了每隔一秒发送一个消息验证是否正确连接（可能在connectWifi返回成功但还没有真正连接上），
+                //验证逻辑在handler里
                 cennectTimer = new Timer();
                 cennectTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
+                        //给handler发一个连接成功的消息
                         Message.obtain(mHandler, WifiConst.WiFiConnectSuccess, hostName).sendToTarget();
 //                        mHandler.sendEmptyMessage(WifiConst.WiFiConnectSuccess);
                     }
                 }, new Date(), 1000);
             }
+
+
         }
     }
 
@@ -574,10 +588,12 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
                     if (isValidated()) { //已连接上
 
                         mStatus.setText("连接成功");
+                        //取消发送成功消息的定时器
                         cennectTimer.cancel();
 
-                        //开启UDP连接
+                        //开启UDP连接，得到一个UDP线程的单例（可以监听端口和发送消息）
                         mUDPListener = UDPMessageListener.getInstance(context);
+                        //将自身加入消息发送对象列表中
                         mUDPListener.addMsgListener(CreateConnectionVu.this);
                         mUDPListener.connectUDPSocket();
 
@@ -646,6 +662,7 @@ public class CreateConnectionVu implements Vu, OnClickListener, UDPMessageListen
             if (s.startsWith(WifiConst.WIFI_AP_HEADER)) {
                 if (!mList.contains(s)) {//没有添加过
                     mList.add(wifi.SSID);
+                    //添加热点头像
                     mSearchView.addApView(wifi);
                 }
             }

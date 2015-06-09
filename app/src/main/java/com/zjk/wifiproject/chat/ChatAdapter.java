@@ -1,9 +1,11 @@
 package com.zjk.wifiproject.chat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -264,9 +266,27 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         @Override
         public void update(int position) {
-            ChatEntity item = list.get(position);
+            final ChatEntity item = list.get(position);
             iv_picture.setImageURI(Uri.parse("file://" + item.getContent()));
             tv_time.setText(DateUtils.formatDate(tv_time.getContext(), item.getTime()));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int location[] = new int[2];
+                    view.getLocationOnScreen(location);
+                    int resId = (int) view.getTag();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("locationX", location[0]);
+                    bundle.putInt("locationY", location[1]);
+                    bundle.putInt("width", view.getWidth());
+                    bundle.putInt("height", view.getHeight());
+                    bundle.putInt("resId", resId);
+                    Intent intent = new Intent(itemView.getContext(), ShowPictureActivity.class);
+                    intent.putExtras(bundle);
+                    itemView.getContext().startActivity(intent);
+                    ((Activity) itemView.getContext()).overridePendingTransition(0, 0);
+                }
+            });
         }
     }
 
@@ -457,7 +477,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        playAudio(v,f);
+                        playAudio(v, f);
                     }
                 });
             } else if (fileEnd.contains("mp4") || fileEnd.contains("3gp") || fileEnd.contains("rmvb") || fileEnd.contains("mtk") || fileEnd.contains("avi")) {
@@ -469,7 +489,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         playVedio(v, f);
                     }
                 });
-            }else {
+            } else {
                 fileTpye.setImageResource(R.drawable.item_file);
                 //点击事件
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -515,7 +535,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         it.setDataAndType(uri, "video/*");
         v.getContext().startActivity(it);
     }
-    private void playAudio(View v, File f){
+
+    private void playAudio(View v, File f) {
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(f), "audio/*");

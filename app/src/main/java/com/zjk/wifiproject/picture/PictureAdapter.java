@@ -17,11 +17,19 @@
 package com.zjk.wifiproject.picture;
 
 import android.content.Context;
+import android.net.Uri;
+import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zjk.wifiproject.R;
+import com.zjk.wifiproject.entity.Message;
+import com.zjk.wifiproject.entity.WFile;
+import com.zjk.wifiproject.file.OnFileCheckListener;
+import com.zjk.wifiproject.view.TouchCheckBox;
 
 import java.util.List;
 
@@ -58,6 +66,18 @@ public class PictureAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_picture_folder, null);
         }
+
+        SimpleDraweeView image = (SimpleDraweeView) convertView.findViewById(R.id.image);
+        TextView pictureCount = (TextView) convertView.findViewById(R.id.pictureCount);
+        TextView folderName = (TextView) convertView.findViewById(R.id.folderName);
+        TouchCheckBox select = (TouchCheckBox) convertView.findViewById(R.id.select);
+
+        image.setImageURI(Uri.parse("file://" + list.get(position).getAbsolutePath()));
+        folderName.setText(list.get(position).getName());
+        pictureCount.setText(Formatter.formatFileSize(context,list.get(position).length()));
+        WFile wfile = new WFile(list.get(position).getAbsolutePath());
+        Message.CONTENT_TYPE type = Message.CONTENT_TYPE.IMAGE;
+        select.setOnCheckedChangeListener(new OnFileCheckListener(wfile,type));
         return convertView;
     }
 }

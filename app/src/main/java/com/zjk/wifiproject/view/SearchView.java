@@ -72,6 +72,7 @@ public class SearchView extends RelativeLayout {
     }
 
     public void setOnAvatarClickListener(OnAvatarClickListener listener) {
+        //调用者的listener
         this.listener = listener;
     }
 
@@ -111,6 +112,10 @@ public class SearchView extends RelativeLayout {
         oa.start();
     }
 
+    /**
+     * 添加热点头像
+     * @param wifi
+     */
     public void addApView(ScanResult wifi) {
         if (margins.size() == 0) {
             T.show(context, "达到最大数目");
@@ -123,7 +128,7 @@ public class SearchView extends RelativeLayout {
         View view = View.inflate(context, R.layout.layout_new_ap, null);
         String name = wifi.SSID.substring(6);
         ((TextView) view.findViewById(R.id.apName)).setText(name);
-        view.setTag(wifi);//将头像对应的wifi附加到上面
+        view.setTag(wifi);//将头像对应的wifi附加到上面（绑定），这样可以由头像得到wifi
         addView(view);
 
         //生成随机位置 marginLeft，marginTop
@@ -141,6 +146,7 @@ public class SearchView extends RelativeLayout {
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                //调用者的listener，（在setOnAvatarClickListener里已经初始化）
                 if (listener != null) {
                     listener.onClick(v);
                 }

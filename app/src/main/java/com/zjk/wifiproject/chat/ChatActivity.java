@@ -148,7 +148,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 //        Logger.d(mChatUser.toString());
 //        Logger.d(mChatUser.getIpaddress());
 
-        //如果有未发送的文件先发送文件
+        //进入聊天界面后，如果有未发送的文件先发送文件（在外面选过）
         Set<String> keys = BaseApplication.sendFileStates.keySet();
         if (keys.size() > 0) {
             for (String s : keys) {

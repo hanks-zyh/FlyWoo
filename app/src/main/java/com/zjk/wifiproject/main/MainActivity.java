@@ -66,6 +66,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> {
 
     }
 
+    //MainVu里post一个参数为RefreshTipEvent的消息就会回调到这个方法中
     public void onEvent(RefreshTipEvent event) {
         /* Do something */
         checkConnectStatus();

@@ -44,10 +44,21 @@ public class PictureFolderVu implements Vu {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Logger.i("setOnItemClickListener:"+position);
-                BusProvider.getInstance().post(new ShowImageListEvent(list.get(position).images));
+                Logger.i("setOnItemClickListener:" + position);
+              //  BusProvider.getInstance().post(new ShowImageListEvent(list.get(position).images));
+             //   EventBus.getDefault().post();
+                if(mListView.getAdapter() instanceof PictureFolderAdapter) { //如果是文件夹
+                    setPictureList(list.get(position).images);
+                }else {//如果是图片，点击返回
+                    mListView.setAdapter(adapter);
+                }
             }
         });
+    }
+
+    public void setPictureList(List<PictureEntity> list)
+    {
+        mListView.setAdapter(new PictureAdapter(context,list));
     }
 
     public void onResume() {
