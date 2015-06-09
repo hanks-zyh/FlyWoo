@@ -4,15 +4,15 @@ ADDED from AndroidManifest.xml:2:1
 	xmlns:android
 		ADDED from AndroidManifest.xml:2:11
 	package
-		ADDED from AndroidManifest.xml:3:5
+		ADDED from AndroidManifest.xml:3:11
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:versionName
-		ADDED from AndroidManifest.xml:5:5
+		ADDED from AndroidManifest.xml:5:11
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:versionCode
-		ADDED from AndroidManifest.xml:4:5
+		ADDED from AndroidManifest.xml:4:11
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 uses-sdk
@@ -202,3 +202,9 @@ activity#com.zjk.wifiproject.music.MusicSelectActivity
 ADDED from AndroidManifest.xml:59:9
 	android:name
 		ADDED from AndroidManifest.xml:59:19
+activity#com.zjk.wifiproject.chat.ShowPictureActivity
+ADDED from AndroidManifest.xml:60:9
+	android:theme
+		ADDED from AndroidManifest.xml:61:19
+	android:name
+		ADDED from AndroidManifest.xml:60:19

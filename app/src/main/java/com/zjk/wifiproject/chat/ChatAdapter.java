@@ -273,14 +273,13 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 @Override
                 public void onClick(View view) {
                     int location[] = new int[2];
-                    view.getLocationOnScreen(location);
-                    int resId = (int) view.getTag();
+                    iv_picture.getLocationOnScreen(location);
                     Bundle bundle = new Bundle();
                     bundle.putInt("locationX", location[0]);
                     bundle.putInt("locationY", location[1]);
                     bundle.putInt("width", view.getWidth());
                     bundle.putInt("height", view.getHeight());
-                    bundle.putInt("resId", resId);
+                    bundle.putString("url", item.getContent());
                     Intent intent = new Intent(itemView.getContext(), ShowPictureActivity.class);
                     intent.putExtras(bundle);
                     itemView.getContext().startActivity(intent);

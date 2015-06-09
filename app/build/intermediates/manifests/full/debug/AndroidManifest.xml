@@ -57,6 +57,9 @@
         <activity android:name="com.zjk.wifiproject.vedio.VedioSelectActivity" />
         <activity android:name="com.zjk.wifiproject.app.ApkSelectActivity" />
         <activity android:name="com.zjk.wifiproject.music.MusicSelectActivity" />
+        <activity
+            android:name="com.zjk.wifiproject.chat.ShowPictureActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>
